@@ -391,16 +391,7 @@ const TableV3 = () => {
           return (
             <div className="mb-[300px]">
               <Input label={cell.row.original.status} disabled />
-              <Button
-                size="sm"
-                // color={email ? "blue" : "blue-gray"}
-                // disabled={!email}
-                // disabled
-                className="mt-2"
-                onClick={() => submitHandler(cell.row.original.id)}
-              >
-                Hủy job
-              </Button>
+            
             </div>
           );
         },
