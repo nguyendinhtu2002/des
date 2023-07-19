@@ -46,22 +46,10 @@ function Header() {
           >
             <div class="px-4 py-3">
               <span class="block text-sm text-gray-900 dark:text-white">
-                Bonnie Green
-              </span>
-              <span class="block text-sm  text-gray-500 truncate dark:text-gray-400">
-                name@flowbite.com
+                Số dư: 200.000
               </span>
             </div>
             <ul class="py-2" aria-labelledby="user-menu-button">
-              <li>
-                <a
-                  href="#"
-                  class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white"
-                >
-                  Settings
-                </a>
-              </li>
-
               <li>
                 <button
                   class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white"
@@ -108,7 +96,7 @@ function Header() {
                   href="/"
                   className={`block py-2 pl-3 pr-4 ${
                     location.pathname === "/" ? "text-blue-700" : "text-black"
-                  } bg-blue-700 rounded md:bg-transparent  md:p-0 `}
+                  }  rounded md:bg-transparent  md:p-0 `}
                   //   aria-current="page"
                 >
                   Danh sách đơn hàng

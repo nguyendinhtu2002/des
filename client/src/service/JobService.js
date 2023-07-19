@@ -56,13 +56,9 @@ export const cancelJob = async (id, access_token) => {
   const headers = {
     Authorization: `Bearer ${access_token}`,
   };
-  const res = await axiosJWT.post(
-    `http://localhost:5000/api/v1/job/cancelJob/${id}`,
-    null,
-    {
-      headers,
-    }
-  );
+  const res = await axiosJWT.post(`${URL}/api/v1/job/cancelJob/${id}`, null, {
+    headers,
+  });
   return res.data;
 };
 
@@ -70,12 +66,8 @@ export const updateJob = async (id, data, access_token) => {
   const headers = {
     Authorization: `Bearer ${access_token}`,
   };
-  const res = await axiosJWT.put(
-    `http://localhost:5000/api/v1/job/update/other/${id}`,
-    data,
-    {
-      headers,
-    }
-  );
+  const res = await axiosJWT.put(`${URL}/api/v1/job/update/other/${id}`, data, {
+    headers,
+  });
   return res.data;
 };

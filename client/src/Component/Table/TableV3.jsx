@@ -55,8 +55,8 @@ const TableV3 = () => {
   };
   const { isLoading, data } = useQuery(["products"], fetchJob);
   const mutation = useMutationHooks(async (data) => {
-    const { id,access_token } = data;
-    await JobService.cancelJob(id,access_token);
+    const { id, access_token } = data;
+    await JobService.cancelJob(id, access_token);
   });
   const applyFilters = () => {
     const filtered = data.filter((item) => {
@@ -98,7 +98,7 @@ const TableV3 = () => {
     console.log(designId);
     if (window.confirm("Bạn có đồng ý xóa không?")) {
       axios
-        .delete(`http://localhost:5000/api/v1/job/detele/img/${id}`, {
+        .delete(`https://api.mundesign.net/api/v1/job/detele/img/${id}`, {
           data: { designId: designId },
         })
         .then((res) => {
@@ -148,7 +148,8 @@ const TableV3 = () => {
         enableGlobalFilter: true,
         enableColumnFilter: false,
         Cell: ({ cell }) => {
-          const { name, size, sku, image_url } = cell.row.original.product;
+          const { name, size, sku, image_url, Deadline } =
+            cell.row.original.product;
           return (
             <div>
               <div className="pl-2 pt-2">
@@ -159,52 +160,21 @@ const TableV3 = () => {
                 <a className="text-[#3c8dbc]">
                   <h5 class="ng-binding inline text-[#3c8dbc] ml-1 ">{name}</h5>
                 </a>
-                <div class="form-check pt-2">
-                  <Checkbox
-                    label={
-                      <Typography
-                        variant="small"
-                        color="gray"
-                        className="flex items-center font-normal"
-                      >
-                        Multiple design
-                      </Typography>
-                    }
-                    containerProps={{ className: "-ml-2.5 py-0" }}
-                    disabled
-                  />
-                </div>
-                <div class="form-check">
-                  <Checkbox
-                    label={
-                      <Typography
-                        variant="small"
-                        color="gray"
-                        className="flex items-center font-normal"
-                      >
-                        Double sided
-                      </Typography>
-                    }
-                    containerProps={{ className: "-ml-2.5 py-0" }}
-                    disabled
-                  />
-                </div>
-              </div>
-              <div className="mt-[0.5px] pl-2">
-                <strong>Độ ưu tiên: </strong>
-                <span className="bg-[#d2d6de] rounded py-[2px] px-[7px] text-[10px] mt-0 mx-0 mb-[3px] text-center inline-block">
-                  Ưu tiên
-                </span>
               </div>
               <div className="mt-[0.5px] pl-2">
                 <strong>Created at:</strong>
-                <span class="ng-binding"> 16:12' 12/07/2023</span>
+                <span class="ng-binding">
+                  {" "}
+                  {moment(cell.row.original.createdAt).format(
+                    "YYYY-MM-DD HH:mm:ss.SSS"
+                  )}
+                </span>
               </div>
               <div className=" pl-2">
                 <strong>Created at:</strong>
                 <span class="ng-binding text-[#a94442]">
                   {" "}
-                  12:42' 13/07/2023
+                  {moment(Deadline).format("YYYY-MM-DD HH:mm:ss.SSS")}
                 </span>
               </div>
               <div className="flex flex-wrap m-h-[180px] overflow-y-scroll pl-2">
@@ -289,7 +259,13 @@ const TableV3 = () => {
         enableColumnFilter: false,
         Cell: ({ cell }) => {
           return (
-            <div className={cell.row.original.attributes.outsource_note?"mb-[50px]":"mb-[75px]"}>
+            <div
+              className={
+                cell.row.original.attributes.outsource_note
+                  ? "mb-[50px]"
+                  : "mb-[75px]"
+              }
+            >
               <div class="form-group mx-2">
                 <Input
                   label={cell.row.original.designer?.designer_id.name}

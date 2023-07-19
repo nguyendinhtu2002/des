@@ -19,6 +19,7 @@ import { useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import Toast from "../../Component/LoadingError/Toast";
 import axios from "axios";
+import moment from "moment";
 function TableV2() {
   const [isNoteVisible, setIsNoteVisible] = useState(false);
   const [Issuccess, setSuccess] = useState(false);
@@ -185,48 +186,11 @@ function TableV2() {
                     />
                     <a className="text-[#3c8dbc]">
                       <h5 class="ng-binding inline text-[#3c8dbc] ml-1 ">
-                        {item.product.name}
+                        {moment(item.product.name).format("YYYY-MM-DD HH:mm:ss.SSS")}
                       </h5>
                     </a>
-                    <div class="form-check pt-2">
-                      <Checkbox
-                        label={
-                          <Typography
-                            variant="small"
-                            color="gray"
-                            className="flex items-center font-normal"
-                          >
-                            Multiple design
-                          </Typography>
-                        }
-                        containerProps={{ className: "-ml-2.5 py-0" }}
-                        disabled={item.product.multiple_design}
-                        checked={item.product.multiple_design}
-                      />
-                    </div>
-                    <div class="form-check">
-                      <Checkbox
-                        label={
-                          <Typography
-                            variant="small"
-                            color="gray"
-                            className="flex items-center font-normal"
-                          >
-                            Double sided
-                          </Typography>
-                        }
-                        containerProps={{ className: "-ml-2.5 py-0" }}
-                        disabled={item.product.double_sided}
-                        checked={item.product.double_sided}
-                      />
-                    </div>
                   </div>
-                  <div className="mt-[0.5px] pl-2">
-                    <strong>Độ ưu tiên: </strong>
-                    <span className="bg-[#d2d6de] rounded py-[2px] px-[7px] text-[10px] mt-0 mx-0 mb-[3px] text-center inline-block">
-                      Ưu tiên
-                    </span>
-                  </div>
+
                   <div className="mt-[0.5px] pl-2">
                     <strong>Created at:</strong>
                     <span class="ng-binding"> {item.createdAt}</span>
@@ -235,7 +199,9 @@ function TableV2() {
                     <strong>Deadline at:</strong>
                     <span class="ng-binding text-[#a94442]">
                       {" "}
-                      {item.product.Deadline}
+                      {moment(item.product.Deadline).format(
+                        "YYYY-MM-DD HH:mm:ss.SSS"
+                      )}
                     </span>
                   </div>
                   <div className="flex flex-wrap max-h-[200px]  overflow-y-scroll pl-2">
@@ -269,23 +235,7 @@ function TableV2() {
                   </div>
                 </td>
                 <td className="p-0 ml-1 border-r items-start border-b">
-                  <div className="max-w-[500px] max-h-[250px] py-0 px-[10px] flex flex-wrap  items-start mt-2my-[5px]  overflow-y-scroll mb-[200px]">
-                    <Avatar
-                      src="https://cdn.prtvstatic.com/unsafe/600x0/assets.printerval.com/2023/05/17/646474149ef240.11658332.jpg"
-                      alt="avatar"
-                      size="xxl"
-                      className="cd:max-w-fit"
-                      variant="square"
-                    />
-
-                    <Avatar
-                      src="https://cdn.prtvstatic.com/unsafe/600x0/assets.printerval.com/2023/05/17/646474149ef240.11658332.jpg"
-                      alt="avatar"
-                      size="xxl"
-                      className="cd:max-w-fit xl:ml-2 cd:mt-2"
-                      variant="square"
-                    />
-                  </div>
+                  <div className="max-w-[500px] max-h-[250px] py-0 px-[10px] flex flex-wrap  items-start mt-2my-[5px]  overflow-y-scroll mb-[200px]"></div>
                 </td>
                 <td className="p-0 ml-1 border-r border-b ">
                   <div class="form-group mx-2">
