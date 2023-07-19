@@ -41,8 +41,8 @@ function Main() {
   };
   const fetchJob = async () => {
     const data = userLogin.id;
-    const access_token = JSON.parse(localStorage.getItem("access_token"))
-    const res = await JobService.getAllByGuest(data,access_token);
+    const access_token = JSON.parse(localStorage.getItem("access_token"));
+    const res = await JobService.getAllByGuest(data, access_token);
     return res;
   };
   const toastId = React.useRef(null);
@@ -126,7 +126,7 @@ function Main() {
         enableGlobalFilter: true,
         enableColumnFilter: false,
         Cell: ({ cell }) => {
-          const { name, size, sku, image_url } = cell.row.original.product;
+          const { name, size, sku, image_url,Deadline } = cell.row.original.product;
           return (
             <div>
               <div className="pl-2 pt-2">
@@ -137,59 +137,24 @@ function Main() {
                 <a className="text-[#3c8dbc]">
                   <h5 class="ng-binding inline text-[#3c8dbc] ml-1 ">{name}</h5>
                 </a>
-                <div class="form-check pt-2">
-                  <Checkbox
-                    label={
-                      <Typography
-                        variant="small"
-                        color="gray"
-                        className="flex items-center font-normal"
-                      >
-                        Multiple design
-                      </Typography>
-                    }
-                    containerProps={{ className: "-ml-2.5 py-0" }}
-                    disabled
-                  />
-                </div>
-                <div class="form-check">
-                  <Checkbox
-                    label={
-                      <Typography
-                        variant="small"
-                        color="gray"
-                        className="flex items-center font-normal"
-                      >
-                        Double sided
-                      </Typography>
-                    }
-                    containerProps={{ className: "-ml-2.5 py-0" }}
-                    disabled
-                  />
-                </div>
               </div>
-              <div className="mt-[0.5px] pl-2">
-                <strong>Độ ưu tiên: </strong>
-                <span className="bg-[#d2d6de] rounded py-[2px] px-[7px] text-[10px] mt-0 mx-0 mb-[3px] text-center inline-block">
-                  Ưu tiên
-                </span>
-              </div>
+
               <div className="mt-[0.5px] pl-2">
                 <strong>Created at:</strong>
-                <span class="ng-binding"> 16:12' 12/07/2023</span>
+                <span class="ng-binding"> {moment(cell.row.original.createdAt).format("YYYY-MM-DD HH:mm:ss.SSS")}</span>
               </div>
               <div className=" pl-2">
-                <strong>Created at:</strong>
+                <strong>Deadline at:</strong>
                 <span class="ng-binding text-[#a94442]">
                   {" "}
-                  12:42' 13/07/2023
+                  {moment(Deadline).format("YYYY-MM-DD HH:mm:ss.SSS")}
                 </span>
               </div>
               <div className="flex flex-wrap m-h-[180px] overflow-y-scroll pl-2">
                 <div className="p-[5px] mb-[10px] mr-[5px] border border-solid border-[#ddd] rounded-lg w-[160px]">
                   <a className="">
                     <Avatar
-                      src="https://cdn.prtvstatic.com/unsafe/600x0/assets.printerval.com/2023/05/17/646474149ef240.11658332.jpg"
+                      src={image_url}
                       size="lg"
                       alt="avatar"
                     />
