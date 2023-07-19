@@ -24,6 +24,8 @@ function TableV2() {
   const [isNoteVisible, setIsNoteVisible] = useState(false);
   const [Issuccess, setSuccess] = useState(false);
   const [Iserror, setError] = useState(false);
+  const [click, setClick] = useState(false);
+
   const toastId = React.useRef(null);
   const Toastobjects = {
     position: "top-right",
@@ -102,7 +104,17 @@ function TableV2() {
       }
     }
   }, [error, isSuccess]);
+  const showModal = (src) => {
+    setClick(true);
+    document.getElementById("modal").classList.remove("hidden");
+    document.getElementById("modal-img").src = src;
+  };
 
+  const closeModal = () => {
+    setClick(false);
+
+    document.getElementById("modal").classList.add("hidden");
+  };
   return isLoading ? (
     <Loading />
   ) : (
@@ -182,18 +194,22 @@ function TableV2() {
                   <div className="pl-2 pt-2">
                     <img
                       className="ng-scope h-5 w-[30px] cursor-default inline"
-                      src="https://printerval.com/system/images/flags/png100px/de.png"
+                      src={item.product.image_url}
+                      onClick={() => showModal(item.product.image_url)}
                     />
                     <a className="text-[#3c8dbc]">
                       <h5 class="ng-binding inline text-[#3c8dbc] ml-1 ">
-                        {moment(item.product.name).format("YYYY-MM-DD HH:mm:ss.SSS")}
+                        {item.product.name}
                       </h5>
                     </a>
                   </div>
 
                   <div className="mt-[0.5px] pl-2">
                     <strong>Created at:</strong>
-                    <span class="ng-binding"> {item.createdAt}</span>
+                    <span class="ng-binding">
+                      {" "}
+                      {moment(item.createAt).format("YYYY-MM-DD HH:mm:ss.SSS")}
+                    </span>
                   </div>
                   <div className=" pl-2">
                     <strong>Deadline at:</strong>
@@ -212,9 +228,10 @@ function TableV2() {
                       >
                         <a className="">
                           <Avatar
-                            src="https://cdn.prtvstatic.com/unsafe/600x0/assets.printerval.com/2023/05/17/646474149ef240.11658332.jpg"
+                            src={item.product.image_url}
                             size="lg"
                             alt="avatar"
+                            onClick={() => showModal(item.product.image_url)}
                           />
                         </a>
                         <div className="inline-block align-middle">
@@ -321,6 +338,24 @@ function TableV2() {
             ))}
           </tbody>
         </table>
+      </div>
+      <div
+        id="modal"
+        className="hidden fixed top-0 left-0 z-80 w-screen h-screen bg-black/70 flex justify-center items-center"
+      >
+        <a
+          className="fixed z-90 top-6 right-8 text-white text-5xl font-bold"
+          href="javascript:void(0)"
+          onClick={closeModal}
+        >
+          &times;
+        </a>
+
+        <img
+          id="modal-img"
+          className="max-w-[800px] max-h-[600px] object-cover"
+          alt="Modal Image"
+        />
       </div>
     </>
   );

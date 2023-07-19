@@ -43,14 +43,15 @@ const TableV3 = () => {
   const [typeDate, setTypeDate] = useState("createdAt");
   const [dateFrom, setDateFrom] = useState("");
   const [dateTo, setDateTo] = useState("");
+  const [click, setClick] = useState(false);
 
   const history = useNavigate();
-
+  const userLogin = useSelector((state) => state.user);
   const handleNoteDoubleClick = () => {
     setIsNoteVisible(true);
   };
   const fetchJob = async () => {
-    const res = await JobService.getJobUser();
+    const res = await JobService.getJobUser(userLogin.id);
     return res;
   };
   const { isLoading, data } = useQuery(["products"], fetchJob);
@@ -93,7 +94,6 @@ const TableV3 = () => {
     draggable: true,
     progress: undefined,
   };
-  const userLogin = useSelector((state) => state.user);
   const handleDeleteImg = async (id, designId) => {
     console.log(designId);
     if (window.confirm("Bạn có đồng ý xóa không?")) {
@@ -132,6 +132,17 @@ const TableV3 = () => {
       access_token,
     });
   };
+  const showModal = (src) => {
+    setClick(true);
+    document.getElementById("modal").classList.remove("hidden");
+    document.getElementById("modal-img").src = src;
+  };
+
+  const closeModal = () => {
+    setClick(false);
+
+    document.getElementById("modal").classList.add("hidden");
+  };
   const columns = useMemo(
     () => [
       {
@@ -156,6 +167,7 @@ const TableV3 = () => {
                 <img
                   className="ng-scope h-5 w-[30px] cursor-default inline"
                   src={image_url}
+                  onClick={() => showModal(image_url)}
                 />
                 <a className="text-[#3c8dbc]">
                   <h5 class="ng-binding inline text-[#3c8dbc] ml-1 ">{name}</h5>
@@ -181,9 +193,10 @@ const TableV3 = () => {
                 <div className="p-[5px] mb-[10px] mr-[5px] border border-solid border-[#ddd] rounded-lg w-[160px]">
                   <a className="">
                     <Avatar
-                      src="https://cdn.prtvstatic.com/unsafe/600x0/assets.printerval.com/2023/05/17/646474149ef240.11658332.jpg"
+                      src={image_url}
                       size="lg"
                       alt="avatar"
+                      onClick={() => showModal(image_url)}
                     />
                   </a>
                   <div className="inline-block align-middle">
@@ -222,6 +235,7 @@ const TableV3 = () => {
                       size="xxl"
                       className="cd:max-w-fit"
                       variant="square"
+                      onClick={(e)=>showModal(design.url)}
                     />
                     <button
                       className="absolute top-0  p-1 bg-red-500 rounded-full text-white hover:bg-red-600 transition-colors duration-300"
@@ -425,124 +439,148 @@ const TableV3 = () => {
   return (
     <>
       <Toast />
-      <div className="grid xl:grid-cols-3 md:grid-cols-1 gap-4 xl:w-[70%] ">
-        <div>
-          <Input
-            label="Search products..."
-            value={product}
-            onChange={(e) => setProduct(e.target.value)}
-          />
-        </div>
-        <div>
-          <Select label="Status" value={status} onChange={(e) => setStatus(e)}>
-            <Option value="All Status">All Status</Option>
-            <Option value="Waiting">Waiting</Option>
-            <Option value="Doing">Doing</Option>
-            <Option value="Review">Review</Option>
-            <Option value="Fix">Fix</Option>
-            <Option value="Confirm">Confirm</Option>
-            <Option value="Done">Done</Option>
-          </Select>
-        </div>
-        <div>
-          {/* <Select label="Select Version">
+      <div
+        id="modal"
+        className="hidden fixed top-0 left-0 z-80 w-screen h-screen bg-black/70 flex justify-center items-center"
+      >
+        <a
+          className="fixed z-90 top-6 right-8 text-white text-5xl font-bold"
+          href="javascript:void(0)"
+          onClick={closeModal}
+        >
+          &times;
+        </a>
+
+        <img
+          id="modal-img"
+          className="max-w-[800px] max-h-[600px] object-cover"
+          alt="Modal Image"
+        />
+      </div>
+      <div className={click ? "hidden" : ""}>
+        <div className="grid xl:grid-cols-3 md:grid-cols-1 gap-4 xl:w-[70%] ">
+          <div>
+            <Input
+              label="Search products..."
+              value={product}
+              onChange={(e) => setProduct(e.target.value)}
+            />
+          </div>
+          <div>
+            <Select
+              label="Status"
+              value={status}
+              onChange={(e) => setStatus(e)}
+            >
+              <Option value="All Status">All Status</Option>
+              <Option value="Waiting">Waiting</Option>
+              <Option value="Doing">Doing</Option>
+              <Option value="Review">Review</Option>
+              <Option value="Fix">Fix</Option>
+              <Option value="Confirm">Confirm</Option>
+              <Option value="Done">Done</Option>
+            </Select>
+          </div>
+          <div>
+            {/* <Select label="Select Version">
             <Option>Material Tailwind HTML</Option>
             <Option>Material Tailwind React</Option>
             <Option>Material Tailwind Vue</Option>
             <Option>Material Tailwind Angular</Option>
             <Option>Material Tailwind Svelte</Option>
           </Select> */}
-        </div>
-        <div>
-          <Select
-            label="Chọn type ngày"
-            value={typeDate}
-            onChange={(e) => setTypeDate(e)}
-          >
-            <Option value="createdAt">Ngày tạo</Option>
-            <Option value="updatedAt">Ngày cập nhật</Option>
-          </Select>
-        </div>
-        <div>
-          <Input
-            label="Date from"
-            type="date"
-            value={dateFrom}
-            onChange={(e) => setDateFrom(e.target.value)}
-          />
-        </div>
-        <div>
-          <Input
-            label="Date to"
-            type="date"
-            onChange={(e) => setDateTo(e.target.value)}
-            value={dateTo}
-          />
-        </div>
-        <div className="flex w-[80%] mb-5">
-          <div className="">
-            <Button
-              className="flex items-center gap-3 py-2"
-              onClick={applyFilters}
-            >
-              <MagnifyingGlassIcon strokeWidth={2} className=" w-5" /> Search
-            </Button>
           </div>
-          <div className="ml-2">
-            <Button
-              className="flex items-center gap-3 py-2"
-              onClick={handleClearFrom}
+          <div>
+            <Select
+              label="Chọn type ngày"
+              value={typeDate}
+              onChange={(e) => setTypeDate(e)}
             >
-              <ArrowPathIcon strokeWidth={2} className=" w-5" />
-              Clear form
-            </Button>
+              <Option value="createdAt">Ngày tạo</Option>
+              <Option value="updatedAt">Ngày cập nhật</Option>
+            </Select>
+          </div>
+          <div>
+            <Input
+              label="Date from"
+              type="date"
+              value={dateFrom}
+              onChange={(e) => setDateFrom(e.target.value)}
+            />
+          </div>
+          <div>
+            <Input
+              label="Date to"
+              type="date"
+              onChange={(e) => setDateTo(e.target.value)}
+              value={dateTo}
+            />
+          </div>
+          <div className="flex w-[80%] mb-5">
+            <div className="">
+              <Button
+                className="flex items-center gap-3 py-2"
+                onClick={applyFilters}
+              >
+                <MagnifyingGlassIcon strokeWidth={2} className=" w-5" /> Search
+              </Button>
+            </div>
+            <div className="ml-2">
+              <Button
+                className="flex items-center gap-3 py-2"
+                onClick={handleClearFrom}
+              >
+                <ArrowPathIcon strokeWidth={2} className=" w-5" />
+                Clear form
+              </Button>
+            </div>
           </div>
         </div>
+        <MaterialReactTable
+          columns={columns}
+          data={isFilterActive ? filteredData : data ?? []}
+          state={{ isLoading: isLoading }}
+          initialState={{ showColumnFilters: false }}
+          enableRowActions
+          enableColumnResizing
+          renderRowActions={({ row, table }) => [
+            <div className="mb-[340px]">
+              <IconButton
+                color="secondary"
+                onClick={() => {
+                  console.log(row.original.id);
+                  history(`/detail/${row.original.id}`);
+                }}
+              >
+                <EditIcon />
+              </IconButton>
+            </div>,
+          ]}
+          positionActionsColumn="last"
+          filterFns={{
+            filterProductName: (row, id, filterValue) =>
+              row.original.product.name
+                .toLowerCase()
+                .includes(filterValue.toLowerCase()),
+          }}
+          globalFilterFn="filterProductName"
+          muiTableProps={{
+            sx: {
+              border: "1px solid rgba(81, 81, 81, 1)",
+            },
+          }}
+          muiTableHeadCellProps={{
+            sx: {
+              border: "1px solid rgba(81, 81, 81, 1)",
+            },
+          }}
+          muiTableBodyCellProps={{
+            sx: {
+              border: "1px solid rgba(81, 81, 81, 1)",
+            },
+          }}
+        />
       </div>
-      <MaterialReactTable
-        columns={columns}
-        data={isFilterActive ? filteredData : data ?? []}
-        state={{ isLoading: isLoading }}
-        initialState={{ showColumnFilters: false }}
-        enableRowActions
-        enableColumnResizing
-        renderRowActions={({ row, table }) => [
-          <div className="mb-[340px]">
-            <IconButton
-              color="secondary"
-              onClick={() => {
-                console.log(row.original.id);
-                history(`/detail/${row.original.id}`);
-              }}
-            >
-              <EditIcon />
-            </IconButton>
-          </div>,
-        ]}
-        positionActionsColumn="last"
-        filterFns={{
-          filterProductName: (row, id, filterValue) =>
-            row.original.product.name
-              .toLowerCase()
-              .includes(filterValue.toLowerCase()),
-        }}
-        globalFilterFn="filterProductName"
-        muiTableProps={{
-          sx: {
-            border: "1px solid rgba(81, 81, 81, 1)",
-          },
-        }}
-        muiTableHeadCellProps={{
-          sx: {
-            border: "1px solid rgba(81, 81, 81, 1)",
-          },
-        }}
-        muiTableBodyCellProps={{
-          sx: {
-            border: "1px solid rgba(81, 81, 81, 1)",
-          },
-        }}
-      />
     </>
   );
 };

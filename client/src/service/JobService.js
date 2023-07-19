@@ -33,8 +33,8 @@ export const addUsertoJob = async (id, data, access_token) => {
   }
 };
 
-export const getJobUser = async () => {
-  const res = await axios.get(`${URL}api/v1/job/getJob/ByUser`);
+export const getJobUser = async (id) => {
+  const res = await axios.get(`${URL}api/v1/job/getJob/ByUser/${id}`);
   return res.data;
 };
 export const getDetail = async (id, access_token) => {
