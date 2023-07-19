@@ -281,7 +281,7 @@ function TableV2() {
                     <Input
                       type="email"
                       label="Email Address"
-                      value={200}
+                      value={item.attributes.outsource_price}
                       // onChange={onChange}
                       disabled
                       className="pr-20"
