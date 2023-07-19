@@ -14,7 +14,6 @@ const createJob = async (req, res) => {
       designs,
       attributes,
     } = req.body;
-    console.log(attributes);
     // Định nghĩa schema Joi cho dữ liệu đầu vào
     const schema = Joi.object({
       payment_type: Joi.string(),
@@ -59,25 +58,22 @@ const createJob = async (req, res) => {
     }
     // Kiểm tra số tiền hiện có của người dùng
     const sku = product.sku; // Lấy SKU từ product
+    console.log(sku);
     let price = 0;
     let updatedAttributes = {};
     // Kiểm tra SKU và xác định giá tiền tương ứng
-    if (sku === "Tshirt2D") {
+    if (sku == "Tshirt2D") {
       price = guest.typeGia.Tshirt2D.customer; // Giá tiền cho loại Tshirt2D và người dùng
       updatedAttributes = { outsource_price: guest.typeGia.Tshirt2D.user };
-    } else if (sku === "Poster") {
+    } else if (sku == "Poster") {
       price = guest.typeGia.Poster.customer; // Giá tiền cho loại Poster và người dùng
       updatedAttributes = { outsource_price: guest.typeGia.Poster.user };
-    } else if (sku === "T3D") {
+    } else if (sku == "T3D") {
       price = guest.typeGia.T3D.customer; // Giá tiền cho loại T3D và người dùng
       updatedAttributes = { outsource_price: guest.typeGia.T3D.user };
-    } else if (sku === "Quan3D") {
+    } else if (sku == "Quan3D") {
       price = guest.typeGia.Quan3D.customer; // Giá tiền cho loại Quan3D và người dùng
       updatedAttributes = { outsource_price: guest.typeGia.Quan3D.user };
-    }
-
-    if (price === 0) {
-      return res.status(400).json({ message: "Invalid SKU" });
     }
 
     if (guest.money < price) {
@@ -257,11 +253,10 @@ const updateJob = async (req, res) => {
 };
 const getJobByUser = async (req, res) => {
   try {
-    const designerId = req.params.designerId;
+    const { designerId } = req.params;
 
     const jobs = await Job.find({
-      "designer.designer_id": { $exists: true },
-      "designer.designer_id._id": designerId,
+      "designer.designer_id": designerId,
       isDeleted: false,
     }).populate([
       {
@@ -431,15 +426,21 @@ const updateGuest = async (req, res) => {
 const updateByAdmin = async (req, res) => {
   try {
     const { id } = req.params;
-    const { status, outsource_note,monetary_fine,designer_id } = req.body;
+    const { status, outsource_note, monetary_fine, designer_id } = req.body;
+    const updateFields = {
+      status,
+      "attributes.outsource_note": outsource_note,
+      "attributes.monetary_fine": monetary_fine,
+    };
 
+    if (designer_id) {
+      updateFields["designer.designer_id"] = designer_id;
+    }
     const updatedJob = await Job.findOneAndUpdate(
       { id: id },
       {
         status,
-        "attributes.outsource_note": outsource_note,
-        "attributes.monetary_fine":monetary_fine,
-        "designer.designer_id":designer_id
+        updateFields,
       },
       { new: true }
     );
@@ -495,5 +496,5 @@ module.exports = {
   getByGuest,
   updateGuest,
   updateByAdmin,
-  getTotalPrice
+  getTotalPrice,
 };

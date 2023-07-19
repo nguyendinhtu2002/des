@@ -26,7 +26,7 @@ router.put("/update/:id", updateStatus);
 router.get("/getall/byUser", protect, user, getJobByStatus);
 router.delete("/delete/:id", deleteJob);
 router.post("/addUsertoJob/:id", protect, updateJob);
-router.get("/getJob/ByUser", getJobByUser);
+router.get("/getJob/ByUser/:designerId", getJobByUser);
 router.post("/cancelJob/:id", protect, user, cancelJob);
 router.delete("/detele/img/:id", deleteImg);
 router.put("/update/other/:id", protect, updateOrder);
