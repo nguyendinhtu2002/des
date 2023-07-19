@@ -1,8 +1,10 @@
-import React, { useMemo, useState } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { MaterialReactTable } from "material-react-table";
 import * as JobService from "../../service/JobService";
 import * as UserService from "../../service/UserService";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
 
 import { useSelector } from "react-redux";
 import { useQuery } from "react-query";
@@ -18,6 +20,7 @@ import {
   Typography,
   Select,
   Option,
+  Textarea,
 } from "@material-tailwind/react";
 
 import { Edit as EditIcon } from "@mui/icons-material";
@@ -37,10 +40,16 @@ function Main() {
   const [dateTo, setDateTo] = useState("");
   const [designer, setDesigner] = useState("");
   const [user, setUser] = useState("");
+  const [click, setClick] = useState(false);
   const history = useNavigate();
   const userLogin = useSelector((state) => state.user);
   const handleNoteDoubleClick = () => {
     setIsNoteVisible(true);
+  };
+  const [selectedDate, setSelectedDate] = useState(null);
+
+  const handleDateChange = (date) => {
+    setSelectedDate(date);
   };
   const fetchJob = async () => {
     const access_token = JSON.parse(localStorage.getItem("access_token"));
@@ -63,7 +72,9 @@ function Main() {
     const filtered = data.filter((item) => {
       if (typeDate === "createdAt") {
         return (
-          (!user || item.designer?.designer_id?._id == user) &&
+          (!user ||
+            item.designer?.designer_id?._id == user ||
+            item.guest_create?._id == user) &&
           (!status || status === "All Status" || item.status === status) &&
           (!product || item.product.name === product) &&
           (!dateFrom ||
@@ -72,7 +83,9 @@ function Main() {
         );
       } else if (typeDate === "updatedAt") {
         return (
-          (!user || item.designer.designer_id._id == user) &&
+          (!user ||
+            item.designer?.designer_id?._id == user ||
+            item.guest_create?._id == user) &&
           (!status || status === "All Status" || item.status === status) &&
           (!product || item.product.name === product) &&
           (!dateFrom ||
@@ -117,8 +130,19 @@ function Main() {
   const fetchUser = async () => {
     const access_token = JSON.parse(localStorage.getItem("access_token"));
 
-    const res = await UserService.getUserByCustomer(access_token);
+    const res = await UserService.getAll(access_token);
     return res;
+  };
+  const showModal = (src) => {
+    setClick(true);
+    document.getElementById("modal").classList.remove("hidden");
+    document.getElementById("modal-img").src = src;
+  };
+
+  const closeModal = () => {
+    setClick(false);
+
+    document.getElementById("modal").classList.add("hidden");
   };
   const { isLoading: isLoading1, data: data1 } = useQuery(["users"], fetchUser);
   const columns = useMemo(
@@ -137,72 +161,50 @@ function Main() {
         enableGlobalFilter: true,
         enableColumnFilter: false,
         Cell: ({ cell }) => {
-          const { name, size, sku, image_url } = cell.row.original.product;
+          const { name, size, sku, image_url,Deadline } = cell.row.original.product;
           return (
             <div>
               <div className="pl-2 pt-2">
                 <img
                   className="ng-scope h-5 w-[30px] cursor-default inline"
                   src={image_url}
+                  onClick={() => showModal(image_url)}
                 />
+
                 <a className="text-[#3c8dbc]">
                   <h5 class="ng-binding inline text-[#3c8dbc] ml-1 ">{name}</h5>
                 </a>
-                <div class="form-check pt-2">
-                  <Checkbox
-                    label={
-                      <Typography
-                        variant="small"
-                        color="gray"
-                        className="flex items-center font-normal"
-                      >
-                        Multiple design
-                      </Typography>
-                    }
-                    containerProps={{ className: "-ml-2.5 py-0" }}
-                    disabled
-                  />
-                </div>
-                <div class="form-check">
-                  <Checkbox
-                    label={
-                      <Typography
-                        variant="small"
-                        color="gray"
-                        className="flex items-center font-normal"
-                      >
-                        Double sided
-                      </Typography>
-                    }
-                    containerProps={{ className: "-ml-2.5 py-0" }}
-                    disabled
-                  />
-                </div>
               </div>
-              <div className="mt-[0.5px] pl-2">
-                <strong>Độ ưu tiên: </strong>
-                <span className="bg-[#d2d6de] rounded py-[2px] px-[7px] text-[10px] mt-0 mx-0 mb-[3px] text-center inline-block">
-                  Ưu tiên
-                </span>
-              </div>
+
               <div className="mt-[0.5px] pl-2">
                 <strong>Created at:</strong>
-                <span class="ng-binding"> 16:12' 12/07/2023</span>
+                <span class="ng-binding">
+                  {" "}
+                  {moment(cell.row.original.createdAt).format(
+                    "YYYY-MM-DD HH:mm:ss.SSS"
+                  )}
+                </span>
               </div>
               <div className=" pl-2">
                 <strong>Created at:</strong>
                 <span class="ng-binding text-[#a94442]">
                   {" "}
-                  12:42' 13/07/2023
+                  <span class="ng-binding">
+                    {" "}
+                    {moment(Deadline).format(
+                      "YYYY-MM-DD HH:mm:ss.SSS"
+                    )}
+                  </span>
                 </span>
               </div>
               <div className="flex flex-wrap m-h-[180px] overflow-y-scroll pl-2">
                 <div className="p-[5px] mb-[10px] mr-[5px] border border-solid border-[#ddd] rounded-lg w-[160px]">
                   <a className="">
                     <Avatar
-                      src="https://cdn.prtvstatic.com/unsafe/600x0/assets.printerval.com/2023/05/17/646474149ef240.11658332.jpg"
+                      src={image_url}
                       size="lg"
                       alt="avatar"
+                      onClick={() => showModal(image_url)}
                     />
                   </a>
                   <div className="inline-block align-middle">
@@ -221,7 +223,7 @@ function Main() {
             </div>
           );
         },
-        size: 200,
+        size: 240,
       },
       {
         header: "Design",
@@ -241,6 +243,7 @@ function Main() {
                       size="xxl"
                       className="cd:max-w-fit"
                       variant="square"
+                      onClick={()=>showModal(design.url)}
                     />
                     <button
                       className="absolute top-0  p-1 bg-red-500 rounded-full text-white hover:bg-red-600 transition-colors duration-300"
@@ -281,7 +284,7 @@ function Main() {
             <div
               className={
                 cell.row.original.attributes.outsource_note
-                  ? "mb-[30px]"
+                  ? "mb-[55px]"
                   : "mb-[60px]"
               }
             >
@@ -292,7 +295,7 @@ function Main() {
                 />
               </div>
               <div class="form-group mx-2 mb-1">
-                <Input label={cell.row.original.guest_create.name} disabled />
+                <Input label={cell.row.original.guest_create?.name} disabled />
               </div>
               <div className="mx-2">
                 <Typography
@@ -302,13 +305,12 @@ function Main() {
                 >
                   Note outsource:
                 </Typography>
-                <div
-                  className="pre-note ng-binding ml-2 cursor-default"
-                  onDoubleClick={handleNoteDoubleClick}
-                  aria-hidden={!isNoteVisible}
-                >
-                  {cell.row.original.attributes.outsource_note}
-                </div>
+                <Textarea
+                  label="Message"
+                  disabled
+                  value={cell.row.original.attributes.outsource_note}
+                />
+
                 {/* {isNoteVisible && <Textarea label="Message" />}
                   {isNoteVisible && (
                     <Button
@@ -338,15 +340,6 @@ function Main() {
                       className: "min-w-0",
                     }}
                   />
-                  <Button
-                    size="sm"
-                    // color={email ? "blue" : "blue-gray"}
-                    // disabled={!email}
-                    disabled
-                    className="!absolute right-1 top-1 rounded"
-                  >
-                    Lưu
-                  </Button>
                 </div>
                 <Typography
                   variant="small"
@@ -367,22 +360,13 @@ function Main() {
                       className: "min-w-0",
                     }}
                   />
-                  <Button
-                    size="sm"
-                    // color={email ? "blue" : "blue-gray"}
-                    // disabled={!email}
-                    disabled
-                    className="!absolute right-1 top-1 rounded"
-                  >
-                    Lưu
-                  </Button>
                 </div>
               </div>
             </div>
           );
         },
-        // size: 290,
-        maxSize: 200,
+        size: 411,
+        maxSize: 411,
         minSize: 150,
       },
       {
@@ -394,7 +378,7 @@ function Main() {
         // enableColumnFilter: false, // Disable column filter for this column
         Cell: ({ cell }) => {
           return (
-            <div className="mb-[320px]">
+            <div className="mb-[430px]">
               <Input label={cell.row.original.status} disabled />
               {/* <Button
                 size="sm"
@@ -409,9 +393,9 @@ function Main() {
             </div>
           );
         },
-        size: 125,
-        minSize: 100,
-        maxSize: 140,
+        // size: 125,
+        minSize: 120,
+        maxSize: 160,
       },
     ],
     []
@@ -423,6 +407,7 @@ function Main() {
     setStatus("Doing");
     setTypeDate("createdAt");
   };
+
   return (
     <section className="content-main">
       <div className="content-header">
@@ -433,8 +418,30 @@ function Main() {
           </Link>
         </div> */}
       </div>
+      <div
+        id="modal"
+        className="hidden fixed top-0 left-0 z-80 w-screen h-screen bg-black/70 flex justify-center items-center"
+      >
+        <a
+          className="fixed z-90 top-6 right-8 text-white text-5xl font-bold"
+          href="javascript:void(0)"
+          onClick={closeModal}
+        >
+          &times;
+        </a>
 
-      <div className="card mb-4 shadow-sm">
+        <img
+          id="modal-img"
+          className="max-w-[800px] max-h-[600px] object-cover"
+          alt="Modal Image"
+        />
+      </div>
+
+      <div
+        className={
+          click ? " hidden card mb-4 shadow-sm" : "card mb-4 shadow-sm"
+        }
+      >
         <div className="card-body">
           {/* {loading ? (
             <Loading />
@@ -493,9 +500,9 @@ function Main() {
               <Input
                 label="Date from"
                 type="date"
-                value={dateFrom}
                 onChange={(e) => setDateFrom(e.target.value)}
-              />
+                value={dateTo}
+              />{" "}
             </div>
             <div>
               <Input
@@ -527,6 +534,7 @@ function Main() {
               </div>
             </div>
           </div>
+
           <MaterialReactTable
             columns={columns}
             data={isFilterActive ? filteredData : data ?? []}
@@ -535,7 +543,7 @@ function Main() {
             enableRowActions
             enableColumnResizing
             renderRowActions={({ row, table }) => [
-              <div className="mb-[326px]">
+              <div className="mb-[430px]">
                 <IconButton
                   color="secondary"
                   onClick={() => {

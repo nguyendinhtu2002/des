@@ -1,12 +1,10 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import moment from "moment";
-import { useDispatch, useSelector } from "react-redux";
 import * as UserService from "../../service/UserService";
 import { toast } from "react-toastify";
 import Toast from "../LoadingError/Toast";
 import { MaterialReactTable } from "material-react-table";
-import { IconButton } from "@material-tailwind/react";
 import {
   Edit as EditIcon,
   EditNotifications,
@@ -14,11 +12,30 @@ import {
 } from "@mui/icons-material";
 import { Box } from "@mui/material";
 import { useMutationHooks } from "../../hooks/useMutationHook";
+import {
+  ArrowPathIcon,
+  MagnifyingGlassIcon,
+} from "@heroicons/react/24/outline";
+import {
+  Avatar,
+  Button,
+  Checkbox,
+  IconButton,
+  Input,
+  Typography,
+  Select,
+  Option,
+} from "@material-tailwind/react";
 
 const Users = (props) => {
   const { data } = props;
   const [loading, setLoading] = useState("");
   const [tempData, setTempData] = useState([]);
+  const [role, setRole] = useState("");
+  const [isNoteVisible, setIsNoteVisible] = useState(false);
+  const [filteredData, setFilteredData] = useState([]);
+  const [isFilterActive, setIsFilterActive] = useState(false);
+
   const history = useNavigate();
 
   const toastId = React.useRef(null);
@@ -115,6 +132,14 @@ const Users = (props) => {
     ],
     []
   );
+  const applyFilters = () => {
+    const filtered = data.filter((item) => {
+      return item.role === role
+    });
+
+    setFilteredData(filtered);
+    setIsFilterActive(true);
+  };
   const { error, isSuccess } = mutationDelete;
   useEffect(() => {
     if (!error && isSuccess) {
@@ -135,9 +160,47 @@ const Users = (props) => {
   return (
     <>
       <Toast />
+      <div className="grid xl:grid-cols-3 md:grid-cols-1 gap-4 xl:w-[70%] pt-4">
+        <div>
+          <Select label="Role" onChange={(e) => setRole(e)}>
+            <Option value="customer">Người dùng</Option>
+            <Option value="guest">Khách hàng</Option>
+          </Select>
+        </div>
+        <div>
+          {/* <Input
+            label="Search tên người dùng..."
+            // value={product}
+            // onChange={(e) => setProduct(e.target.value)}
+          /> */}
+        </div>
+
+        <div></div>
+
+        <div className="flex w-[80%] mb-5">
+          <div className="">
+            <Button
+              className="flex items-center gap-3 py-2"
+              onClick={applyFilters}
+            >
+              <MagnifyingGlassIcon strokeWidth={2} className=" w-5" /> Search
+            </Button>
+          </div>
+          <div className="ml-2">
+            <Button
+              className="flex items-center gap-3 py-2"
+              style={{ textTransform: "none" }}
+              // onClick={handleClearFrom}
+            >
+              <ArrowPathIcon strokeWidth={2} className=" w-5" />
+              Clear
+            </Button>
+          </div>
+        </div>
+      </div>
       <MaterialReactTable
         columns={columns}
-        data={data}
+        data={isFilterActive ? filteredData : data ?? []}
         initialState={{ showColumnFilters: false }}
         enableRowActions
         enableColumnResizing

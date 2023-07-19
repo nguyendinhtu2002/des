@@ -59,7 +59,6 @@ const CreateUser = () => {
       updateAdmin != "" &&
       username != "" &&
       password != "" &&
-      soDu != "" &&
       name!=""
     ) {
       const updateData = {

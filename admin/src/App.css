@@ -899,7 +899,9 @@ ul.row-sm {
   display: inline-block;
   cursor: ns-resize !important;
 }
-
+.dropdown-toggle::after{
+  content: none;
+}
 .btn-sm i {
   font-size: 1.2rem;
   line-height: 0.7;

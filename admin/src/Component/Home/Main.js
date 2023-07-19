@@ -6,8 +6,7 @@ import ProductsStatistics from "./ProductsStatistics";
 // import * as ProductService from "../../Services/ProductService";
 // import { useQuery } from "react-query";
 // import * as PayService from "../../Services/OrderSevice";
-import * as JobService from "../../service/JobService";
-import * as UserService from "../../service/UserService";
+
 const Main = () => {
   // const dispatch = useDispatch();
   const [loading, setLoading] = useState(false);
