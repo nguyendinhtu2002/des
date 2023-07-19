@@ -62,13 +62,15 @@ function App() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route element={<PrivateRoutes />}></Route>
+        <Route element={<PrivateRoutes />}>
         <Route path="/" element={<HomeScreen />} />
         <Route path="/products" element={<ProductScreen />} />
         <Route path="/detail/:id" element={<EditProduct />} />
         <Route path="/users" element={<UserPage />} />
         <Route path="/user/detail/:id" element={<EditUserPage />} />
         <Route path="/addUser" element={<NewUser />} />
+
+        </Route>
 
         <Route path="/login" element={<Login />} />
       </Routes>
