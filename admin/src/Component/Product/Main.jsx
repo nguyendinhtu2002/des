@@ -29,6 +29,7 @@ import {
   MagnifyingGlassIcon,
 } from "@heroicons/react/24/outline";
 import moment from "moment";
+import { useMutationHooks } from "../../hooks/useMutationHook";
 function Main() {
   const [isNoteVisible, setIsNoteVisible] = useState(false);
   const [filteredData, setFilteredData] = useState([]);
@@ -48,15 +49,18 @@ function Main() {
   };
   const [selectedDate, setSelectedDate] = useState(null);
 
-  const handleDateChange = (date) => {
-    setSelectedDate(date);
-  };
   const fetchJob = async () => {
     const access_token = JSON.parse(localStorage.getItem("access_token"));
     const res = await JobService.getAllJob(access_token);
 
     return res;
   };
+  const mutationDelete = useMutationHooks(async (data) => {
+    const access_token = JSON.parse(localStorage.getItem("access_token"));
+    const { id } = data;
+    const res = await JobService.deleteJob(id, access_token);
+    return res;
+  });
   const toastId = React.useRef(null);
   const Toastobjects = {
     position: "top-right",
@@ -67,6 +71,14 @@ function Main() {
     draggable: true,
     progress: undefined,
   };
+  const handleDeleteJob = (id) => {
+    if (window.confirm("Bạn có đồng ý xóa không?")) {
+      mutationDelete.mutate({
+        id,
+      });
+    }
+  };
+  const { error, isSuccess } = mutationDelete;
   const { isLoading, data } = useQuery(["products"], fetchJob);
   const applyFilters = () => {
     const filtered = data.filter((item) => {
@@ -161,7 +173,8 @@ function Main() {
         enableGlobalFilter: true,
         enableColumnFilter: false,
         Cell: ({ cell }) => {
-          const { name, size, sku, image_url,Deadline } = cell.row.original.product;
+          const { name, size, sku, image_url, Deadline } =
+            cell.row.original.product;
           return (
             <div>
               <div className="pl-2 pt-2">
@@ -191,9 +204,7 @@ function Main() {
                   {" "}
                   <span class="ng-binding">
                     {" "}
-                    {moment(Deadline).format(
-                      "YYYY-MM-DD HH:mm:ss.SSS"
-                    )}
+                    {moment(Deadline).format("YYYY-MM-DD HH:mm:ss.SSS")}
                   </span>
                 </span>
               </div>
@@ -243,7 +254,7 @@ function Main() {
                       size="xxl"
                       className="cd:max-w-fit"
                       variant="square"
-                      onClick={()=>showModal(design.url)}
+                      onClick={() => showModal(design.url)}
                     />
                     <button
                       className="absolute top-0  p-1 bg-red-500 rounded-full text-white hover:bg-red-600 transition-colors duration-300"
@@ -284,8 +295,8 @@ function Main() {
             <div
               className={
                 cell.row.original.attributes.outsource_note
-                  ? "mb-[55px]"
-                  : "mb-[60px]"
+                  ? "mb-[95px]"
+                  : "mb-[95px]"
               }
             >
               <div class="form-group mx-2 mb-4">
@@ -380,16 +391,16 @@ function Main() {
           return (
             <div className="mb-[430px]">
               <Input label={cell.row.original.status} disabled />
-              {/* <Button
+              <Button
                 size="sm"
                 // color={email ? "blue" : "blue-gray"}
                 // disabled={!email}
                 // disabled
                 className="mt-2"
-                onClick={() => submitHandler(cell.row.original.id)}
+                onClick={() => handleDeleteJob(cell.row.original.id)}
               >
                 Hủy job
-              </Button> */}
+              </Button>
             </div>
           );
         },
@@ -407,181 +418,195 @@ function Main() {
     setStatus("Doing");
     setTypeDate("createdAt");
   };
-
+  useEffect(() => {
+    // hangldeGetAll();
+    if (!error && isSuccess) {
+      if (!toast.isActive(toastId.current)) {
+        toastId.current = toast.success("Thành công!", Toastobjects);
+      }
+    } else if (error) {
+      if (!toast.isActive(toastId.current)) {
+        toastId.current = toast.error("Có lỗi vui lòng thử lại", Toastobjects);
+      }
+    }
+  }, [error, isSuccess]);
   return (
-    <section className="content-main">
-      <div className="content-header">
-        {/* <h2 className="content-title ">Products</h2> */}
-        {/* <div>
+    <>
+      <Toast />
+      <section className="content-main">
+        <div className="content-header">
+          {/* <h2 className="content-title ">Products</h2> */}
+          {/* <div>
           <Link to="/addproduct" className="btn btn-primary">
             Create new
           </Link>
         </div> */}
-      </div>
-      <div
-        id="modal"
-        className="hidden fixed top-0 left-0 z-80 w-screen h-screen bg-black/70 flex justify-center items-center"
-      >
-        <a
-          className="fixed z-90 top-6 right-8 text-white text-5xl font-bold"
-          href="javascript:void(0)"
-          onClick={closeModal}
+        </div>
+        <div
+          id="modal"
+          className="hidden fixed top-0 left-0 z-80 w-screen h-screen bg-black/70 flex justify-center items-center"
         >
-          &times;
-        </a>
+          <a
+            className="fixed z-90 top-6 right-8 text-white text-5xl font-bold"
+            href="javascript:void(0)"
+            onClick={closeModal}
+          >
+            &times;
+          </a>
 
-        <img
-          id="modal-img"
-          className="max-w-[800px] max-h-[600px] object-cover"
-          alt="Modal Image"
-        />
-      </div>
+          <img
+            id="modal-img"
+            className="max-w-[800px] max-h-[600px] object-cover"
+            alt="Modal Image"
+          />
+        </div>
 
-      <div
-        className={
-          click ? " hidden card mb-4 shadow-sm" : "card mb-4 shadow-sm"
-        }
-      >
-        <div className="card-body">
-          {/* {loading ? (
+        <div
+          className={
+            click ? " hidden card mb-4 shadow-sm" : "card mb-4 shadow-sm"
+          }
+        >
+          <div className="card-body">
+            {/* {loading ? (
             <Loading />
           ) : (
             <div className="row">
               <Table data={tempData} columns={columns} sub={true} />
             </div>
           )} */}
-          <div className="grid xl:grid-cols-3 md:grid-cols-1 gap-4 xl:w-[70%] ">
-            <div>
-              <Input
-                label="Search products..."
-                value={product}
-                onChange={(e) => setProduct(e.target.value)}
-              />
-            </div>
-            <div>
-              <Select
-                label="Status"
-                value={status}
-                onChange={(e) => setStatus(e)}
-              >
-                <Option value="All Status">All Status</Option>
-                <Option value="Waiting Admin">Waiting Admin</Option>
-                <Option value="Waiting">Waiting</Option>
-                <Option value="Doing">Doing</Option>
-                <Option value="Review">Review</Option>
-                <Option value="Fix">Fix</Option>
-                <Option value="Confirm">Confirm</Option>
-                <Option value="Done">Done</Option>
-              </Select>
-            </div>
-            <div>
-              <select
-                class="form-select"
-                aria-label="Default select example"
-                onChange={(e) => setUser(e.target.value)}
-              >
-                <option selected>Choose Des</option>
-                {data1?.map((item) => (
-                  <option value={item._id}>{item.name}</option>
-                ))}
-              </select>
-            </div>
-            <div>
-              <Select
-                label="Chọn type ngày"
-                value={typeDate}
-                onChange={(e) => setTypeDate(e)}
-              >
-                <Option value="createdAt">Ngày tạo</Option>
-                <Option value="updatedAt">Ngày cập nhật</Option>
-              </Select>
-            </div>
-            <div>
-              <Input
-                label="Date from"
-                type="date"
-                onChange={(e) => setDateFrom(e.target.value)}
-                value={dateTo}
-              />{" "}
-            </div>
-            <div>
-              <Input
-                label="Date to"
-                type="date"
-                onChange={(e) => setDateTo(e.target.value)}
-                value={dateTo}
-              />
-            </div>
-            <div className="flex w-[80%] mb-5">
-              <div className="">
-                <Button
-                  className="flex items-center gap-3 py-2"
-                  onClick={applyFilters}
-                >
-                  <MagnifyingGlassIcon strokeWidth={2} className=" w-5" />{" "}
-                  Search
-                </Button>
+            <div className="grid xl:grid-cols-3 md:grid-cols-1 gap-4 xl:w-[70%] ">
+              <div>
+                <Input
+                  label="Search products..."
+                  value={product}
+                  onChange={(e) => setProduct(e.target.value)}
+                />
               </div>
-              <div className="ml-2">
-                <Button
-                  className="flex items-center gap-3 py-2"
-                  style={{ textTransform: "none" }}
-                  onClick={handleClearFrom}
+              <div>
+                <Select
+                  label="Status"
+                  value={status}
+                  onChange={(e) => setStatus(e)}
                 >
-                  <ArrowPathIcon strokeWidth={2} className=" w-5" />
-                  Clear
-                </Button>
+                  <Option value="All Status">All Status</Option>
+                  <Option value="Waiting Admin">Waiting Admin</Option>
+                  <Option value="Waiting">Waiting</Option>
+                  <Option value="Doing">Doing</Option>
+                  <Option value="Review">Review</Option>
+                  <Option value="Fix">Fix</Option>
+                  <Option value="Confirm">Confirm</Option>
+                  <Option value="Done">Done</Option>
+                </Select>
+              </div>
+              <div>
+                <select
+                  class="form-select"
+                  aria-label="Default select example"
+                  onChange={(e) => setUser(e.target.value)}
+                >
+                  <option selected>Choose Des</option>
+                  {data1?.map((item) => (
+                    <option value={item._id}>{item.name}</option>
+                  ))}
+                </select>
+              </div>
+              <div>
+                <Select
+                  label="Chọn type ngày"
+                  value={typeDate}
+                  onChange={(e) => setTypeDate(e)}
+                >
+                  <Option value="createdAt">Ngày tạo</Option>
+                  <Option value="updatedAt">Ngày cập nhật</Option>
+                </Select>
+              </div>
+              <div>
+                <Input
+                  label="Date from"
+                  type="date"
+                  onChange={(e) => setDateFrom(e.target.value)}
+                  value={dateTo}
+                />{" "}
+              </div>
+              <div>
+                <Input
+                  label="Date to"
+                  type="date"
+                  onChange={(e) => setDateTo(e.target.value)}
+                  value={dateTo}
+                />
+              </div>
+              <div className="flex w-[80%] mb-5">
+                <div className="">
+                  <Button
+                    className="flex items-center gap-3 py-2"
+                    onClick={applyFilters}
+                  >
+                    <MagnifyingGlassIcon strokeWidth={2} className=" w-5" />{" "}
+                    Search
+                  </Button>
+                </div>
+                <div className="ml-2">
+                  <Button
+                    className="flex items-center gap-3 py-2"
+                    style={{ textTransform: "none" }}
+                    onClick={handleClearFrom}
+                  >
+                    <ArrowPathIcon strokeWidth={2} className=" w-5" />
+                    Clear
+                  </Button>
+                </div>
               </div>
             </div>
-          </div>
 
-          <MaterialReactTable
-            columns={columns}
-            data={isFilterActive ? filteredData : data ?? []}
-            state={{ isLoading: isLoading }}
-            initialState={{ showColumnFilters: false }}
-            enableRowActions
-            enableColumnResizing
-            renderRowActions={({ row, table }) => [
-              <div className="mb-[430px]">
-                <IconButton
-                  color="secondary"
-                  onClick={() => {
-                    console.log(row.original.id);
-                    history(`/detail/${row.original.id}`);
-                  }}
-                >
-                  <EditIcon />
-                </IconButton>
-              </div>,
-            ]}
-            positionActionsColumn="last"
-            filterFns={{
-              filterProductName: (row, id, filterValue) =>
-                row.original.product.name
-                  .toLowerCase()
-                  .includes(filterValue.toLowerCase()),
-            }}
-            globalFilterFn="filterProductName"
-            muiTableProps={{
-              sx: {
-                border: "1px solid rgba(81, 81, 81, 1)",
-              },
-            }}
-            muiTableHeadCellProps={{
-              sx: {
-                border: "1px solid rgba(81, 81, 81, 1)",
-              },
-            }}
-            muiTableBodyCellProps={{
-              sx: {
-                border: "1px solid rgba(81, 81, 81, 1)",
-              },
-            }}
-          />
+            <MaterialReactTable
+              columns={columns}
+              data={isFilterActive ? filteredData : data ?? []}
+              state={{ isLoading: isLoading }}
+              initialState={{ showColumnFilters: false }}
+              enableRowActions
+              enableColumnResizing
+              renderRowActions={({ row, table }) => [
+                <div className="mb-[430px]">
+                  <IconButton
+                    color="secondary"
+                    onClick={() => {
+                      console.log(row.original.id);
+                      history(`/detail/${row.original.id}`);
+                    }}
+                  >
+                    <EditIcon />
+                  </IconButton>
+                </div>,
+              ]}
+              positionActionsColumn="last"
+              filterFns={{
+                filterProductName: (row, id, filterValue) =>
+                  row.original.product.name
+                    .toLowerCase()
+                    .includes(filterValue.toLowerCase()),
+              }}
+              globalFilterFn="filterProductName"
+              muiTableProps={{
+                sx: {
+                  border: "1px solid rgba(81, 81, 81, 1)",
+                },
+              }}
+              muiTableHeadCellProps={{
+                sx: {
+                  border: "1px solid rgba(81, 81, 81, 1)",
+                },
+              }}
+              muiTableBodyCellProps={{
+                sx: {
+                  border: "1px solid rgba(81, 81, 81, 1)",
+                },
+              }}
+            />
+          </div>
         </div>
-      </div>
-    </section>
+      </section>
+    </>
   );
 }
 

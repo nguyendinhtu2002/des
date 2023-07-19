@@ -11,7 +11,10 @@ export const getAllJob = async (access_token) => {
   });
   return res.data;
 };
-
+export const deleteJob = async(id)=>{
+  const res = await axios.delete(`${URL}api/v1/job/delete/${id}`);
+  return res.data;
+}
 export const addUsertoJob = async (id, data) => {
   try {
     const res = await axios.post(`${URL}api/v1/job/addUsertoJob/${id}`, data);
