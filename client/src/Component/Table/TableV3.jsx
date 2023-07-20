@@ -410,6 +410,11 @@ const TableV3 = () => {
       }
     }
   }, [error, isSuccess]);
+  useEffect(() => {
+    if (!isLoading) {
+      applyFilters();
+    }
+  }, [data]);
   return (
     <>
       <Toast />
