@@ -38,7 +38,7 @@ const TableV3 = () => {
   const [isNoteVisible, setIsNoteVisible] = useState(false);
   const [filteredData, setFilteredData] = useState([]);
   const [isFilterActive, setIsFilterActive] = useState(false);
-  const [status, setStatus] = useState("Waiting");
+  const [status, setStatus] = useState("Doing");
   const [product, setProduct] = useState("");
   const [typeDate, setTypeDate] = useState("createdAt");
   const [dateFrom, setDateFrom] = useState("");
