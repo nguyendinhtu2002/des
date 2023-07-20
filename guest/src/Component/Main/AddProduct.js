@@ -30,6 +30,16 @@ const AddProductMain = () => {
   const dispatch = useDispatch();
   const userLogin = useSelector((state) => state.user);
   const toastId = React.useRef(null);
+  const [fileName, setFileName] = useState("");
+
+  const handleFileChange = (event) => {
+    const file = event.target.files[0];
+    if (file) {
+      setFileName(file.name);
+    } else {
+      setFileName("");
+    }
+  };
   const Toastobjects = {
     position: "top-right",
     autoClose: 5000,
@@ -52,12 +62,7 @@ const AddProductMain = () => {
   const submitHandler = async (event) => {
     event.preventDefault();
     console.log(deadline);
-    if (
-      productname === "" ||
-      deadline === "" ||
-      sku === "" ||
-      size === ""
-    ) {
+    if (productname === "" || deadline === "" || sku === "" || size === "") {
       if (!toast.isActive(toastId.current)) {
         toastId.current = toast.error("Không được để trống!", Toastobjects);
       }
@@ -216,6 +221,7 @@ const AddProductMain = () => {
                       onChange={handleFileInputChange}
                       multiple
                     />
+                    {/* <p>File đã chọn: {fileName}</p> */}
                   </div>
                 </div>
               </div>

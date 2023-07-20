@@ -157,7 +157,7 @@ function Main() {
                 <span class="ng-binding">
                   {" "}
                   {moment(cell.row.original.createdAt).format(
-                    "YYYY-MM-DD HH:mm:ss.SSS"
+                    "YYYY-MM-DD HH:mm:ss"
                   )}
                 </span>
               </div>
@@ -165,7 +165,7 @@ function Main() {
                 <strong>Deadline at:</strong>
                 <span class="ng-binding text-[#a94442]">
                   {" "}
-                  {moment(Deadline).format("YYYY-MM-DD HH:mm:ss.SSS")}
+                  {moment(Deadline).format("YYYY-MM-DD HH:mm:ss")}
                 </span>
               </div>
               <div className="flex flex-wrap m-h-[180px] overflow-y-scroll pl-2">
