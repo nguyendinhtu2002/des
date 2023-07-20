@@ -173,6 +173,7 @@ const EditProductMain = (props) => {
                         onChange={(e) => setDesign(e.target.value)}
                       >
                         <option selected>Choose Nhân viên</option>
+
                         {data1?.map((item, index) => (
                           <option key={index} value={item._id}>
                             {item.name}
