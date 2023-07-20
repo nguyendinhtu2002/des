@@ -6,6 +6,7 @@ import { useDispatch, useSelector } from "react-redux";
 
 function Header() {
   const location = useLocation();
+  const [click,setClick] = useState(false)
   const dispatch = useDispatch();
   const handleLogout = () => {
     dispatch(resetUser());
@@ -38,6 +39,7 @@ function Header() {
             aria-expanded="false"
             data-dropdown-toggle="user-dropdown"
             data-dropdown-placement="bottom"
+            onClick={(e)=>setClick(true)}
           >
             <span class="sr-only">Open user menu</span>
             <img
@@ -47,7 +49,7 @@ function Header() {
             />
           </button>
           <div
-            class="z-50 hidden my-4 text-base list-none bg-white divide-y divide-gray-100 rounded-lg shadow dark:bg-gray-700 dark:divide-gray-600"
+            class={click?" z-50  my-4 text-base list-none bg-white divide-y divide-gray-100 rounded-lg shadow dark:bg-gray-700 dark:divide-gray-600":"hidden"}
             id="user-dropdown"
           >
             <div class="px-4 py-3">
