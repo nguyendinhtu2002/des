@@ -460,13 +460,14 @@ const getByGuest = async (req, res) => {
 const updateGuest = async (req, res) => {
   try {
     const { id } = req.params;
-    const { status, outsource_note } = req.body;
+    const { status, outsource_note, outsource_order } = req.body;
 
     const updatedJob = await Job.findOneAndUpdate(
       { id: id },
       {
         status,
         "attributes.outsource_note": outsource_note,
+        "attributes.outsource_order": outsource_order,
       },
       { new: true }
     );
