@@ -216,7 +216,7 @@ const Users = (props) => {
         </div>
         <div>
           <Button variant="gradient" onClick={handleOpen}>
-            Open Dialog
+            Danh sách
           </Button>
         </div>
         <div></div>
