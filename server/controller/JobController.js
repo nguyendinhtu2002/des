@@ -559,6 +559,102 @@ const getTotalPrice = async (req, res) => {
     res.status(500).json({ error: "Something went wrong" });
   }
 };
+const getStatusCountByDesigner = async (req, res) => {
+  try {
+    const possibleStatuses = [
+      "Waiting Admin",
+      "Waiting",
+      "Doing",
+      "Review",
+      "Fix",
+      "Confirm",
+      "Done",
+    ];
+
+    const pipeline = [
+      // Match the documents with the specified criteria (optional)
+      {
+        $match: {
+          // Add any filtering conditions here if needed
+        },
+      },
+      // Unwind the 'designer' field to create a separate document for each designer
+      { $unwind: '$designer' },
+      // Group the documents by 'designer.designer_id' (designer ID) and 'status' and calculate the count for each group
+      {
+        $group: {
+          _id: {
+            designerId: '$designer.designer_id',
+            status: '$status',
+          },
+          count: { $sum: 1 },
+        },
+      },
+      // Group again by designer to accumulate the status counts for each designer
+      {
+        $group: {
+          _id: '$_id.designerId',
+          statusCounts: {
+            $push: {
+              status: '$_id.status',
+              count: '$count',
+            },
+          },
+        },
+      },
+      // Lookup 'User' collection to get the designer's name
+      {
+        $lookup: {
+          from: 'users',
+          localField: '_id',
+          foreignField: '_id',
+          as: 'designerDetails',
+        },
+      },
+      // Project the desired fields for the final result
+      {
+        $project: {
+          _id: 1,
+          name: { $arrayElemAt: ['$designerDetails.name', 0] },
+          statusCounts: {
+            $arrayToObject: {
+              $map: {
+                input: possibleStatuses,
+                as: 'status',
+                in: {
+                  k: '$$status',
+                  v: {
+                    $ifNull: [
+                      {
+                        $arrayElemAt: [
+                          {
+                            $filter: {
+                              input: '$statusCounts',
+                              cond: { $eq: ['$$this.status', '$$status'] },
+                            },
+                          },
+                          0,
+                        ],
+                      },
+                      0,
+                    ],
+                  },
+                },
+              },
+            },
+          },
+        },
+      },
+    ];
+
+    const result = await Job.aggregate(pipeline);
+    res.json(result);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: 'Error occurred while fetching data' });
+  }
+};
+
 module.exports = {
   createJob,
   getJob,
@@ -575,4 +671,5 @@ module.exports = {
   updateGuest,
   updateByAdmin,
   getTotalPrice,
+  getStatusCountByDesigner,
 };

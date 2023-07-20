@@ -15,6 +15,8 @@ const {
   updateGuest,
   updateByAdmin,
   getTotalPrice,
+  getStatusCountByDesign,
+  getStatusCountByDesigner,
 } = require("../controller/JobController");
 const { protect, user, guest, admin } = require("../middleware/AuthMiddleware");
 const router = express.Router();
@@ -34,4 +36,5 @@ router.get("/getall/byGuest/:guestId", protect, guest, getByGuest);
 router.put("/update/guest/:id", protect, guest, updateGuest);
 router.put("/update/admin/:id",protect,admin,updateByAdmin)
 router.get("/getAllPrice/byAdmin",getTotalPrice)
+router.get("/getStatusCountByDesign/admin",getStatusCountByDesigner)
 module.exports = router;
