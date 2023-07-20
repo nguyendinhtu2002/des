@@ -433,6 +433,11 @@ function Main() {
       }
     }
   }, [error, isSuccess]);
+  useEffect(() => {
+    if (!isLoading) {
+      applyFilters();
+    }
+  }, [data]);
   return (
     <>
       <Toast />
