@@ -466,13 +466,12 @@ const getTotalPrice = async (req, res) => {
 
       const user = await User.findOne({ _id: designer_id });
 
-      if (!user) {
-        return res.status(404).json({ message: "User not found" });
-      }
+     if(user){
+       const customerPrice = user.typeGia[sku]?.user || 0;
+ 
+       totalPrice += customerPrice;
 
-      const customerPrice = user.typeGia[sku]?.user || 0;
-
-      totalPrice += customerPrice;
+     }
     }
 
     return res.status(200).json({ totalPrice });
