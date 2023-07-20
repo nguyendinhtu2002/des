@@ -11,10 +11,10 @@ export const getAllJob = async (access_token) => {
   });
   return res.data;
 };
-export const deleteJob = async(id)=>{
+export const deleteJob = async (id) => {
   const res = await axios.delete(`${URL}api/v1/job/delete/${id}`);
   return res.data;
-}
+};
 export const addUsertoJob = async (id, data) => {
   try {
     const res = await axios.post(`${URL}api/v1/job/addUsertoJob/${id}`, data);
@@ -78,17 +78,18 @@ export const updateByGuest = async (id, data, access_token) => {
   const headers = {
     Authorization: `Bearer ${access_token}`,
   };
-  const res = axiosJWT.put(
-    `${URL}api/v1/job/update/admin/${id}`,
-    data,
-    {
-      headers,
-    }
-  );
+  const res = axiosJWT.put(`${URL}api/v1/job/update/admin/${id}`, data, {
+    headers,
+  });
   return res.data;
 };
 
-export const getTotalPrice = async()=>{
+export const getTotalPrice = async () => {
   const res = await axios.get(`${URL}api/v1/job/getAllPrice/byAdmin`);
   return res.data;
-}
+};
+
+export const getStatusDesign = async () => {
+  const res = await axios.get(`${URL}api/v1/job/getStatusCountByDesign/admin`);
+  return res.data;
+};

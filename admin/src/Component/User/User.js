@@ -2,6 +2,8 @@ import React, { useEffect, useMemo, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import moment from "moment";
 import * as UserService from "../../service/UserService";
+import * as JobService from "../../service/JobService";
+
 import { toast } from "react-toastify";
 import Toast from "../LoadingError/Toast";
 import { MaterialReactTable } from "material-react-table";
@@ -25,7 +27,14 @@ import {
   Typography,
   Select,
   Option,
+  Dialog,
+  DialogHeader,
+  DialogBody,
+  DialogFooter,
+  Card,
+  CardFooter,
 } from "@material-tailwind/react";
+import { useQuery } from "react-query";
 
 const Users = (props) => {
   const { data } = props;
@@ -35,7 +44,7 @@ const Users = (props) => {
   const [isNoteVisible, setIsNoteVisible] = useState(false);
   const [filteredData, setFilteredData] = useState([]);
   const [isFilterActive, setIsFilterActive] = useState(false);
-
+  const [currentPage, setCurrentPage] = useState(1);
   const history = useNavigate();
 
   const toastId = React.useRef(null);
@@ -158,7 +167,43 @@ const Users = (props) => {
       }
     }
   }, [error, isSuccess]);
+  const fetchStatus = async () => {
+    const res = await JobService.getStatusDesign();
+    return res;
+  };
 
+  const { isLoading, data: data1 } = useQuery(["status"], fetchStatus);
+
+  const [open, setOpen] = useState(false);
+
+  const handleOpen = () => setOpen(!open);
+  const TABLE_HEAD = [
+    "Designer",
+    "Waiting",
+    "Doing",
+    "Review",
+    "Fix",
+    "Confirm",
+    "Done",
+  ];
+  const totalItems = data1?.length;
+  const totalPages = Math.ceil(totalItems / 6);
+  // Function to handle previous page button click
+  const handlePreviousPage = () => {
+    if (currentPage > 1) {
+      setCurrentPage((prevPage) => prevPage - 1);
+    }
+  };
+
+  // Function to handle next page button click
+  const handleNextPage = () => {
+    if (currentPage < totalPages) {
+      setCurrentPage((prevPage) => prevPage + 1);
+    }
+  };
+  const startIndex = (currentPage - 1) * 6;
+  const endIndex = startIndex + 6;
+  const currentPageData = data1?.slice(startIndex, endIndex);
   return (
     <>
       <Toast />
@@ -170,15 +215,11 @@ const Users = (props) => {
           </Select>
         </div>
         <div>
-          {/* <Input
-            label="Search tên người dùng..."
-            // value={product}
-            // onChange={(e) => setProduct(e.target.value)}
-          /> */}
+          <Button variant="gradient" onClick={handleOpen}>
+            Open Dialog
+          </Button>
         </div>
-
         <div></div>
-
         <div className="flex w-[80%] mb-5">
           <div className="">
             <Button
@@ -200,6 +241,155 @@ const Users = (props) => {
           </div>
         </div>
       </div>
+      <Dialog
+        open={open}
+        handler={handleOpen}
+        animate={{
+          mount: { scale: 1, y: 0 },
+          unmount: { scale: 0.9, y: -100 },
+        }}
+      >
+        <DialogHeader>Its a simple dialog.</DialogHeader>
+        <DialogBody divider>
+          <Card className="overflow-scroll h-full w-full">
+            <table className="w-full min-w-max table-auto text-left">
+              <thead>
+                <tr>
+                  {TABLE_HEAD.map((head) => (
+                    <th
+                      key={head}
+                      className="border-b border-blue-gray-100 bg-blue-gray-50 p-4"
+                    >
+                      <Typography
+                        variant="small"
+                        color="blue-gray"
+                        className="font-normal leading-none opacity-70"
+                      >
+                        {head}
+                      </Typography>
+                    </th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody>
+                {currentPageData?.map(({ name, statusCounts }, index) => {
+                  const isLast = index === data1.length - 1;
+                  const classes = isLast
+                    ? "p-4"
+                    : "p-4 border-b border-blue-gray-50";
+
+                  return (
+                    <tr key={name}>
+                      <td className={classes}>
+                        <Typography
+                          variant="small"
+                          color="blue-gray"
+                          className="font-normal"
+                        >
+                          {name}
+                        </Typography>
+                      </td>
+                      <td className={`${classes} bg-blue-gray-50/50`}>
+                        <Typography
+                          variant="small"
+                          color="blue-gray"
+                          className="font-normal"
+                        >
+                          {statusCounts.Waiting.count
+                            ? statusCounts.Waiting.count
+                            : 0}
+                        </Typography>
+                      </td>
+                      <td className={classes}>
+                        <Typography
+                          variant="small"
+                          color="blue-gray"
+                          className="font-normal"
+                        >
+                          {statusCounts.Doing.count
+                            ? statusCounts.Doing.count
+                            : 0}
+                        </Typography>
+                      </td>
+                      <td className={classes}>
+                        <Typography
+                          variant="small"
+                          color="blue-gray"
+                          className="font-normal"
+                        >
+                          {statusCounts.Review.count
+                            ? statusCounts.Review.count
+                            : 0}
+                        </Typography>
+                      </td>
+                      <td className={classes}>
+                        <Typography
+                          variant="small"
+                          color="blue-gray"
+                          className="font-normal"
+                        >
+                          {statusCounts.Fix.count ? statusCounts.Fix.count : 0}
+                        </Typography>
+                      </td>
+                      <td className={classes}>
+                        <Typography
+                          variant="small"
+                          color="blue-gray"
+                          className="font-normal"
+                        >
+                          {statusCounts.Confirm.count
+                            ? statusCounts.Confirm.count
+                            : 0}
+                        </Typography>
+                      </td>
+                      <td className={classes}>
+                        <Typography
+                          variant="small"
+                          color="blue-gray"
+                          className="font-normal"
+                        >
+                          {statusCounts.Done.count
+                            ? statusCounts.Done.count
+                            : 0}
+                        </Typography>
+                      </td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+          </Card>
+        </DialogBody>
+        <DialogFooter>
+          <CardFooter className="flex items-center justify-between border-t border-blue-gray-50 p-4">
+            <Typography
+              variant="small"
+              color="blue-gray"
+              className="font-normal"
+            >
+              Page {currentPage} of {totalPages}
+            </Typography>
+            <div className="flex gap-2">
+              <Button
+                variant="outlined"
+                color="blue-gray"
+                size="sm"
+                onClick={handlePreviousPage}
+              >
+                Previous
+              </Button>
+              <Button
+                variant="outlined"
+                color="blue-gray"
+                size="sm"
+                onClick={handleNextPage}
+              >
+                Next
+              </Button>
+            </div>
+          </CardFooter>
+        </DialogFooter>
+      </Dialog>
       <MaterialReactTable
         columns={columns}
         data={isFilterActive ? filteredData : data ?? []}

@@ -2,6 +2,7 @@ import React, { useEffect } from "react";
 import { Link } from "react-router-dom";
 import $ from "jquery";
 import { useDispatch } from "react-redux";
+import { resetUser } from "../features/userSlide/userSlide";
 // import * as UserService from "../Services/UserService";
 
 const Header = () => {
@@ -25,16 +26,12 @@ const Header = () => {
     });
   }, []);
 
-  // const logoutHandler = async () => {
-  //   await UserService.logoutUser();
-  //   setTimeout(() => {
-  //     window.location.reload();
-  //   });
-  //   dispatch(resetPay());
-  //   dispatch(resetUser());
-  //   dispatch(restProductSingle());
-
-  // };
+  const handleLogout = () => {
+    dispatch(resetUser());
+    localStorage.clear("access_token");
+    localStorage.clear("refresh_token");
+    window.location.reload();
+  };
 
   return (
     <header className="main-header navbar">
@@ -78,7 +75,7 @@ const Header = () => {
                 Settings
               </Link>
               <Link
-                // onClick={logoutHandler}
+                onClick={handleLogout}
                 className="dropdown-item text-danger"
                 to="#"
               >
