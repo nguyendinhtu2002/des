@@ -146,7 +146,7 @@ const Users = (props) => {
       if (!toast.isActive(toastId.current)) {
         toastId.current = toast.success("Thành công!", Toastobjects);
       }
-      window.location(() => {}, 2000);
+      window.location.reload(() => {}, 2000);
     } else if (error) {
       if (!toast.isActive(toastId.current)) {
         toastId.current = toast.error(

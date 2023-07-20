@@ -55,7 +55,7 @@ const TopTotal = (props) => {
     maximumFractionDigits: 0,
   };
   const formattedAmount = (amount, options) => {
-    return amount.toLocaleString(undefined, options);
+    return amount?.toLocaleString(undefined, options);
   };
   return (
     <div className="row">
@@ -68,7 +68,7 @@ const TopTotal = (props) => {
             <div className="text">
               <h6 className="mb-1">Tổng doanh thu</h6>
               {!isLoading ? (
-                <span>$ {formattedAmount(data.totalPrice)}</span>
+                <span>$ {formattedAmount(data?.totalPrice)||0}</span>
               ) : (
                 <Loading />
               )}{" "}
