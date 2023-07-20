@@ -134,7 +134,7 @@ const Users = (props) => {
   );
   const applyFilters = () => {
     const filtered = data.filter((item) => {
-      return item.role === role
+      return item.role === role;
     });
 
     setFilteredData(filtered);
@@ -146,7 +146,9 @@ const Users = (props) => {
       if (!toast.isActive(toastId.current)) {
         toastId.current = toast.success("Thành công!", Toastobjects);
       }
-      window.location.reload(() => {}, 2000);
+      setTimeout(() => {
+        window.location.reload();
+      }, 2000);
     } else if (error) {
       if (!toast.isActive(toastId.current)) {
         toastId.current = toast.error(

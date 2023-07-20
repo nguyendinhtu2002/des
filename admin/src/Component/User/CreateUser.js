@@ -20,13 +20,23 @@ const CreateUser = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [soDu, setSoDu] = useState(0);
-  const [giaKhachTshirt, setGiaKhachTshirt] = useState(0);
   const [username, setUsername] = useState("");
   const [name, setName] = useState("");
-
+  const [giaKhachTshirt, setGiaKhachTshirt] = useState(0);
   const [giaNhanVienTshirt, setGiaNhanVienTshirt] = useState(0);
-  const [giaKhachPoster, setGiaKhachPoster] = useState(0);
-  const [giaNhanVienPoster, setGiaNhanVienPoster] = useState(0);
+  const [giaKhachTshirtKho, setGiaKhachTshirtKho] = useState(0);
+  const [giaNhanVienTshirtKho, setGiaNhanVienTshirtKho] = useState(0);
+  const [giaKhachTshirtX15, setGiaKhachTshirtX15] = useState(0);
+  const [giaNhanVienTshirtX15, setGiaNhanVienTshirtX15] = useState(0);
+  const [giaKhachTshirtX2, setGiaKhachTshirtX2] = useState(0);
+  const [giaNhanVienTshirtX2, setGiaNhanVienTshirtX2] = useState(0);
+  const [giaKhachTshirtX3, setGiaKhachTshirtX3] = useState(0);
+  const [giaNhanVienTshirtX3, setGiaNhanVienTshirtX3] = useState(0);
+
+  const [giaKhachPosterKho, setGiaKhachPosterKho] = useState(0);
+  const [giaNhanVienPosterKho, setGiaNhanVienPosterKho] = useState(0);
+  const [giaKhachPosterDe, setGiaKhachPosterDe] = useState(0);
+  const [giaNhanVienPosterDe, setGiaNhanVienPosterDe] = useState(0);
   const [giaKhach3D, setGiaKhach3D] = useState(0);
   const [giaNhanVien3D, setGiaNhanVien3D] = useState(0);
   const [giaKhach3DQuan, setGiaKhach3DQuan] = useState(0);
@@ -59,7 +69,7 @@ const CreateUser = () => {
       updateAdmin != "" &&
       username != "" &&
       password != "" &&
-      name!=""
+      name != ""
     ) {
       const updateData = {
         role: updateAdmin,
@@ -71,9 +81,29 @@ const CreateUser = () => {
             customer: giaKhachTshirt,
             user: giaNhanVienTshirt,
           },
-          Poster: {
-            customer: giaKhachPoster,
-            user: giaNhanVienPoster,
+          Tshirt2DX15: {
+            customer: giaKhachTshirtX15,
+            user: giaNhanVienTshirtX15,
+          },
+          Tshirt2DX2: {
+            customer: giaKhachTshirtX2,
+            user: giaNhanVienTshirtX2,
+          },
+          Tshirt2DX3: {
+            customer: giaKhachTshirtX3,
+            user: giaNhanVienTshirtX3,
+          },
+          Tshirt2DKho: {
+            customer: giaKhachTshirtKho,
+            user: giaNhanVienTshirtKho,
+          },
+          PosterKho: {
+            customer: giaKhachPosterKho,
+            user: giaNhanVienPosterKho,
+          },
+          PosterDe: {
+            customer: giaKhachPosterDe,
+            user: giaNhanVienPosterDe,
           },
           T3D: {
             customer: giaKhach3D,
@@ -265,7 +295,7 @@ const CreateUser = () => {
                       </div>
                       <div className="mb-4">
                         <label htmlFor="product_title" className="form-label">
-                          Giá Poster
+                          Giá Tshirt 2D Khó
                         </label>
                         <div className="flex flex-row  gap-3">
                           <div className="w-[50%]">
@@ -275,7 +305,7 @@ const CreateUser = () => {
                               // id="exampleFormControlinput1"
                               // rows="3"
                               onChange={(e) =>
-                                setGiaKhachPoster(e.target.value)
+                                setGiaKhachTshirtKho(e.target.value)
                               }
                             />
                             <p
@@ -293,7 +323,217 @@ const CreateUser = () => {
                               // id="exampleFormControlinput1"
                               // rows="3"
                               onChange={(e) =>
-                                setGiaNhanVienPoster(e.target.value)
+                                setGiaNhanVienTshirtKho(e.target.value)
+                              }
+                            />
+                            <p
+                              id="helper-text-explanation"
+                              class="mt-1 text-sm text-black dark:text-gray-400"
+                            >
+                              Giá nhân viên
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+                      <div className="mb-4">
+                        <label htmlFor="product_title" className="form-label">
+                          Giá Tshirt 2D X1.5
+                        </label>
+                        <div className="flex flex-row  gap-3">
+                          <div className="w-[50%]">
+                            <input
+                              class="form-control"
+                              type="number"
+                              // id="exampleFormControlinput1"
+                              // rows="3"
+                              onChange={(e) =>
+                                setGiaKhachTshirtX15(e.target.value)
+                              }
+                            />
+                            <p
+                              id="helper-text-explanation"
+                              class="mt-1 text-sm text-black dark:text-gray-400"
+                            >
+                              Giá khách
+                            </p>
+                          </div>
+
+                          <div className="w-[50%]">
+                            <input
+                              class="form-control "
+                              type="number"
+                              // id="exampleFormControlinput1"
+                              // rows="3"
+                              onChange={(e) =>
+                                setGiaNhanVienTshirtX15(e.target.value)
+                              }
+                            />
+                            <p
+                              id="helper-text-explanation"
+                              class="mt-1 text-sm text-black dark:text-gray-400"
+                            >
+                              Giá nhân viên
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+                      <div className="mb-4">
+                        <label htmlFor="product_title" className="form-label">
+                          Giá Tshirt 2D X2
+                        </label>
+                        <div className="flex flex-row  gap-3">
+                          <div className="w-[50%]">
+                            <input
+                              class="form-control"
+                              type="number"
+                              // id="exampleFormControlinput1"
+                              // rows="3"
+                              onChange={(e) =>
+                                setGiaKhachTshirtX2(e.target.value)
+                              }
+                            />
+                            <p
+                              id="helper-text-explanation"
+                              class="mt-1 text-sm text-black dark:text-gray-400"
+                            >
+                              Giá khách
+                            </p>
+                          </div>
+
+                          <div className="w-[50%]">
+                            <input
+                              class="form-control "
+                              type="number"
+                              // id="exampleFormControlinput1"
+                              // rows="3"
+                              onChange={(e) =>
+                                setGiaNhanVienTshirtX2(e.target.value)
+                              }
+                            />
+                            <p
+                              id="helper-text-explanation"
+                              class="mt-1 text-sm text-black dark:text-gray-400"
+                            >
+                              Giá nhân viên
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+                      <div className="mb-4">
+                        <label htmlFor="product_title" className="form-label">
+                          Giá Tshirt 2D X3
+                        </label>
+                        <div className="flex flex-row  gap-3">
+                          <div className="w-[50%]">
+                            <input
+                              class="form-control"
+                              type="number"
+                              // id="exampleFormControlinput1"
+                              // rows="3"
+                              onChange={(e) =>
+                                setGiaKhachTshirtX3(e.target.value)
+                              }
+                            />
+                            <p
+                              id="helper-text-explanation"
+                              class="mt-1 text-sm text-black dark:text-gray-400"
+                            >
+                              Giá khách
+                            </p>
+                          </div>
+
+                          <div className="w-[50%]">
+                            <input
+                              class="form-control "
+                              type="number"
+                              // id="exampleFormControlinput1"
+                              // rows="3"
+                              onChange={(e) =>
+                                setGiaNhanVienTshirtX3(e.target.value)
+                              }
+                            />
+                            <p
+                              id="helper-text-explanation"
+                              class="mt-1 text-sm text-black dark:text-gray-400"
+                            >
+                              Giá nhân viên
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+                      <div className="mb-4">
+                        <label htmlFor="product_title" className="form-label">
+                          Giá Poster Khó
+                        </label>
+                        <div className="flex flex-row  gap-3">
+                          <div className="w-[50%]">
+                            <input
+                              class="form-control"
+                              type="number"
+                              // id="exampleFormControlinput1"
+                              // rows="3"
+                              onChange={(e) =>
+                                setGiaKhachPosterKho(e.target.value)
+                              }
+                            />
+                            <p
+                              id="helper-text-explanation"
+                              class="mt-1 text-sm text-black dark:text-gray-400"
+                            >
+                              Giá khách
+                            </p>
+                          </div>
+
+                          <div className="w-[50%]">
+                            <input
+                              class="form-control "
+                              type="number"
+                              // id="exampleFormControlinput1"
+                              // rows="3"
+                              onChange={(e) =>
+                                setGiaNhanVienPosterKho(e.target.value)
+                              }
+                            />
+                            <p
+                              id="helper-text-explanation"
+                              class="mt-1 text-sm text-black dark:text-gray-400"
+                            >
+                              Giá nhân viên
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+                      <div className="mb-4">
+                        <label htmlFor="product_title" className="form-label">
+                          Giá Poster Dễ
+                        </label>
+                        <div className="flex flex-row  gap-3">
+                          <div className="w-[50%]">
+                            <input
+                              class="form-control"
+                              type="number"
+                              // id="exampleFormControlinput1"
+                              // rows="3"
+                              onChange={(e) =>
+                                setGiaKhachPosterDe(e.target.value)
+                              }
+                            />
+                            <p
+                              id="helper-text-explanation"
+                              class="mt-1 text-sm text-black dark:text-gray-400"
+                            >
+                              Giá khách
+                            </p>
+                          </div>
+
+                          <div className="w-[50%]">
+                            <input
+                              class="form-control "
+                              type="number"
+                              // id="exampleFormControlinput1"
+                              // rows="3"
+                              onChange={(e) =>
+                                setGiaNhanVienPosterDe(e.target.value)
                               }
                             />
                             <p

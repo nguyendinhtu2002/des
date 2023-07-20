@@ -424,6 +424,9 @@ function Main() {
       if (!toast.isActive(toastId.current)) {
         toastId.current = toast.success("Thành công!", Toastobjects);
       }
+      setTimeout(() => {
+        window.location.reload();
+      }, 2000);
     } else if (error) {
       if (!toast.isActive(toastId.current)) {
         toastId.current = toast.error("Có lỗi vui lòng thử lại", Toastobjects);
