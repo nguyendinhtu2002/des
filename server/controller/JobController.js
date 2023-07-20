@@ -53,6 +53,7 @@ const createJob = async (req, res) => {
       designer,
       product,
       designs,
+      attributes,
     } = req.body;
     // Định nghĩa schema Joi cho dữ liệu đầu vào
     const schema = Joi.object({
@@ -80,7 +81,8 @@ const createJob = async (req, res) => {
       attributes: Joi.object({
         outsource_price: Joi.number().default(0),
         team_outsource: Joi.string(),
-        outsource_note: Joi.string().default(""),
+        outsource_note: Joi.string(),
+        outsource_order: Joi.string(),
       }),
     });
 
@@ -103,31 +105,31 @@ const createJob = async (req, res) => {
     // Kiểm tra SKU và xác định giá tiền tương ứng
     if (sku == "Tshirt2D") {
       price = guest.typeGia.Tshirt2D.customer; // Giá tiền cho loại Tshirt2D và người dùng
-      updatedAttributes = { outsource_price: guest.typeGia.Tshirt2D.user };
+      attributes.outsource_price = guest.typeGia.Tshirt2D.user;
     } else if (sku == "Tshirt2DKho") {
       price = guest.typeGia.Tshirt2DKho.customer; // Giá tiền cho loại Tshirt2D và người dùng
-      updatedAttributes = { outsource_price: guest.typeGia.Tshirt2DKho.user };
+      attributes.outsource_price = guest.typeGia.Tshirt2DKho.user;
     } else if (sku == "Tshirt2DX15") {
       price = guest.typeGia.Tshirt2DX15.customer; // Giá tiền cho loại Tshirt2D và người dùng
-      updatedAttributes = { outsource_price: guest.typeGia.Tshirt2DX15.user };
+      attributes.outsource_price = guest.typeGia.Tshirt2DX15.user;
     } else if (sku == "Tshirt2DX2") {
       price = guest.typeGia.Tshirt2DX2.customer; // Giá tiền cho loại Tshirt2D và người dùng
-      updatedAttributes = { outsource_price: guest.typeGia.Tshirt2DX2.user };
+      attributes.outsource_price = guest.typeGia.Tshirt2DX2.user;
     } else if (sku == "Tshirt2DX3") {
       price = guest.typeGia.Tshirt2DX3.customer; // Giá tiền cho loại Tshirt2D và người dùng
-      updatedAttributes = { outsource_price: guest.typeGia.Tshirt2DX3.user };
+      attributes.outsource_price = guest.typeGia.Tshirt2DX3.user;
     } else if (sku == "PosterKho") {
       price = guest.typeGia.PosterKho.customer; // Giá tiền cho loại Poster và người dùng
-      updatedAttributes = { outsource_price: guest.typeGia.PosterKho.user };
+      attributes.outsource_price = guest.typeGia.PosterKho.user;
     } else if (sku == "PosterDe") {
       price = guest.typeGia.PosterDe.customer; // Giá tiền cho loại Poster và người dùng
-      updatedAttributes = { outsource_price: guest.typeGia.PosterDe.user };
+      attributes.outsource_price = guest.typeGia.PosterDe.user;
     } else if (sku == "T3D") {
       price = guest.typeGia.T3D.customer; // Giá tiền cho loại T3D và người dùng
-      updatedAttributes = { outsource_price: guest.typeGia.T3D.user };
+      attributes.outsource_price = guest.typeGia.T3D.user;
     } else if (sku == "Quan3D") {
       price = guest.typeGia.Quan3D.customer; // Giá tiền cho loại Quan3D và người dùng
-      updatedAttributes = { outsource_price: guest.typeGia.Quan3D.user };
+      attributes.outsource_price = guest.typeGia.Quan3D.user;
     }
 
     if (guest.money < price) {
@@ -149,7 +151,7 @@ const createJob = async (req, res) => {
       designer,
       product,
       designs,
-      attributes: updatedAttributes,
+      attributes,
     });
 
     const savedJob = await job.save();
@@ -512,12 +514,14 @@ const updateByAdmin = async (req, res) => {
 
     if (designer_id) {
       updateFields["designer.designer_id"] = designer_id;
+    } else {
+      updateFields["$unset"] = { "designer.designer_id": 1 };
     }
     const updatedJob = await Job.findOneAndUpdate(
       { id: id },
-      {
-        $set: updateFields,
-      },
+
+      updateFields,
+
       { new: true }
     );
 
