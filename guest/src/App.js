@@ -1,4 +1,5 @@
 import "./App.css";
+import "./responsive.css"
 import "react-toastify/dist/ReactToastify.css";
 import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
 import Login from "./page/Login/Login";

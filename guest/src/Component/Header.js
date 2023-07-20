@@ -20,14 +20,13 @@ const Header = () => {
     });
 
     $(".btn-aside-minimize").on("click", function () {
-      // if (window.innerWidth < 768) {
-      //   $("body").removeClass("aside-mini");
-      //   $(".navbar-aside").removeClass("show");
-      // } else {
-      //   // minimize sidebar on desktop
-      //   $("body").toggleClass("aside-mini");
-      // }
-      $("body").toggleClass("aside-mini");
+      if (window.innerWidth < 768) {
+        $("body").removeClass("aside-mini");
+        $(".navbar-aside").removeClass("show");
+      } else {
+        // minimize sidebar on desktop
+        $("body").toggleClass("aside-mini");
+      }
     });
   }, []);
 
@@ -47,6 +46,12 @@ const Header = () => {
     <header className="main-header navbar">
       <div className="col-search"></div>
       <div className="col-nav">
+        <button
+          class="btn btn-icon btn-mobile me-auto"
+          data-trigger="#offcanvas_aside"
+        >
+          <i class="md-28 fas fa-bars"></i>
+        </button>
         <ul className="nav">
           <li className="nav-item mr-2">
             <span>Số dư: {formattedAmount(userLogin.money)} VND</span>

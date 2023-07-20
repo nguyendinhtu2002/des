@@ -29,7 +29,7 @@ function Main() {
   const [isNoteVisible, setIsNoteVisible] = useState(false);
   const [filteredData, setFilteredData] = useState([]);
   const [isFilterActive, setIsFilterActive] = useState(false);
-  const [status, setStatus] = useState("Waiting");
+  const [status, setStatus] = useState("Review");
   const [product, setProduct] = useState("");
   const [typeDate, setTypeDate] = useState("createdAt");
   const [dateFrom, setDateFrom] = useState("");
