@@ -81,7 +81,10 @@ function Main() {
   const { error, isSuccess } = mutationDelete;
   const { isLoading, data } = useQuery(["products"], fetchJob);
   const applyFilters = () => {
-    const filtered = data.filter((item) => {
+    if (!data || !Array.isArray(data)) {
+      return;
+    }
+    const filtered = data?.filter((item) => {
       if (typeDate === "createdAt") {
         return (
           (!user ||
@@ -434,10 +437,10 @@ function Main() {
     }
   }, [error, isSuccess]);
   useEffect(() => {
-    if (!isLoading) {
+    if (!isLoading && data) {
       applyFilters();
     }
-  }, [data]);
+  }, [data, isLoading]);
   return (
     <>
       <Toast />
