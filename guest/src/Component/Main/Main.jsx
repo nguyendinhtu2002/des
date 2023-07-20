@@ -16,6 +16,7 @@ import {
   Typography,
   Select,
   Option,
+  Textarea
 } from "@material-tailwind/react";
 
 import { Edit as EditIcon } from "@mui/icons-material";
@@ -242,7 +243,7 @@ function Main() {
             </div>
           );
         },
-        size: 200,
+        size: 150,
       },
       {
         header: "Designer",
@@ -256,7 +257,7 @@ function Main() {
               className={
                 cell.row.original.attributes.outsource_note
                   ? "mb-[190px]"
-                  : "mb-[230px]"
+                  : ""
               }
             >
               <div class="form-group mx-2 mb-4">
@@ -276,23 +277,25 @@ function Main() {
                 >
                   Note outsource:
                 </Typography>
-                <div
-                  className="pre-note ng-binding ml-2 cursor-default"
-                  onDoubleClick={handleNoteDoubleClick}
-                  aria-hidden={!isNoteVisible}
+                <Textarea
+                  label="Message"
+                  disabled
+                  value={cell.row.original.attributes.outsource_note}
+                />
+              </div>
+              <div className="mx-2">
+                <Typography
+                  variant="small"
+                  color="blue-gray"
+                  className="mb-4 font-medium ml-2"
                 >
-                  {cell.row.original.attributes.outsource_note}
-                </div>
-                {/* {isNoteVisible && <Textarea label="Message" />}
-                  {isNoteVisible && (
-                    <Button
-                      size="sm"
-                      className="rounded-md"
-                      onClick={() => setIsNoteVisible(false)}
-                    >
-                      Save
-                    </Button>
-                  )} */}
+                  Orrder outsource:
+                </Typography>
+                <Textarea
+                  label="Message"
+                  disabled
+                  value={cell.row.original.attributes.outsource_order}
+                />
               </div>
             </div>
           );
@@ -310,7 +313,7 @@ function Main() {
         // enableColumnFilter: false, // Disable column filter for this column
         Cell: ({ cell }) => {
           return (
-            <div className="mb-[320px]">
+            <div className="mb-[370px]">
               <Input label={cell.row.original.status} disabled />
               {/* <Button
                 size="sm"
@@ -367,7 +370,9 @@ function Main() {
           alt="Modal Image"
         />
       </div>
-      <div className={click?"hidden card mb-4 shadow-sm":"card mb-4 shadow-sm"}>
+      <div
+        className={click ? "hidden card mb-4 shadow-sm" : "card mb-4 shadow-sm"}
+      >
         <div className="card-body">
           <div className="grid xl:grid-cols-3 md:grid-cols-1 gap-4 xl:w-[70%] ">
             <div>
@@ -449,7 +454,7 @@ function Main() {
             enableRowActions
             enableColumnResizing
             renderRowActions={({ row, table }) => [
-              <div className="mb-[326px]">
+              <div className="mb-[370px]">
                 <IconButton
                   color="secondary"
                   onClick={() => {

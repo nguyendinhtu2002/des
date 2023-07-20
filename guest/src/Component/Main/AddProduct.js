@@ -31,6 +31,7 @@ const AddProductMain = () => {
   const userLogin = useSelector((state) => state.user);
   const toastId = React.useRef(null);
   const [fileName, setFileName] = useState("");
+  const [orderNote, setOrderNote] = useState("");
 
   const handleFileChange = (event) => {
     const file = event.target.files[0];
@@ -61,7 +62,6 @@ const AddProductMain = () => {
 
   const submitHandler = async (event) => {
     event.preventDefault();
-    console.log(deadline);
     if (productname === "" || deadline === "" || sku === "" || size === "") {
       if (!toast.isActive(toastId.current)) {
         toastId.current = toast.error("Không được để trống!", Toastobjects);
@@ -94,6 +94,11 @@ const AddProductMain = () => {
                 sku: sku,
                 size: sizes,
                 image_url: res.data.secure_url,
+              },
+              attributes: {
+                outsource_price: 0,
+
+                outsource_order: orderNote,
               },
               guest_create: userLogin.id,
               access_token,
@@ -209,7 +214,20 @@ const AddProductMain = () => {
                       Mỗi size cách nhau bởi dấu phẩy(",").
                     </div>
                   </div>
-
+                  <div className="mb-4">
+                    <label htmlFor="product_title" className="form-label">
+                      Order note
+                    </label>
+                    <input
+                      type="text"
+                      placeholder="Type here"
+                      className="form-control"
+                      id="product_title"
+                      required
+                      // value={productname}
+                      onChange={(e) => setOrderNote(e.target.value)}
+                    />
+                  </div>
                   <div class="mb-3">
                     <label for="formFileMultiple" class="form-label">
                       Images

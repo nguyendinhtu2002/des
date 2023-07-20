@@ -21,6 +21,7 @@ const EditProductMain = (props) => {
   const [show, setShow] = useState(false);
   const [open, setOpen] = useState(false);
   const [message, setMessage] = useState("");
+  const [orderNote,setOrderNote] = useState("")
   const [design, setDesign] = useState([]);
   const [status, setStatus] = useState("");
   const toggleChecked = () => setShow((value) => !value);
@@ -44,8 +45,8 @@ const EditProductMain = (props) => {
     return res;
   };
   const mutationAddProduct = useMutationHooks(async (data) => {
-    const { id,access_token, ...rests } = data;
-    const res = await JobService.updateByGuest(id,rests, access_token);
+    const { id, access_token, ...rests } = data;
+    const res = await JobService.updateByGuest(id, rests, access_token);
     return res;
   });
   const { isLoading, data } = useQuery(["productDetail"], () =>
@@ -58,17 +59,19 @@ const EditProductMain = (props) => {
       setMessage(data.attributes.outsource_note);
       setStatus(data.status);
       setDesign(data.designs);
+      setOrderNote(data.attributes.outsource_order);
     }
   }, [data]);
 
   const submitHandler = async (e) => {
     e.preventDefault();
-    const access_token = JSON.parse(localStorage.getItem("access_token"))
+    const access_token = JSON.parse(localStorage.getItem("access_token"));
     mutationAddProduct.mutate({
       id,
       status: status,
       outsource_note: message,
-      access_token
+      outsource_order:orderNote,
+      access_token,
     });
   };
   useEffect(() => {
@@ -79,10 +82,7 @@ const EditProductMain = (props) => {
       }
     } else if (error) {
       if (!toast.isActive(toastId.current)) {
-        toastId.current = toast.error(
-          "Có lỗi vui lòng thử lại",
-          Toastobjects
-        );
+        toastId.current = toast.error("Có lỗi vui lòng thử lại", Toastobjects);
       }
     }
   }, [error, isSuccess]);
@@ -121,6 +121,18 @@ const EditProductMain = (props) => {
                         rows="3"
                         value={message}
                         onChange={(e) => setMessage(e.target.value)}
+                      ></textarea>
+                    </div>
+                    <div className="mb-4">
+                      <label htmlFor="product_title" className="form-label">
+                        Order note
+                      </label>
+                      <textarea
+                        class="form-control"
+                        id="exampleFormControlTextarea1"
+                        rows="3"
+                        value={orderNote}
+                        onChange={(e) => setOrderNote(e.target.value)}
                       ></textarea>
                     </div>
                     <div className="mb-4">
