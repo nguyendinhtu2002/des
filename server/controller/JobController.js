@@ -1,7 +1,48 @@
 const Joi = require("joi");
 const Job = require("../models/Job");
 const User = require("../models/User");
+const getPriceAndAttributesBySku = (guest, sku) => {
+  const priceMapping = {
+    Tshirt2D: {
+      customer: guest.typeGia.Tshirt2D.customer,
+      user: guest.typeGia.Tshirt2D.user,
+    },
+    Tshirt2DKho: {
+      customer: guest.typeGia.Tshirt2DKho.customer,
+      user: guest.typeGia.Tshirt2DKho.user,
+    },
+    Tshirt2DX15: {
+      customer: guest.typeGia.Tshirt2DX15.customer,
+      user: guest.typeGia.Tshirt2DX15.user,
+    },
+    Tshirt2DX2: {
+      customer: guest.typeGia.Tshirt2DX2.customer,
+      user: guest.typeGia.Tshirt2DX2.user,
+    },
+    Tshirt2DX3: {
+      customer: guest.typeGia.Tshirt2DX3.customer,
+      user: guest.typeGia.Tshirt2DX3.user,
+    },
+    PosterKho: {
+      customer: guest.typeGia.PosterKho.customer,
+      user: guest.typeGia.PosterKho.user,
+    },
+    PosterDe: {
+      customer: guest.typeGia.PosterDe.customer,
+      user: guest.typeGia.PosterDe.user,
+    },
+    T3D: {
+      customer: guest.typeGia.T3D.customer,
+      user: guest.typeGia.T3D.user,
+    },
+    Quan3D: {
+      customer: guest.typeGia.Quan3D.customer,
+      user: guest.typeGia.Quan3D.user,
+    },
+  };
 
+  return priceMapping[sku] || null;
+};
 const createJob = async (req, res) => {
   try {
     const {
@@ -12,7 +53,6 @@ const createJob = async (req, res) => {
       designer,
       product,
       designs,
-      attributes,
     } = req.body;
     // Định nghĩa schema Joi cho dữ liệu đầu vào
     const schema = Joi.object({
@@ -58,7 +98,6 @@ const createJob = async (req, res) => {
     }
     // Kiểm tra số tiền hiện có của người dùng
     const sku = product.sku; // Lấy SKU từ product
-    console.log(sku);
     let price = 0;
     let updatedAttributes = {};
     // Kiểm tra SKU và xác định giá tiền tương ứng
@@ -221,16 +260,33 @@ const deleteJob = async (req, res) => {
   try {
     const { id } = req.params;
 
-    // Cập nhật trường "isDeleted" thành true cho công việc có _id tương ứng
+    const job = await Job.findOne({ id: id }).populate("guest_create");
+    if (!job) {
+      return res.status(404).json({ message: "Job not found" });
+    }
+
+    const guest = await User.findOne({ _id: job.guest_create });
+
+    if (!guest) {
+      return res.status(404).json({ message: "Guest not found" });
+    }
+    const priceAndAttributes = getPriceAndAttributesBySku(
+      guest,
+      job.product.sku
+    );
+    const { customer } = priceAndAttributes;
+
+    if (guest) {
+      guest.money += customer;
+      await guest.save();
+    }
+
+    // Đánh dấu công việc là đã xóa
     const updatedJob = await Job.findOneAndUpdate(
       { id: id },
       { isDeleted: true },
       { new: true }
     );
-
-    if (!updatedJob) {
-      return res.status(404).json({ message: "Job not found" });
-    }
 
     return res.status(200).json({ message: "Delete success" });
   } catch (error) {
@@ -380,7 +436,7 @@ const getByGuest = async (req, res) => {
   try {
     const { guestId } = req.params;
 
-    const jobs = await Job.find({ guest_create: guestId,isDeleted:"false" })
+    const jobs = await Job.find({ guest_create: guestId, isDeleted: "false" })
       .sort({ createdAt: -1 })
       .populate([
         {
@@ -416,21 +472,27 @@ const updateGuest = async (req, res) => {
     if (!updatedJob) {
       return res.status(404).json({ message: "Job not found" });
     }
-    if (status === "done") {
-      const { sku } = updatedJob.product;
-      const { designer_id } = updatedJob.designer;
+    if (status === "Done" && !updatedJob.moneyProcessed) {
+      const id = updatedJob.designer.designer_id;
+      if (id) {
+        const user = await User.findOne({
+          _id: updatedJob.designer.designer_id,
+        });
 
-      const user = await User.findOne({ _id: designer_id });
+        if (!user) {
+          return res.status(404).json({ message: "User not found" });
+        }
 
-      if (!user) {
-        return res.status(404).json({ message: "User not found" });
+        user.money +=
+          updatedJob.attributes.outsource_price -
+          updatedJob.attributes.monetary_fine;
+
+        updatedJob.moneyProcessed = true;
+        await updatedJob.save();
+        await user.save();
+      } else {
+        return res.status(404).json({ message: "Chưa có ai nhận" });
       }
-
-      const customerPrice = user.typeGia[sku]?.customer || 0;
-
-      user.money -= customerPrice;
-
-      await user.save();
     }
     return res.status(200).json(updatedJob);
   } catch (error) {
@@ -451,7 +513,6 @@ const updateByAdmin = async (req, res) => {
     if (designer_id) {
       updateFields["designer.designer_id"] = designer_id;
     }
-    console.log(updateFields);
     const updatedJob = await Job.findOneAndUpdate(
       { id: id },
       {
