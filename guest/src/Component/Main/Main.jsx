@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { MaterialReactTable } from "material-react-table";
 import * as JobService from "../../service/JobService";
@@ -16,7 +16,7 @@ import {
   Typography,
   Select,
   Option,
-  Textarea
+  Textarea,
 } from "@material-tailwind/react";
 
 import { Edit as EditIcon } from "@mui/icons-material";
@@ -255,9 +255,7 @@ function Main() {
           return (
             <div
               className={
-                cell.row.original.attributes.outsource_note
-                  ? "mb-[190px]"
-                  : ""
+                cell.row.original.attributes.outsource_note ? "mb-[190px]" : ""
               }
             >
               <div class="form-group mx-2 mb-4">
@@ -342,6 +340,11 @@ function Main() {
     setStatus("Doing");
     setTypeDate("createdAt");
   };
+  useEffect(() => {
+    if (!isLoading) {
+      applyFilters();
+    }
+  }, [data]);
   return (
     <section className="content-main">
       <div className="content-header">
@@ -390,6 +393,7 @@ function Main() {
               >
                 <Option value="All Status">All Status</Option>
                 <Option value="Waiting">Waiting</Option>
+                <Option value="Waiting Admin">Waiting Admin</Option>
                 <Option value="Doing">Doing</Option>
                 <Option value="Review">Review</Option>
                 <Option value="Fix">Fix</Option>
