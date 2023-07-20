@@ -46,7 +46,57 @@ const userSchema = mongoose.Schema(
           default: 0,
         },
       },
-      Poster: {
+      Tshirt2DKho: {
+        customer: {
+          type: Number,
+          default: 0,
+        },
+        user: {
+          type: Number,
+          default: 0,
+        },
+      },
+      Tshirt2DX15: {
+        customer: {
+          type: Number,
+          default: 0,
+        },
+        user: {
+          type: Number,
+          default: 0,
+        },
+      },
+      Tshirt2DX2: {
+        customer: {
+          type: Number,
+          default: 0,
+        },
+        user: {
+          type: Number,
+          default: 0,
+        },
+      },
+      Tshirt2DX3: {
+        customer: {
+          type: Number,
+          default: 0,
+        },
+        user: {
+          type: Number,
+          default: 0,
+        },
+      },
+      PosterKho: {
+        customer: {
+          type: Number,
+          default: 0,
+        },
+        user: {
+          type: Number,
+          default: 0,
+        },
+      },
+      PosterDe: {
         customer: {
           type: Number,
           default: 0,

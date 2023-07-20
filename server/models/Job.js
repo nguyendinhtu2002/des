@@ -39,7 +39,7 @@ const jobSchema = mongoose.Schema(
     },
     local_code: {
       type: String,
-      required: true,
+      default:"" 
     },
     guest_create: {
       type: mongoose.Schema.Types.ObjectId,
@@ -100,9 +100,7 @@ const jobSchema = mongoose.Schema(
       type: Boolean,
       default: false,
     },
-  },
-  {
-    timestamps: true,
+    createdAt: { type: Date, default: Date.now }
   }
 );
 

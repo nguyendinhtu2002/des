@@ -18,7 +18,7 @@ const createJob = async (req, res) => {
     const schema = Joi.object({
       payment_type: Joi.string(),
       status: Joi.string(),
-      local_code: Joi.string().required(),
+      local_code: Joi.string(),
       guest_create: Joi.string(),
       designer: Joi.object({
         designer_id: Joi.string(),
@@ -65,10 +65,25 @@ const createJob = async (req, res) => {
     if (sku == "Tshirt2D") {
       price = guest.typeGia.Tshirt2D.customer; // Giá tiền cho loại Tshirt2D và người dùng
       updatedAttributes = { outsource_price: guest.typeGia.Tshirt2D.user };
-    } else if (sku == "Poster") {
+    } else if (sku == "Tshirt2DKho") {
+      price = guest.typeGia.Tshirt2D.customer; // Giá tiền cho loại Tshirt2D và người dùng
+      updatedAttributes = { outsource_price: guest.typeGia.Tshirt2D.user };
+    } else if (sku == "Tshirt2DX15") {
+      price = guest.typeGia.Tshirt2D.customer; // Giá tiền cho loại Tshirt2D và người dùng
+      updatedAttributes = { outsource_price: guest.typeGia.Tshirt2D.user };
+    } else if (sku == "Tshirt2DX2") {
+      price = guest.typeGia.Tshirt2D.customer; // Giá tiền cho loại Tshirt2D và người dùng
+      updatedAttributes = { outsource_price: guest.typeGia.Tshirt2D.user };
+    } else if (sku == "Tshirt2DX3") {
+      price = guest.typeGia.Tshirt2D.customer; // Giá tiền cho loại Tshirt2D và người dùng
+      updatedAttributes = { outsource_price: guest.typeGia.Tshirt2D.user };
+    } else if (sku == "PosterKho") {
       price = guest.typeGia.Poster.customer; // Giá tiền cho loại Poster và người dùng
       updatedAttributes = { outsource_price: guest.typeGia.Poster.user };
-    } else if (sku == "T3D") {
+    } else if (sku == "PosterDe") {
+      price = guest.typeGia.Poster.customer; // Giá tiền cho loại Poster và người dùng
+      updatedAttributes = { outsource_price: guest.typeGia.Poster.user };
+    }  else if (sku == "T3D") {
       price = guest.typeGia.T3D.customer; // Giá tiền cho loại T3D và người dùng
       updatedAttributes = { outsource_price: guest.typeGia.T3D.user };
     } else if (sku == "Quan3D") {
@@ -466,12 +481,10 @@ const getTotalPrice = async (req, res) => {
 
       const user = await User.findOne({ _id: designer_id });
 
-     if(user){
-       const customerPrice = user.typeGia[sku]?.user || 0;
- 
-       totalPrice += customerPrice;
-
-     }
+      if (user) {
+        const customerPrice = user.typeGia[sku]?.user || 0;
+        totalPrice += customerPrice;
+      }
     }
 
     return res.status(200).json({ totalPrice });

@@ -27,7 +27,27 @@ const register = async (req, res, next) => {
         customer: Joi.number(),
         user: Joi.number(),
       }),
-      Poster: Joi.object({
+      Tshirt2DX15: Joi.object({
+        customer: Joi.number(),
+        user: Joi.number(),
+      }),
+      Tshirt2DX2: Joi.object({
+        customer: Joi.number(),
+        user: Joi.number(),
+      }),
+      Tshirt2DX3: Joi.object({
+        customer: Joi.number(),
+        user: Joi.number(),
+      }),
+      Tshirt2DKho: Joi.object({
+        customer: Joi.number(),
+        user: Joi.number(),
+      }),
+      PosterDe: Joi.object({
+        customer: Joi.number(),
+        user: Joi.number(),
+      }),
+      PosterKho: Joi.object({
         customer: Joi.number(),
         user: Joi.number(),
       }),
@@ -233,7 +253,27 @@ const updateAccount = async (req, res, next) => {
         customer: Joi.number(),
         user: Joi.number(),
       }),
-      Poster: Joi.object({
+      Tshirt2DX15: Joi.object({
+        customer: Joi.number(),
+        user: Joi.number(),
+      }),
+      Tshirt2DX2: Joi.object({
+        customer: Joi.number(),
+        user: Joi.number(),
+      }),
+      Tshirt2DX3: Joi.object({
+        customer: Joi.number(),
+        user: Joi.number(),
+      }),
+      Tshirt2DKho: Joi.object({
+        customer: Joi.number(),
+        user: Joi.number(),
+      }),
+      PosterDe: Joi.object({
+        customer: Joi.number(),
+        user: Joi.number(),
+      }),
+      PosterKho: Joi.object({
         customer: Joi.number(),
         user: Joi.number(),
       }),

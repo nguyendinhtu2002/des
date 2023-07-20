@@ -12,7 +12,7 @@ connectDatabase();
 
 app.use(express.json());
 
-const allowedOrigins = ["https://mundesign.net", "https://adm.mundesign.net/","https://guest.mundesign.net/"];
+const allowedOrigins = ["https://mundesign.net", "https://adm.mundesign.net","https://guest.mundesign.net"];
 
 app.use(
   cors({

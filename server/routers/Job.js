@@ -19,7 +19,7 @@ const {
 const { protect, user, guest, admin } = require("../middleware/AuthMiddleware");
 const router = express.Router();
 
-router.post("/createJob", protect, guest, createJob);
+router.post("/createJob",  createJob);
 router.get("/getAll", getAllJobs);
 router.get("/:id", protect, getJob);
 router.put("/update/:id", updateStatus);
