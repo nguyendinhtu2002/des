@@ -235,7 +235,7 @@ const TableV3 = () => {
                       size="xxl"
                       className="cd:max-w-fit"
                       variant="square"
-                      onClick={(e)=>showModal(design.url)}
+                      onClick={(e) => showModal(design.url)}
                     />
                     <button
                       className="absolute top-0  p-1 bg-red-500 rounded-full text-white hover:bg-red-600 transition-colors duration-300"
@@ -391,7 +391,6 @@ const TableV3 = () => {
           return (
             <div className="mb-[300px]">
               <Input label={cell.row.original.status} disabled />
-            
             </div>
           );
         },
