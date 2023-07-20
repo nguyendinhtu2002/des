@@ -6,8 +6,12 @@ import { useDispatch, useSelector } from "react-redux";
 
 function Header() {
   const location = useLocation();
-  const [click,setClick] = useState(false)
   const dispatch = useDispatch();
+
+  const [click, setClick] = useState(false);
+  const handleClick = () => {
+    setClick(!click);
+  };
   const handleLogout = () => {
     dispatch(resetUser());
     localStorage.clear("access_token");
@@ -20,7 +24,7 @@ function Header() {
   const formattedAmount = (amount, options) => {
     return amount?.toLocaleString(undefined, options);
   };
-  const userLogin = useSelector((state)=>state.user)
+  const userLogin = useSelector((state) => state.user);
   return (
     <nav class="bg-white border-gray-200 dark:bg-gray-900">
       <div class=" flex flex-wrap items-center justify-between  p-4">
@@ -35,11 +39,7 @@ function Header() {
           <button
             type="button"
             class="flex mr-3 text-sm bg-gray-800 rounded-full md:mr-0 focus:ring-4 focus:ring-gray-300 dark:focus:ring-gray-600"
-            id="user-menu-button"
-            aria-expanded="false"
-            data-dropdown-toggle="user-dropdown"
-            data-dropdown-placement="bottom"
-            onClick={(e)=>setClick(true)}
+            onClick={handleClick}
           >
             <span class="sr-only">Open user menu</span>
             <img
@@ -49,7 +49,11 @@ function Header() {
             />
           </button>
           <div
-            class={click?" z-50  my-4 text-base list-none bg-white divide-y divide-gray-100 rounded-lg shadow dark:bg-gray-700 dark:divide-gray-600":"hidden"}
+            class={
+              click
+                ? " z-50 absolute m-[-40px] top-[50px] my-4 text-base list-none bg-white divide-y divide-gray-100 rounded-lg shadow dark:bg-gray-700 dark:divide-gray-600"
+                : "hidden"
+            }
             id="user-dropdown"
           >
             <div class="px-4 py-3">
@@ -57,7 +61,7 @@ function Header() {
                 Số dư: {formattedAmount(userLogin?.money)}
               </span>
             </div>
-            <ul class="py-2" aria-labelledby="user-menu-button">
+            <ul class="py-2">
               <li>
                 <button
                   class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white"
