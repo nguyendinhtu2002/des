@@ -29,7 +29,7 @@ function Login() {
     draggable: true,
     progress: undefined,
   };
-  const mutation = useMutationHooks((data) => UserService.loginUser(data));
+  const mutation = useMutationHooks((data) => UserService.loginGuest(data));
   const { data, error, isLoading, isError, isSuccess } = mutation;
 
   const submitHandler = async (e) => {
