@@ -56,8 +56,7 @@ const AddProductMain = () => {
       productname === "" ||
       deadline === "" ||
       sku === "" ||
-      size === "" ||
-      local === ""
+      size === ""
     ) {
       if (!toast.isActive(toastId.current)) {
         toastId.current = toast.error("Không được để trống!", Toastobjects);
@@ -77,7 +76,9 @@ const AddProductMain = () => {
           );
 
           try {
-            const access_token =JSON.parse( localStorage.getItem("access_token"));
+            const access_token = JSON.parse(
+              localStorage.getItem("access_token")
+            );
 
             const result = mutationAddProduct.mutate({
               product: {
@@ -90,7 +91,6 @@ const AddProductMain = () => {
                 image_url: res.data.secure_url,
               },
               guest_create: userLogin.id,
-              local_code: local,
               access_token,
             });
 
@@ -158,40 +158,6 @@ const AddProductMain = () => {
                       onChange={(e) => setName(e.target.value)}
                     />
                   </div>
-                  <div className=" mb-3">
-                    <label htmlFor="product_title" className="form-label">
-                      Multiple Design
-                    </label>
-                    <div class="form-check">
-                      <input
-                        class="form-check-input"
-                        type="checkbox"
-                        id="flexCheckDefault"
-                        onChange={(e) => setMultipleDes(e.target.value)}
-                      />
-
-                      <label class="form-check-label" for="flexRadioDefault1">
-                        True
-                      </label>
-                    </div>
-                  </div>
-                  <div className=" mb-3">
-                    <label htmlFor="product_title" className="form-label">
-                      Double sided
-                    </label>
-                    <div class="form-check">
-                      <input
-                        class="form-check-input"
-                        type="checkbox"
-                        value=""
-                        id="flexCheckDefault"
-                        onChange={(e) => setDoubleSided(e.target.value)}
-                      />
-                      <label class="form-check-label" for="flexRadioDefault1">
-                        True
-                      </label>
-                    </div>
-                  </div>
 
                   <div class="mb-3">
                     <label for="formFileMultiple" class="form-label">
@@ -206,16 +172,21 @@ const AddProductMain = () => {
                   </div>
                   <div className="mb-4">
                     <label htmlFor="product_price" className="form-label">
-                      Sku
+                      Loại sản phẩm
                     </label>
                     <select
                       class="form-select"
                       aria-label="Default select example"
                       onChange={(e) => setSku(e.target.value)}
                     >
-                      <option selected>Choose Sku</option>
+                      <option selected>Choose Loại sản phẩm</option>
+                      <option value="Tshirt2DX15">Tshirt 2D X1.5</option>
+                      <option value="Tshirt2DX2">Tshirt 2D X2</option>
+                      <option value="Tshirt2DX3">Tshirt 2D X3</option>
                       <option value="Tshirt2D">Tshirt 2D</option>
-                      <option value="Poster">Poster</option>
+                      <option value="Tshirt2DKho">Tshirt 2D khó</option>
+                      <option value="PosterKho">Poster Khó</option>
+                      <option value="PosterDe">Poster Dễ</option>
                       <option value="T3D">3D</option>
                       <option value="Quan3D">3D + Quần</option>
                     </select>
@@ -233,16 +204,7 @@ const AddProductMain = () => {
                       Mỗi size cách nhau bởi dấu phẩy(",").
                     </div>
                   </div>
-                  <div className="mb-4">
-                    <label htmlFor="product_price" className="form-label">
-                      Local
-                    </label>
-                    <input
-                      type="text"
-                      class="form-control"
-                      onChange={(e) => setLocal(e.target.value)}
-                    />
-                  </div>
+
                   <div class="mb-3">
                     <label for="formFileMultiple" class="form-label">
                       Images

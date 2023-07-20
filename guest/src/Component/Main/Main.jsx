@@ -34,6 +34,7 @@ function Main() {
   const [dateFrom, setDateFrom] = useState("");
   const [dateTo, setDateTo] = useState("");
   const [designer, setDesigner] = useState("");
+  const [click, setClick] = useState(false);
   const history = useNavigate();
   const userLogin = useSelector((state) => state.user);
   const handleNoteDoubleClick = () => {
@@ -90,9 +91,9 @@ function Main() {
         })
         .then((res) => {
           toastId.current = toast.success("Thành công!", Toastobjects);
-          // setTimeout(() => {
-          //   window.location.reload();
-          // }, 1000);
+          setTimeout(() => {
+            window.location.reload();
+          }, 2000);
         })
         .catch((error) => {
           if (error.response.status === 500) {
@@ -109,7 +110,17 @@ function Main() {
         });
     }
   };
+  const showModal = (src) => {
+    setClick(true);
+    document.getElementById("modal").classList.remove("hidden");
+    document.getElementById("modal-img").src = src;
+  };
 
+  const closeModal = () => {
+    setClick(false);
+
+    document.getElementById("modal").classList.add("hidden");
+  };
   const columns = useMemo(
     () => [
       {
@@ -126,13 +137,15 @@ function Main() {
         enableGlobalFilter: true,
         enableColumnFilter: false,
         Cell: ({ cell }) => {
-          const { name, size, sku, image_url,Deadline } = cell.row.original.product;
+          const { name, size, sku, image_url, Deadline } =
+            cell.row.original.product;
           return (
             <div>
               <div className="pl-2 pt-2">
                 <img
                   className="ng-scope h-5 w-[30px] cursor-default inline"
                   src={image_url}
+                  onClick={(e) => showModal(image_url)}
                 />
                 <a className="text-[#3c8dbc]">
                   <h5 class="ng-binding inline text-[#3c8dbc] ml-1 ">{name}</h5>
@@ -141,7 +154,12 @@ function Main() {
 
               <div className="mt-[0.5px] pl-2">
                 <strong>Created at:</strong>
-                <span class="ng-binding"> {moment(cell.row.original.createdAt).format("YYYY-MM-DD HH:mm:ss.SSS")}</span>
+                <span class="ng-binding">
+                  {" "}
+                  {moment(cell.row.original.createdAt).format(
+                    "YYYY-MM-DD HH:mm:ss.SSS"
+                  )}
+                </span>
               </div>
               <div className=" pl-2">
                 <strong>Deadline at:</strong>
@@ -157,6 +175,7 @@ function Main() {
                       src={image_url}
                       size="lg"
                       alt="avatar"
+                      onClick={(e) => showModal(image_url)}
                     />
                   </a>
                   <div className="inline-block align-middle">
@@ -195,6 +214,7 @@ function Main() {
                       size="xxl"
                       className="cd:max-w-fit"
                       variant="square"
+                      onClick={() => showModal(design.url)}
                     />
                     <button
                       className="absolute top-0  p-1 bg-red-500 rounded-full text-white hover:bg-red-600 transition-colors duration-300"
@@ -329,16 +349,26 @@ function Main() {
           </Link>
         </div>
       </div>
+      <div
+        id="modal"
+        className="hidden fixed top-0 left-0 z-80 w-screen h-screen bg-black/70 flex justify-center items-center"
+      >
+        <a
+          className="fixed z-90 top-6 right-8 text-white text-5xl font-bold"
+          href="javascript:void(0)"
+          onClick={closeModal}
+        >
+          &times;
+        </a>
 
-      <div className="card mb-4 shadow-sm">
+        <img
+          id="modal-img"
+          className="max-w-[800px] max-h-[600px] object-cover"
+          alt="Modal Image"
+        />
+      </div>
+      <div className={click?"hidden card mb-4 shadow-sm":"card mb-4 shadow-sm"}>
         <div className="card-body">
-          {/* {loading ? (
-            <Loading />
-          ) : (
-            <div className="row">
-              <Table data={tempData} columns={columns} sub={true} />
-            </div>
-          )} */}
           <div className="grid xl:grid-cols-3 md:grid-cols-1 gap-4 xl:w-[70%] ">
             <div>
               <Input
