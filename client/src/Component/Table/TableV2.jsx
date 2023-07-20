@@ -208,7 +208,7 @@ function TableV2() {
                     <strong>Created at:</strong>
                     <span class="ng-binding">
                       {" "}
-                      {moment(item.createAt).format("YYYY-MM-DD HH:mm:ss.SSS")}
+                      {moment(item.createAt).format("YYYY-MM-DD HH:mm:ss")}
                     </span>
                   </div>
                   <div className=" pl-2">
@@ -216,7 +216,7 @@ function TableV2() {
                     <span class="ng-binding text-[#a94442]">
                       {" "}
                       {moment(item.product.Deadline).format(
-                        "YYYY-MM-DD HH:mm:ss.SSS"
+                        "YYYY-MM-DD HH:mm:ss"
                       )}
                     </span>
                   </div>

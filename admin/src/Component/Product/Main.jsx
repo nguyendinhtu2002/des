@@ -194,17 +194,17 @@ function Main() {
                 <span class="ng-binding">
                   {" "}
                   {moment(cell.row.original.createdAt).format(
-                    "YYYY-MM-DD HH:mm:ss.SSS"
+                    "YYYY-MM-DD HH:mm:ss"
                   )}
                 </span>
               </div>
               <div className=" pl-2">
-                <strong>Created at:</strong>
+                <strong>Dealine at:</strong>
                 <span class="ng-binding text-[#a94442]">
                   {" "}
                   <span class="ng-binding">
                     {" "}
-                    {moment(Deadline).format("YYYY-MM-DD HH:mm:ss.SSS")}
+                    {moment(Deadline).format("YYYY-MM-DD HH:mm:ss")}
                   </span>
                 </span>
               </div>
@@ -528,7 +528,7 @@ function Main() {
                   label="Date from"
                   type="date"
                   onChange={(e) => setDateFrom(e.target.value)}
-                  value={dateTo}
+                  value={dateFrom}
                 />{" "}
               </div>
               <div>

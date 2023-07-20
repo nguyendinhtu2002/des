@@ -178,7 +178,7 @@ const TableV3 = () => {
                 <span class="ng-binding">
                   {" "}
                   {moment(cell.row.original.createdAt).format(
-                    "YYYY-MM-DD HH:mm:ss.SSS"
+                    "YYYY-MM-DD HH:mm:ss"
                   )}
                 </span>
               </div>
@@ -186,7 +186,7 @@ const TableV3 = () => {
                 <strong>Created at:</strong>
                 <span class="ng-binding text-[#a94442]">
                   {" "}
-                  {moment(Deadline).format("YYYY-MM-DD HH:mm:ss.SSS")}
+                  {moment(Deadline).format("YYYY-MM-DD HH:mm:ss")}
                 </span>
               </div>
               <div className="flex flex-wrap m-h-[180px] overflow-y-scroll pl-2">
@@ -215,7 +215,7 @@ const TableV3 = () => {
             </div>
           );
         },
-        size: 200,
+        size: 150,
       },
       {
         header: "Design",
@@ -263,7 +263,7 @@ const TableV3 = () => {
             </div>
           );
         },
-        size: 200,
+        size: 180,
       },
       {
         header: "Designer",
@@ -297,23 +297,25 @@ const TableV3 = () => {
                 >
                   Note outsource:
                 </Typography>
-                <div
-                  className="pre-note ng-binding ml-2 cursor-default"
-                  onDoubleClick={handleNoteDoubleClick}
-                  aria-hidden={!isNoteVisible}
+                <Textarea
+                  label="Message"
+                  disabled
+                  value={cell.row.original.attributes.outsource_note}
+                />
+              </div>
+              <div className="mx-2">
+                <Typography
+                  variant="small"
+                  color="blue-gray"
+                  className="mb-4 font-medium ml-2"
                 >
-                  {cell.row.original.attributes.outsource_note}
-                </div>
-                {/* {isNoteVisible && <Textarea label="Message" />}
-                {isNoteVisible && (
-                  <Button
-                    size="sm"
-                    className="rounded-md"
-                    onClick={() => setIsNoteVisible(false)}
-                  >
-                    Save
-                  </Button>
-                )} */}
+                  Note Order:
+                </Typography>
+                <Textarea
+                  label="Message"
+                  disabled
+                  value={cell.row.original.attributes.outsource_order}
+                />
               </div>
               <Typography
                 variant="small"
@@ -334,15 +336,6 @@ const TableV3 = () => {
                     className: "min-w-0",
                   }}
                 />
-                <Button
-                  size="sm"
-                  // color={email ? "blue" : "blue-gray"}
-                  // disabled={!email}
-                  disabled
-                  className="!absolute right-1 top-1 rounded"
-                >
-                  Lưu
-                </Button>
               </div>
               <Typography
                 variant="small"
@@ -363,15 +356,6 @@ const TableV3 = () => {
                     className: "min-w-0",
                   }}
                 />
-                <Button
-                  size="sm"
-                  // color={email ? "blue" : "blue-gray"}
-                  // disabled={!email}
-                  disabled
-                  className="!absolute right-1 top-1 rounded"
-                >
-                  Lưu
-                </Button>
               </div>
             </div>
           );
@@ -389,7 +373,7 @@ const TableV3 = () => {
         // enableColumnFilter: false, // Disable column filter for this column
         Cell: ({ cell }) => {
           return (
-            <div className="mb-[300px]">
+            <div className="mb-[594px]">
               <Input label={cell.row.original.status} disabled />
             </div>
           );
@@ -517,7 +501,7 @@ const TableV3 = () => {
             </div>
             <div className="ml-2">
               <Button
-                className="flex items-center gap-3 py-2"
+                className="flex items-center gap-3 py-2 px-3"
                 onClick={handleClearFrom}
               >
                 <ArrowPathIcon strokeWidth={2} className=" w-5" />
@@ -534,7 +518,7 @@ const TableV3 = () => {
           enableRowActions
           enableColumnResizing
           renderRowActions={({ row, table }) => [
-            <div className="mb-[340px]">
+            <div className="mb-[596px] mx-auto">
               <IconButton
                 color="secondary"
                 onClick={() => {

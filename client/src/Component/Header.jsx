@@ -13,7 +13,13 @@ function Header() {
     localStorage.clear("refresh_token");
     window.location.reload();
   };
-
+  const options = {
+    maximumFractionDigits: 0,
+  };
+  const formattedAmount = (amount, options) => {
+    return amount?.toLocaleString(undefined, options);
+  };
+  const userLogin = useSelector((state)=>state.user)
   return (
     <nav class="bg-white border-gray-200 dark:bg-gray-900">
       <div class=" flex flex-wrap items-center justify-between  p-4">
@@ -46,7 +52,7 @@ function Header() {
           >
             <div class="px-4 py-3">
               <span class="block text-sm text-gray-900 dark:text-white">
-                Số dư: 200.000
+                Số dư: {formattedAmount(userLogin?.money)}
               </span>
             </div>
             <ul class="py-2" aria-labelledby="user-menu-button">
