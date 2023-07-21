@@ -575,7 +575,7 @@ const getStatusCountByDesigner = async (req, res) => {
       // Match the documents with the specified criteria (optional)
       {
         $match: {
-          // Add any filtering conditions here if needed
+          isDeleted: false,
         },
       },
       // Unwind the 'designer' field to create a separate document for each designer
