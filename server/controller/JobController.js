@@ -529,7 +529,28 @@ const updateByAdmin = async (req, res) => {
     if (!updatedJob) {
       return res.status(404).json({ message: "Job not found" });
     }
+    if (status === "Done" && !updatedJob.moneyProcessed) {
+      const id = updatedJob.designer.designer_id;
+      if (id) {
+        const user = await User.findOne({
+          _id: updatedJob.designer.designer_id,
+        });
 
+        if (!user) {
+          return res.status(404).json({ message: "Chưa tồn tại nhân viên" });
+        }
+
+        user.money +=
+          updatedJob.attributes.outsource_price -
+          updatedJob.attributes.monetary_fine;
+
+        updatedJob.moneyProcessed = true;
+        await updatedJob.save();
+        await user.save();
+      } else {
+        return res.status(404).json({ message: "Chưa có ai nhận" });
+      }
+    }
     return res.status(200).json(updatedJob);
   } catch (error) {
     console.error(error);
@@ -579,13 +600,13 @@ const getStatusCountByDesigner = async (req, res) => {
         },
       },
       // Unwind the 'designer' field to create a separate document for each designer
-      { $unwind: '$designer' },
+      { $unwind: "$designer" },
       // Group the documents by 'designer.designer_id' (designer ID) and 'status' and calculate the count for each group
       {
         $group: {
           _id: {
-            designerId: '$designer.designer_id',
-            status: '$status',
+            designerId: "$designer.designer_id",
+            status: "$status",
           },
           count: { $sum: 1 },
         },
@@ -593,11 +614,11 @@ const getStatusCountByDesigner = async (req, res) => {
       // Group again by designer to accumulate the status counts for each designer
       {
         $group: {
-          _id: '$_id.designerId',
+          _id: "$_id.designerId",
           statusCounts: {
             $push: {
-              status: '$_id.status',
-              count: '$count',
+              status: "$_id.status",
+              count: "$count",
             },
           },
         },
@@ -605,32 +626,32 @@ const getStatusCountByDesigner = async (req, res) => {
       // Lookup 'User' collection to get the designer's name
       {
         $lookup: {
-          from: 'users',
-          localField: '_id',
-          foreignField: '_id',
-          as: 'designerDetails',
+          from: "users",
+          localField: "_id",
+          foreignField: "_id",
+          as: "designerDetails",
         },
       },
       // Project the desired fields for the final result
       {
         $project: {
           _id: 1,
-          name: { $arrayElemAt: ['$designerDetails.name', 0] },
+          name: { $arrayElemAt: ["$designerDetails.name", 0] },
           statusCounts: {
             $arrayToObject: {
               $map: {
                 input: possibleStatuses,
-                as: 'status',
+                as: "status",
                 in: {
-                  k: '$$status',
+                  k: "$$status",
                   v: {
                     $ifNull: [
                       {
                         $arrayElemAt: [
                           {
                             $filter: {
-                              input: '$statusCounts',
-                              cond: { $eq: ['$$this.status', '$$status'] },
+                              input: "$statusCounts",
+                              cond: { $eq: ["$$this.status", "$$status"] },
                             },
                           },
                           0,
@@ -651,7 +672,7 @@ const getStatusCountByDesigner = async (req, res) => {
     res.json(result);
   } catch (err) {
     console.error(err);
-    res.status(500).json({ message: 'Error occurred while fetching data' });
+    res.status(500).json({ message: "Error occurred while fetching data" });
   }
 };
 
