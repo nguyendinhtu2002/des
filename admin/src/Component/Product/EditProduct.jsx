@@ -8,6 +8,7 @@ import { useQuery } from "react-query";
 import axios from "axios";
 import { useMutationHooks } from "../../hooks/useMutationHook";
 import * as UserService from "../../service/UserService";
+import { updateStatus } from "../../features/products/productSlide";
 
 const ToastObjects = {
   pauseOnFocusLoss: false,
@@ -38,7 +39,7 @@ const EditProductMain = (props) => {
     progress: undefined,
   };
   const history = useNavigate();
-
+  const dispatch = useDispatch();
   const handleGetDetailJob = async (id) => {
     const access_token = JSON.parse(localStorage.getItem("access_token"));
 
@@ -91,6 +92,7 @@ const EditProductMain = (props) => {
       if (!toast.isActive(toastId.current)) {
         toastId.current = toast.success("Thành công!", Toastobjects);
       }
+      dispatch(updateStatus({status}))
     } else if (error) {
       if (!toast.isActive(toastId.current)) {
         toastId.current = toast.error("Có lỗi vui lòng thử lại", Toastobjects);

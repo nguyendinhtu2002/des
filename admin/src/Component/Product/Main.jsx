@@ -1,12 +1,9 @@
-import React, { useEffect, useMemo, useRef, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { MaterialReactTable } from "material-react-table";
 import * as JobService from "../../service/JobService";
 import * as UserService from "../../service/UserService";
-import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-
-import { useSelector } from "react-redux";
 import { useQuery } from "react-query";
 import axios from "axios";
 import { toast } from "react-toastify";
@@ -14,7 +11,6 @@ import Toast from "../../Component/LoadingError/Toast";
 import {
   Avatar,
   Button,
-  Checkbox,
   IconButton,
   Input,
   Typography,
@@ -30,25 +26,20 @@ import {
 } from "@heroicons/react/24/outline";
 import moment from "moment";
 import { useMutationHooks } from "../../hooks/useMutationHook";
+import { useSelector } from "react-redux";
 function Main() {
-  const [isNoteVisible, setIsNoteVisible] = useState(false);
+  const { status: statusinit } = useSelector((state) => state.status);
+  
   const [filteredData, setFilteredData] = useState([]);
   const [isFilterActive, setIsFilterActive] = useState(false);
-  const [status, setStatus] = useState("Waiting");
+  const [status, setStatus] = useState(statusinit);
   const [product, setProduct] = useState("");
   const [typeDate, setTypeDate] = useState("createdAt");
   const [dateFrom, setDateFrom] = useState("");
   const [dateTo, setDateTo] = useState("");
-  const [designer, setDesigner] = useState("");
   const [user, setUser] = useState("");
   const [click, setClick] = useState(false);
   const history = useNavigate();
-  const userLogin = useSelector((state) => state.user);
-  const handleNoteDoubleClick = () => {
-    setIsNoteVisible(true);
-  };
-  const [selectedDate, setSelectedDate] = useState(null);
-
   const fetchJob = async () => {
     const access_token = JSON.parse(localStorage.getItem("access_token"));
     const res = await JobService.getAllJob(access_token);
@@ -159,6 +150,13 @@ function Main() {
 
     document.getElementById("modal").classList.add("hidden");
   };
+
+  // const handleClick = () => {
+  //   const url = this.props.url;
+  //   if (url && url.startsWith("http")) {
+  //     window.open(url, "_blank");
+  //   }
+  // };
   const { isLoading: isLoading1, data: data1 } = useQuery(["users"], fetchUser);
   const columns = useMemo(
     () => [
@@ -323,6 +321,7 @@ function Main() {
                   label="Message"
                   disabled
                   value={cell.row.original.attributes.outsource_note}
+                  // onClick={this.handleClick}
                 />
 
                 {/* {isNoteVisible && <Textarea label="Message" />}

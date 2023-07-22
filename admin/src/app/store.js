@@ -1,5 +1,6 @@
 import { combineReducers, configureStore } from "@reduxjs/toolkit";
-import userReducers from '../features/userSlide/userSlide'
+import userReducers from "../features/userSlide/userSlide";
+import statusReducers from "../features/products/productSlide";
 
 import {
   persistStore,
@@ -17,11 +18,12 @@ const persistConfig = {
   key: "root",
   version: 1,
   storage,
+
 };
 
 const rootReducer = combineReducers({
-    user: userReducers,
-    
+  user: userReducers,
+  status: statusReducers,
 });
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);
@@ -36,4 +38,4 @@ export const store = configureStore({
     }),
 });
 
-export let persistor = persistStore(store)
+export let persistor = persistStore(store);
