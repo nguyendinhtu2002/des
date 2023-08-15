@@ -623,13 +623,11 @@ const getTotalPrice = async (req, res) => {
     let totalPrice = 0;
 
     for (const job of jobs) {
-      const { sku } = job.product;
-      const { designer_id } = job.designer;
 
-      const user = await User.findOne({ _id: designer_id });
+      const user = await User.findOne({ _id: job.designer_id });
 
       if (user) {
-        const customerPrice = user.typeGia[sku]?.user || 0;
+        const customerPrice = user.typeGia[job.nameProduct]?.user || 0;
         totalPrice += customerPrice;
       }
     }

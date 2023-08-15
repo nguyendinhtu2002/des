@@ -353,6 +353,38 @@ const toltalMoneyUser = async(req,res,next)=>{
     res.status(500).json({ error: "Something went wrong" });
   }
 }
+const toltalMoneyGuest = async(req,res,next)=>{
+  try {
+    const users = await User.find({ isDeleted: false,role:"guest" });
+
+    let totalMoney = 0;
+
+    for (const user of users) {
+      totalMoney += user.money;
+    }
+
+    return res.status(200).json({ totalMoney });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Something went wrong" });
+  }
+}
+const getUserIsNhanVien = async(req,res,next)=>{
+  try {
+    const data = await User.find({role:"customer"})
+    return res.json(data);
+  } catch (error) {
+    next(error);
+  }
+}
+const getUserIsGuest = async(req,res,next)=>{
+  try {
+    const data = await User.find({role:"guest"})
+    return res.json(data);
+  } catch (error) {
+    next(error);
+  }
+}
 module.exports = {
   register,
   loginUser,
@@ -364,5 +396,8 @@ module.exports = {
   updateAccount,
   detelteAccount,
   userisCustomer,
-  toltalMoneyUser
+  toltalMoneyUser,
+  getUserIsNhanVien,
+  getUserIsGuest,
+  toltalMoneyGuest
 };

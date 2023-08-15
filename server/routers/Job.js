@@ -19,6 +19,7 @@ const {
   getStatusCountByDesigner,
 } = require("../controller/JobController");
 const { protect, user, guest, admin } = require("../middleware/AuthMiddleware");
+const { getUserIsNhanVien } = require("../controller/UserController");
 const router = express.Router();
 
 router.post("/createJob",  createJob);
