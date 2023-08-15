@@ -78,7 +78,7 @@ export const updateByGuest = async (id, data, access_token) => {
   const headers = {
     Authorization: `Bearer ${access_token}`,
   };
-  const res = axiosJWT.put(`${URL}api/v1/job/update/admin/${id}`, data, {
+  const res =await axiosJWT.post(`${URL}api/v1/job/update/admin/${id}`, data, {
     headers,
   });
   return res.data;

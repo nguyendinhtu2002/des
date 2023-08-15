@@ -1,17 +1,6 @@
 const mongoose = require("mongoose");
 const AutoIncrement = require("mongoose-sequence")(mongoose);
 
-const designSchema = mongoose.Schema(
-  {
-    url: {
-      type: String,
-      required: false,
-    },
-  },
-  {
-    timestamps: true,
-  }
-);
 
 const jobSchema = mongoose.Schema({
   id: {
@@ -20,93 +9,31 @@ const jobSchema = mongoose.Schema({
     required: true,
     default: 0,
   },
-  payment_type: {
-    type: String,
-  },
-  status: {
-    type: String,
-    enum: [
-      "Waiting Admin",
-      "Waiting",
-      "Doing",
-      "Review",
-      "Fix",
-      "Confirm",
-      "Done",
-    ],
-    default: "Waiting Admin",
-  },
-  local_code: {
-    type: String,
-    default: "",
-  },
-  guest_create: {
+  designer_id: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "User",
   },
-  designer: {
-    designer_id: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "User",
-    },
+  nameProduct: {
+    type: String,
+    require: true,
   },
-  product: {
-    name: {
-      type: String,
-      required: true,
-    },
-    image_url: {
-      type: String,
-      required: true,
-    },
-    multiple_design: {
-      type: Boolean,
-      default: false,
-    },
-    double_sided: {
-      type: Boolean,
-      default: false,
-    },
-    Deadline: {
-      type: Date,
-      required: true,
-    },
-    sku: {
-      type: String,
-      require: true,
-    },
-    size: [String],
+  quantity:{
+    type:Number,
+    require:true,
+    default:1,
   },
-  designs: [designSchema],
-  attributes: {
-    outsource_price: {
-      type: Number,
-      default: 0,
-    },
-    team_outsource: {
-      type: String,
-    },
-    outsource_note: {
-      type: String,
-      default: "",
-    },
-    monetary_fine: {
-      type: Number,
-      default: 0,
-    },
-    outsource_order: {
-      type: String,
-      default: "",
-    },
+  guest_id:{
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "User",
   },
   isDeleted: {
     type: Boolean,
     default: false,
   },
-  moneyProcessed: {
-    type: Boolean,
-    default: false,
-  },
+  // moneyProcessed: {
+  //   type: Boolean,
+  //   default: false,
+  // },
   createdAt: { type: Date, default: Date.now },
 });
 

@@ -1,7 +1,7 @@
 import React from "react";
 import Header from "../../Component/Header";
 import Sidebar from "../../Component/sidebar";
-import Main from "../../Component/Product/Main";
+import Main from "../../Component/Order/Main";
 
 const ProductScreen = () => {
   return (

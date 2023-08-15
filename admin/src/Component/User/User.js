@@ -95,12 +95,6 @@ const Users = (props) => {
         size: 100,
       },
       {
-        accessorKey: "email",
-        header: "Email",
-        filterVariant: "text", // default
-        size: 150,
-      },
-      {
         accessorKey: "money",
         header: "Số dư",
         filterVariant: "range",
@@ -214,12 +208,7 @@ const Users = (props) => {
             <Option value="guest">Khách hàng</Option>
           </Select>
         </div>
-        <div>
-          <Button variant="gradient" onClick={handleOpen}>
-            Danh sách
-          </Button>
-        </div>
-        <div></div>
+
         <div className="flex w-[80%] mb-5">
           <div className="">
             <Button
@@ -229,16 +218,7 @@ const Users = (props) => {
               <MagnifyingGlassIcon strokeWidth={2} className=" w-5" /> Search
             </Button>
           </div>
-          <div className="ml-2">
-            <Button
-              className="flex items-center gap-3 py-2"
-              style={{ textTransform: "none" }}
-              // onClick={handleClearFrom}
-            >
-              <ArrowPathIcon strokeWidth={2} className=" w-5" />
-              Clear
-            </Button>
-          </div>
+
         </div>
       </div>
       <Dialog

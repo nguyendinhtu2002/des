@@ -1,16 +1,8 @@
 import React, { useEffect, useState } from "react";
-import { BorderTop } from "@mui/icons-material";
 import {
-  Avatar,
-  Checkbox,
-  Select,
-  Option,
   Typography,
-  Input,
-  Textarea,
-  Button,
+  Card
 } from "@material-tailwind/react";
-// import { Input } from "@mui/material";
 import * as JobService from "../../service/JobService";
 import { useQuery } from "react-query";
 import Loading from "../LoadingError/Loading";
@@ -18,14 +10,18 @@ import { useMutationHooks } from "../../hooks/useMutationHook";
 import { useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import Toast from "../../Component/LoadingError/Toast";
-import axios from "axios";
-import moment from "moment";
-function TableV2() {
-  const [isNoteVisible, setIsNoteVisible] = useState(false);
-  const [Issuccess, setSuccess] = useState(false);
-  const [Iserror, setError] = useState(false);
-  const [click, setClick] = useState(false);
 
+function TableV2(date) {
+  const test = date;
+  const TABLE_HEAD = ["#", "Tên nhân viên", "Chi tiết doanh thu", "Tổng doanh thu"];
+  const TABLE_ROWS = [
+    {
+      id: 1,
+      name: "John Michael",
+      job: "Manager",
+      date: "23/04/18",
+    },
+  ];
   const toastId = React.useRef(null);
   const Toastobjects = {
     position: "top-right",
@@ -36,14 +32,26 @@ function TableV2() {
     draggable: true,
     progress: undefined,
   };
-  const handleNoteDoubleClick = () => {
-    setIsNoteVisible(true);
+  const [value, setValue] = useState({
+    startDate: new Date(),
+    endDate: new Date().setMonth(11)
+  });
+  const {id} = useSelector((state)=>state.user)
+  const handleValueChange = newValue => {
+    console.log("newValue:", newValue);
+    setValue(newValue);
   };
   const fetchJob = async () => {
     const access_token = JSON.parse(localStorage.getItem("access_token"));
 
-    const res = await JobService.getAllJob(access_token);
+    const res = await JobService.getJobUser(id,access_token);
     return res;
+  };
+  const options = {
+    maximumFractionDigits: 0,
+  };
+  const formattedAmount = (amount, options) => {
+    return amount.toLocaleString(undefined, options);
   };
   const userLogin = useSelector((state) => state.user);
   const { isLoading, data } = useQuery(["products"], fetchJob);
@@ -52,40 +60,6 @@ function TableV2() {
     await JobService.addUsertoJob(id, rests, access_token);
   });
   const { error, isSuccess } = mutation;
-
-  const submitHandler = async (id) => {
-    // axios
-    //   .post(`http://localhost:5000/api/v1/job/addUsertoJob/${id}`, {
-    //     designerId: userLogin.id,
-    //   })
-    //   .then((res) => {
-    //     setSuccess(true);
-    //     toastId.current = toast.success("Thành công!", Toastobjects);
-    //     setTimeout(() => {
-    //       window.location.reload();
-    //     }, 3000);
-    //   })
-    //   .catch((error) => {
-    //     if (error.response.status === 500) {
-    //       toastId.current = toast.error(
-    //         "Có lỗi về server báo cho admin!",
-    //         Toastobjects
-    //       );
-    //     } else {
-    //       toastId.current = toast.error(
-    //         error.response.data.message,
-    //         Toastobjects
-    //       );
-    //     }
-    //   });
-    const access_token = JSON.parse(localStorage.getItem("access_token"));
-
-    mutation.mutate({
-      id: id,
-      designerId: userLogin.id,
-      access_token,
-    });
-  };
   useEffect(() => {
     // hangldeGetAll();
     if (!error && isSuccess) {
@@ -104,23 +78,15 @@ function TableV2() {
       }
     }
   }, [error, isSuccess]);
-  const showModal = (src) => {
-    setClick(true);
-    document.getElementById("modal").classList.remove("hidden");
-    document.getElementById("modal-img").src = src;
-  };
 
-  const closeModal = () => {
-    setClick(false);
 
-    document.getElementById("modal").classList.add("hidden");
-  };
+
   return isLoading ? (
     <Loading />
   ) : (
     <>
       <Toast />
-      <div className="table-filter col-md-12">
+      {/* <div className="table-filter col-md-12">
         <table className="table border border-solid border-[#f4f4f4] w-full h-full mb-5  text-sm font-light dark:border-neutral-500">
           <thead className="border-b font-medium dark:border-neutral-500">
             <tr id="js-table-head">
@@ -146,7 +112,7 @@ function TableV2() {
                 }}
                 className="border-r py-2 "
               >
-                Product
+                Tên nhân viên
               </th>
               <th
                 style={{
@@ -158,7 +124,7 @@ function TableV2() {
                 }}
                 className="border-r py-2 "
               >
-                Design
+                Chi tiết doanh thu
               </th>
               <th
                 style={{
@@ -170,193 +136,109 @@ function TableV2() {
                 }}
                 className="border-r py-2 "
               >
-                Designer
+                Tổng doanh thu
               </th>
-              <th
-                style={{
-                  width: "15%",
-                  borderTop: "0px",
-                  borderBottomWidth: "2px",
-                  border: "1px solid #f4f4f4",
-                  paddingLeft: "0px",
-                }}
-                className="border-r py-2 "
-              >
-                Status
-              </th>
+
             </tr>
           </thead>
           <tbody className="text-[13px]">
-            {data?.map((item) => (
-              <tr className="outline-0 ">
-                <td className="border-r border-b">{item.id}</td>
-                <td className="p-0 ml-1 border-r border-b">
-                  <div className="pl-2 pt-2">
-                    <img
-                      className="ng-scope h-5 w-[30px] cursor-default inline"
-                      src={item.product.image_url}
-                      onClick={() => showModal(item.product.image_url)}
-                    />
-                    <a className="text-[#3c8dbc]">
-                      <h5 class="ng-binding inline text-[#3c8dbc] ml-1 ">
-                        {item.product.name}
-                      </h5>
-                    </a>
-                  </div>
-
-                  <div className="mt-[0.5px] pl-2">
-                    <strong>Created at:</strong>
-                    <span class="ng-binding">
-                      {" "}
-                      {moment(item.createAt).format("YYYY-MM-DD HH:mm:ss")}
-                    </span>
-                  </div>
-                  <div className=" pl-2">
-                    <strong>Deadline at:</strong>
-                    <span class="ng-binding text-[#a94442]">
-                      {" "}
-                      {moment(item.product.Deadline).format(
-                        "YYYY-MM-DD HH:mm:ss"
-                      )}
-                    </span>
-                  </div>
-                  <div className="flex flex-wrap max-h-[200px]  overflow-y-scroll pl-2">
-                    {item.product.size.map((temp, index) => (
-                      <div
-                        key={index}
-                        className="p-[5px] mb-[10px] mr-[5px] border border-solid border-[#ddd] rounded-lg w-[160px]"
-                      >
-                        <a className="">
-                          <Avatar
-                            src={item.product.image_url}
-                            size="lg"
-                            alt="avatar"
-                            onClick={() => showModal(item.product.image_url)}
-                          />
-                        </a>
-                        <div className="inline-block align-middle">
-                          <strong className="ng-binding">
-                            {item.product.sku}{" "}
-                          </strong>
-                          <div className="ng-scope">
-                            <strong>Size: </strong>
-                            <span className="ng-binding"> {temp}</span>
-                          </div>
-                          <div className="ng-scope">
-                            <strong>Color: </strong>
-                            <span className="ng-binding"> Dark Heather</span>
-                          </div>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                </td>
-                <td className="p-0 ml-1 border-r items-start border-b">
-                  <div className="max-w-[500px] max-h-[250px] py-0 px-[10px] flex flex-wrap  items-start mt-2my-[5px]  overflow-y-scroll mb-[200px]"></div>
-                </td>
-                <td className="p-0 ml-1 border-r border-b ">
-                  <div class="form-group mx-2">
-                    <Input label="Chưa ai nhận" disabled />
-                  </div>
-                  <div class="form-group mx-2">
-                    <Input label="Nguyễn Văn A" disabled />
-                  </div>
-                  <div className="mx-2">
-                    <Typography
-                      variant="small"
-                      color="blue-gray"
-                      className="mb-4 font-medium ml-2"
-                    >
-                      Note outsource:
-                    </Typography>
-                    <div
-                      className="pre-note ng-binding ml-2 cursor-default"
-                      // onDoubleClick={handleNoteDoubleClick}
-                      aria-hidden={!isNoteVisible}
-                    >
-                      {isNoteVisible ? null : "Double click here to note!"}
-                    </div>
-                    {isNoteVisible && <Textarea label="Message" />}
-                    {isNoteVisible && (
-                      <Button
-                        size="sm"
-                        className="rounded-md"
-                        onClick={() => setIsNoteVisible(false)}
-                      >
-                        Save
-                      </Button>
-                    )}
-                  </div>
+            <tr className="outline-0 ">
+              <td className="border-r border-b">1</td>
+              <td className="p-0 ml-1 border-r border-b">
+                
+                <span>Nguyễn Đình Tư</span>
+              
+    
+              </td>
+              <td className="p-0 ml-1 border-r items-start border-b">
+                <div className="max-w-[500px] max-h-[250px] py-0 px-[10px] flex flex-wrap  items-start mt-2my-[5px]  overflow-y-scroll mb-[200px]"></div>
+              </td>
+              <td className="p-0 ml-1 border-r border-b ">
+              
+              </td>
+            
+            </tr>
+          </tbody>
+        </table>
+      </div> */}
+      
+      <Card className="h-full w-full overflow-scroll "  >
+        <table className="w-full min-w-max table-auto text-left">
+          <thead>
+            <tr>
+              {TABLE_HEAD.map((head) => (
+                <th
+                  key={head}
+                  className="border-b border-blue-gray-100 bg-blue-gray-50 p-4"
+                >
                   <Typography
                     variant="small"
                     color="blue-gray"
-                    className=" font-medium mx-4 mt-2"
+                    className="font-normal leading-none opacity-70"
                   >
-                    Lương:
+                    {head}
                   </Typography>
-                  <div className="relative flex mx-2 mt-2">
-                    <Input
-                      type="email"
-                      label="Email Address"
-                      value={item.attributes.outsource_price}
-                      // onChange={onChange}
-                      disabled
-                      className="pr-20"
-                      containerProps={{
-                        className: "min-w-0",
-                      }}
-                    />
-                    <Button
-                      size="sm"
-                      // color={email ? "blue" : "blue-gray"}
-                      // disabled={!email}
-                      disabled
-                      className="!absolute right-1 top-1 rounded"
+                </th>
+              ))}
+            </tr>
+          </thead>
+          <tbody>
+            {data["transformedData"]?.map(({ designer_id, product }, index) => {
+              const isLast = index === TABLE_ROWS.length - 1;
+              const classes = isLast ? "p-4" : "p-4 border-b border-blue-gray-50";
+
+              return (
+                <tr key={index}>
+                  <td className={classes}>
+                    <Typography
+                      variant="small"
+                      color="blue-gray"
+                      className="font-normal"
                     >
-                      Lưu
-                    </Button>
-                  </div>
-                </td>
-                <td className="p-0 ml-1 border-r border-b ">
-                  <div className="mx-2">
-                    <Input label="Waiting" disabled />
-                    <Button
-                      size="sm"
-                      // color={email ? "blue" : "blue-gray"}
-                      // disabled={!email}
-                      // disabled
-                      onClick={(e) => {
-                        submitHandler(item.id);
-                      }}
-                      className="mt-2"
+                      {index+1}
+                    </Typography>
+                  </td>
+                  <td className={classes}>
+                    <Typography
+                      variant="small"
+                      color="blue-gray"
+                      className="font-normal"
                     >
-                      Nhận job
-                    </Button>
-                  </div>
-                </td>
-              </tr>
-            ))}
+                      {designer_id.name}
+                    </Typography>
+                  </td>
+                  <td className={classes}>
+
+                    {product.map((item)=><div className="flex items-center">
+                      <Typography
+                        variant="body1"
+                        color="blueGray" // Tailwind CSS color class
+                        className="font-normal mr-2"
+                      >
+                        {item.nameProduct} - {item.quantity} :
+                      </Typography>
+                      <Typography color="green" variant="body1">
+                        {formattedAmount(item.money)}
+                      </Typography>
+                    </div>
+                    )}
+                  </td>
+                  <td className={classes}>
+                    <Typography
+                      variant="small"
+                      color="green"
+                      className="font-normal"
+                    >
+                      {formattedAmount(data["totalMoney"])}
+                    </Typography>
+                  </td>
+
+                </tr>
+              );
+            })}
           </tbody>
         </table>
-      </div>
-      <div
-        id="modal"
-        className="hidden fixed top-0 left-0 z-80 w-screen h-screen bg-black/70 flex justify-center items-center"
-      >
-        <a
-          className="fixed z-90 top-6 right-8 text-white text-5xl font-bold"
-          href="javascript:void(0)"
-          onClick={closeModal}
-        >
-          &times;
-        </a>
-
-        <img
-          id="modal-img"
-          className="max-w-[800px] max-h-[600px] object-cover"
-          alt="Modal Image"
-        />
-      </div>
+      </Card>
     </>
   );
 }

@@ -36,7 +36,7 @@ const userSchema = mongoose.Schema(
       default: false,
     },
     typeGia: {
-      Tshirt2D: {
+      Tshirt2DClone: {
         customer: {
           type: Number,
           default: 0,
@@ -46,7 +46,7 @@ const userSchema = mongoose.Schema(
           default: 0,
         },
       },
-      Tshirt2DKho: {
+      Tshirt2DRedesign: {
         customer: {
           type: Number,
           default: 0,
@@ -56,37 +56,7 @@ const userSchema = mongoose.Schema(
           default: 0,
         },
       },
-      Tshirt2DX15: {
-        customer: {
-          type: Number,
-          default: 0,
-        },
-        user: {
-          type: Number,
-          default: 0,
-        },
-      },
-      Tshirt2DX2: {
-        customer: {
-          type: Number,
-          default: 0,
-        },
-        user: {
-          type: Number,
-          default: 0,
-        },
-      },
-      Tshirt2DX3: {
-        customer: {
-          type: Number,
-          default: 0,
-        },
-        user: {
-          type: Number,
-          default: 0,
-        },
-      },
-      PosterKho: {
+      Mug: {
         customer: {
           type: Number,
           default: 0,
@@ -106,7 +76,7 @@ const userSchema = mongoose.Schema(
           default: 0,
         },
       },
-      T3D: {
+      PosterKho: {
         customer: {
           type: Number,
           default: 0,
@@ -116,7 +86,7 @@ const userSchema = mongoose.Schema(
           default: 0,
         },
       },
-      Quan3D: {
+      Tumler: {
         customer: {
           type: Number,
           default: 0,
@@ -126,6 +96,26 @@ const userSchema = mongoose.Schema(
           default: 0,
         },
       },
+      Tshirt3D: {
+        customer: {
+          type: Number,
+          default: 0,
+        },
+        user: {
+          type: Number,
+          default: 0,
+        },
+      },
+      Tshirt3DQuan: {
+        customer: {
+          type: Number,
+          default: 0,
+        },
+        user: {
+          type: Number,
+          default: 0,
+        },
+      }
     },
   },
   {

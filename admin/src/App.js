@@ -16,6 +16,7 @@ import { useEffect } from "react";
 import { updateUser } from "./features/userSlide/userSlide";
 import EditUserPage from "./page/User/EditPage";
 import NewUser from "./page/User/NewUser";
+import AddNew from "./page/Product/AddNew";
 function App() {
   const dispatch = useDispatch();
 
@@ -69,7 +70,7 @@ function App() {
         <Route path="/users" element={<UserPage />} />
         <Route path="/user/detail/:id" element={<EditUserPage />} />
         <Route path="/addUser" element={<NewUser />} />
-
+        <Route path="/addProduct" element={<AddNew/>} />
         </Route>
 
         <Route path="/login" element={<Login />} />

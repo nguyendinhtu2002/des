@@ -21,9 +21,9 @@ const EditProductMain = (props) => {
   const { id } = useParams();
   const [show, setShow] = useState(false);
   const [open, setOpen] = useState(false);
-  const [message, setMessage] = useState("");
-  const [design, setDesign] = useState("");
-  const [tienPhat, setTienPhat] = useState(0);
+  
+  const [product,setProduct] = useState('')
+  const [quantity, setquantity] = useState(0);
   const [status, setStatus] = useState("");
   const toggleChecked = () => setShow((value) => !value);
   const clickMobi = () => setOpen((value) => !value);
@@ -59,10 +59,8 @@ const EditProductMain = (props) => {
 
   useEffect(() => {
     if (data) {
-      setMessage(data.attributes.outsource_note);
-      setStatus(data.status);
-      // setDesign(data.designs);
-      setTienPhat(data.attributes.monetary_fine);
+      setquantity(data.quantity)
+      setProduct(data.nameProduct)
     }
   }, [data]);
 
@@ -71,10 +69,8 @@ const EditProductMain = (props) => {
     const access_token = JSON.parse(localStorage.getItem("access_token"));
     mutationAddProduct.mutate({
       id,
-      status: status,
-      outsource_note: message,
-      monetary_fine: Number(tienPhat),
-      designer_id:design,
+      quantity:Number(quantity),
+      nameProduct:product,
       access_token,
     });
   };
@@ -92,10 +88,12 @@ const EditProductMain = (props) => {
       if (!toast.isActive(toastId.current)) {
         toastId.current = toast.success("Thành công!", Toastobjects);
       }
-      dispatch(updateStatus({status}))
     } else if (error) {
       if (!toast.isActive(toastId.current)) {
-        toastId.current = toast.error("Có lỗi vui lòng thử lại", Toastobjects);
+        toastId.current = toast.error(
+          "Số dư không đủ vui lòng liên hệ admin nạp thêm",
+          Toastobjects
+        );
       }
     }
   }, [error, isSuccess]);
@@ -124,65 +122,41 @@ const EditProductMain = (props) => {
 
                   {/* productSingleStatus Loading */}
                   <>
+
                     <div className="mb-4">
                       <label htmlFor="product_title" className="form-label">
-                        Message
-                      </label>
-                      <textarea
-                        class="form-control"
-                        id="exampleFormControlTextarea1"
-                        rows="3"
-                        value={message}
-                        onChange={(e) => setMessage(e.target.value)}
-                      ></textarea>
-                    </div>
-                    <div className="mb-4">
-                      <label htmlFor="product_title" className="form-label">
-                        Tiền phạt
+                        Số lượng
                       </label>
                       <input
                         class="form-control"
                         type="number"
-                        value={tienPhat}
-                        onChange={(e) => setTienPhat(e.target.value)}
+                        value={quantity}
+                        onChange={(e) => setquantity(e.target.value)}
+
                       ></input>
                     </div>
                     <div className="mb-4">
                       <label htmlFor="product_price" className="form-label">
-                        Status
+                        Product
                       </label>
                       <select
                         class="form-select"
                         aria-label="Default select example"
-                        onChange={(e) => setStatus(e.target.value)}
+                        onChange={(e) => setProduct(e.target.value)}
                       >
-                        <option selected>Choose Status</option>
-                        <option value="Waiting">Waiting</option>
-                        <option value="Doing">Doing</option>
-                        <option value="Review">Review</option>
-                        <option value="Fix">Fix</option>
-                        <option value="Confirm">Confirm</option>
-                        <option value="Done">Done</option>
-                      </select>
-                    </div>
-                    <div className="mb-4">
-                      <label htmlFor="product_price" className="form-label">
-                        Chọn Nhân viên
-                      </label>
-                      <select
-                        class="form-select"
-                        aria-label="Default select example"
-                        onChange={(e) => setDesign(e.target.value)}
-                      >
-                        <option selected>Choose Nhân viên</option>
+                        <option selected>Choose Product</option>
+                        <option value="Tshirt3D" selected={product==="Tshirt3D"}>Tshirt 3D</option>
+                        <option value="Tshirt2DClone" selected={product==="Tshirt2DClone"}>Tshirt 2D Clone</option>
+                        <option value="Tshirt2DRedesign" selected={product==="Tshirt2DRedesign"}>Tshirt 2D Redesign</option>
+                        <option value="Mug" selected={product==="Mug"}>Mug</option>
+                        <option value="PosterDe" selected={product==="PosterDe"}>Poster Dễ</option>
+                        <option value="PosterKho" selected={product==="PosterKho"}>Poster Khó</option>
+                        <option value="Tumler" selected={product==="Tumler"}>Tumler</option>
+                        <option value="Tshirt3DQuan" selected={product==="Tshirt3DQuan"}>Tshirt 3D Quan</option>
 
-                        {data1?.map((item, index) => (
-                          <option key={index} value={item._id}>
-                            {item.name}
-                          </option>
-                        ))}
                       </select>
                     </div>
+
                   </>
                 </div>
               </div>

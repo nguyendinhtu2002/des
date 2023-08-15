@@ -22,25 +22,24 @@ const EditOrderMain = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [soDu, setSoDu] = useState(0);
-  const [giaKhachTshirt, setGiaKhachTshirt] = useState(0);
-  const [giaNhanVienTshirt, setGiaNhanVienTshirt] = useState(0);
-  const [giaKhachTshirtKho, setGiaKhachTshirtKho] = useState(0);
-  const [giaNhanVienTshirtKho, setGiaNhanVienTshirtKho] = useState(0);
-  const [giaKhachTshirtX15, setGiaKhachTshirtX15] = useState(0);
-  const [giaNhanVienTshirtX15, setGiaNhanVienTshirtX15] = useState(0);
-  const [giaKhachTshirtX2, setGiaKhachTshirtX2] = useState(0);
-  const [giaNhanVienTshirtX2, setGiaNhanVienTshirtX2] = useState(0);
-  const [giaKhachTshirtX3, setGiaKhachTshirtX3] = useState(0);
-  const [giaNhanVienTshirtX3, setGiaNhanVienTshirtX3] = useState(0);
+  const [giaKhachTshirt2DClone, setGiaKhachTshirt2DClone] = useState(0);
+  const [giaNhanVienTshirtt2DClone, setGiaNhanVienTshirtt2DClone] = useState(0);
+  const [giaKhachTshirt2DRedesign, setGiaKhachTshirt2DRedesign] = useState(0);
+  const [giaNhanVienTshirt2DRedesign, setGiaNhanVienTshirt2DRedesign] = useState(0);
 
+  const [giaKhachMug, setGiaKhachMug] = useState(0);
+  const [giaNhanVienMug, setGiaNhanVienMug] = useState(0);
+
+  const [giaKhachTumler, setGiaKhachTumler] = useState(0);
+  const [giaNhanVienTumler, setGiaNhanVienTumler] = useState(0);
+  const [giaKhachTshirt3D, setGiaKhachTshirt3D] = useState(0);
+  const [giaNhanVienTshirt3D, setGiaNhanVienTshirt3D] = useState(0);
+  const [giaKhachTshirt3DQuan, setGiaKhachTshirt3DQuan] = useState(0);
+  const [giaNhanVienTshirt3DQuan, setGiaNhanVienTshirt3DQuan] = useState(0);
   const [giaKhachPosterKho, setGiaKhachPosterKho] = useState(0);
   const [giaNhanVienPosterKho, setGiaNhanVienPosterKho] = useState(0);
   const [giaKhachPosterDe, setGiaKhachPosterDe] = useState(0);
   const [giaNhanVienPosterDe, setGiaNhanVienPosterDe] = useState(0);
-  const [giaKhach3D, setGiaKhach3D] = useState(0);
-  const [giaNhanVien3D, setGiaNhanVien3D] = useState(0);
-  const [giaKhach3DQuan, setGiaKhach3DQuan] = useState(0);
-  const [giaNhanVien3DQuan, setGiaNhanVien3DQuan] = useState(0);
   const dispatch = useDispatch();
   const toastId = React.useRef(null);
   const Toastobjects = {
@@ -54,29 +53,26 @@ const EditOrderMain = () => {
   };
   const handleGetDetailsUser = async (id) => {
     const res = await UserService.getDetailsUser(id);
-    // console.log(res.user)
     setUpdateAdmin(res.user?.role);
     setEmail(res.user?.email);
     setSoDu(res.user?.money);
-    setGiaNhanVienTshirt(res.user.typeGia?.Tshirt2D.user);
-    setGiaKhachTshirt(res.user.typeGia?.Tshirt2D.customer);
-    setGiaNhanVienTshirtKho(res.user.typeGia?.Tshirt2DKho.user);
-    setGiaKhachTshirtKho(res.user.typeGia?.Tshirt2DKho.customer);
-    setGiaNhanVienTshirtX15(res.user.typeGia?.Tshirt2DX15.user);
-    setGiaKhachTshirtX15(res.user.typeGia?.Tshirt2DX15.customer);
-    setGiaNhanVienTshirtX2(res.user.typeGia?.Tshirt2DX2.user);
-    setGiaKhachTshirtX2(res.user.typeGia?.Tshirt2DX2.customer);
-    setGiaNhanVienTshirtX3(res.user.typeGia?.Tshirt2DX3.user);
-    setGiaKhachTshirtX3(res.user.typeGia?.Tshirt2DX3.customer);
-    setGiaNhanVienPosterDe(res.user.typeGia?.PosterDe.user);
-    setGiaKhachPosterDe(res.user.typeGia?.PosterDe.customer);
-    setGiaNhanVienPosterKho(res.user.typeGia?.PosterKho.user);
-    setGiaKhachPosterKho(res.user.typeGia?.PosterKho.customer);
-    setGiaNhanVien3D(res.user.typeGia?.T3D.user);
-    setGiaKhach3D(res.user.typeGia?.T3D.customer);
-    setGiaNhanVien3DQuan(res.user.typeGia?.Quan3D.user);
-    setGiaKhach3DQuan(res.user.typeGia?.Quan3D.customer);
-    // dispatch(updateProductSingle({ res }));
+    setGiaNhanVienTshirtt2DClone(res.user?.typeGia?.Tshirt2DClone.user);
+    setGiaKhachTshirt2DClone(res.user?.typeGia?.Tshirt2DClone.customer);
+    setGiaNhanVienTshirt2DRedesign(res.user?.typeGia?.Tshirt2DRedesign.user);
+    setGiaKhachTshirt2DRedesign(res.user?.typeGia?.Tshirt2DRedesign.customer);
+    setGiaNhanVienMug(res.user?.typeGia?.Mug.user);
+    setGiaKhachMug(res.user?.typeGia?.Mug.customer);
+    setGiaNhanVienPosterDe(res.user?.typeGia?.PosterDe.user);
+    setGiaKhachPosterDe(res.user?.typeGia?.PosterDe.customer);
+    setGiaNhanVienPosterKho(res.user?.typeGia?.PosterKho.user);
+    setGiaKhachPosterKho(res.user?.typeGia?.PosterKho.customer);
+    setGiaNhanVienTumler(res.user?.typeGia?.Tumler.user);
+    setGiaKhachTumler(res.user?.typeGia?.Tumler.customer);
+    setGiaNhanVienTshirt3D(res.user?.typeGia?.PosterKho.user);
+    setGiaKhachTshirt3D(res.user?.typeGia?.PosterKho.customer);
+    setGiaNhanVienTshirt3DQuan(res.user?.typeGia?.Tshirt3DQuan.user);
+    setGiaKhachTshirt3DQuan(res.user?.typeGia?.Tshirt3DQuan.customer);
+
   };
   const mutation = useMutationHooks(async (data) => {
     const { id, access_token, ...rests } = data;
@@ -92,25 +88,25 @@ const EditOrderMain = () => {
       email: email,
       money: soDu,
       typeGia: {
-        Tshirt2D: {
-          customer: giaKhachTshirt,
-          user: giaNhanVienTshirt,
+        Tshirt2DClone: {
+          customer: giaKhachTshirt2DClone,
+          user: giaNhanVienTshirtt2DClone,
         },
-        Tshirt2DX15: {
-          customer: giaKhachTshirtX15,
-          user: giaNhanVienTshirtX15,
+        Tshirt2DRedesign: {
+          customer: giaKhachTshirt2DRedesign,
+          user: giaNhanVienTshirt2DRedesign,
         },
-        Tshirt2DX2: {
-          customer: giaKhachTshirtX2,
-          user: giaNhanVienTshirtX2,
+        Mug: {
+          customer: giaKhachMug,
+          user: giaNhanVienMug,
         },
-        Tshirt2DX3: {
-          customer: giaKhachTshirtX3,
-          user: giaNhanVienTshirtX3,
+        Tumler: {
+          customer: giaKhachTumler,
+          user: giaNhanVienTumler,
         },
-        Tshirt2DKho: {
-          customer: giaKhachTshirtKho,
-          user: giaNhanVienTshirtKho,
+        Tshirt3D: {
+          customer: giaKhachTshirt3D,
+          user: giaNhanVienTshirt3D,
         },
         PosterKho: {
           customer: giaKhachPosterKho,
@@ -120,14 +116,11 @@ const EditOrderMain = () => {
           customer: giaKhachPosterDe,
           user: giaNhanVienPosterDe,
         },
-        T3D: {
-          customer: giaKhach3D,
-          user: giaNhanVien3D,
+        Tshirt3DQuan: {
+          customer: giaKhachTshirt3DQuan,
+          user: giaNhanVienTshirt3DQuan,
         },
-        Quan3D: {
-          customer: giaKhach3DQuan,
-          user: giaNhanVien3DQuan,
-        },
+
       },
       access_token,
     };
@@ -238,16 +231,18 @@ const EditOrderMain = () => {
                       </div>
                       <div className="mb-4">
                         <label htmlFor="product_title" className="form-label">
-                          Giá Tshirt 2D
+                          Giá Tshirt 2D Clone
                         </label>
                         <div className="flex flex-row  gap-3">
                           <div className="w-[50%]">
                             <input
                               class="form-control"
                               type="number"
-                              value={giaKhachTshirt}
+                              // id="exampleFormControlinput1"
+                              // rows="3"
+                              value={giaKhachTshirt2DClone}
                               onChange={(e) =>
-                                setGiaKhachTshirt(e.target.value)
+                                setGiaKhachTshirt2DClone(e.target.value)
                               }
                             />
                             <p
@@ -262,10 +257,12 @@ const EditOrderMain = () => {
                             <input
                               class="form-control "
                               type="number"
-                              value={giaNhanVienTshirt}
+                              // id="exampleFormControlinput1"
+                              // rows="3"
+                              value={giaNhanVienTshirtt2DClone}
 
                               onChange={(e) =>
-                                setGiaNhanVienTshirt(e.target.value)
+                                setGiaNhanVienTshirtt2DClone(e.target.value)
                               }
                             />
                             <p
@@ -279,16 +276,19 @@ const EditOrderMain = () => {
                       </div>
                       <div className="mb-4">
                         <label htmlFor="product_title" className="form-label">
-                          Giá Tshirt 2D Khó
+                          Giá Tshirt 2D Redesign
                         </label>
                         <div className="flex flex-row  gap-3">
                           <div className="w-[50%]">
                             <input
                               class="form-control"
                               type="number"
-                              value={giaKhachTshirtKho}
+                              // id="exampleFormControlinput1"
+                              // rows="3"
+                              value={giaKhachTshirt2DRedesign}
+
                               onChange={(e) =>
-                                setGiaKhachTshirtKho(e.target.value)
+                                setGiaKhachTshirt2DRedesign(e.target.value)
                               }
                             />
                             <p
@@ -303,10 +303,12 @@ const EditOrderMain = () => {
                             <input
                               class="form-control "
                               type="number"
-                              value={giaNhanVienPosterKho}
+                              // id="exampleFormControlinput1"
+                              // rows="3"
+                              value={giaNhanVienTshirt2DRedesign}
 
                               onChange={(e) =>
-                                setGiaNhanVienTshirtKho(e.target.value)
+                                setGiaNhanVienTshirt2DRedesign(e.target.value)
                               }
                             />
                             <p
@@ -320,17 +322,19 @@ const EditOrderMain = () => {
                       </div>
                       <div className="mb-4">
                         <label htmlFor="product_title" className="form-label">
-                          Giá Tshirt 2D X1.5
+                          Giá Mug
                         </label>
                         <div className="flex flex-row  gap-3">
                           <div className="w-[50%]">
                             <input
                               class="form-control"
                               type="number"
-                              value={giaKhachTshirtX15}
+                              // id="exampleFormControlinput1"
+                              // rows="3"
+                              value={giaKhachMug}
 
                               onChange={(e) =>
-                                setGiaKhachTshirtX15(e.target.value)
+                                setGiaKhachMug(e.target.value)
                               }
                             />
                             <p
@@ -345,94 +349,11 @@ const EditOrderMain = () => {
                             <input
                               class="form-control "
                               type="number"
-                              value={giaNhanVienTshirtX15}
-
+                              // id="exampleFormControlinput1"
+                              // rows="3"
+                              value={giaNhanVienMug}
                               onChange={(e) =>
-                                setGiaNhanVienTshirtX15(e.target.value)
-                              }
-                            />
-                            <p
-                              id="helper-text-explanation"
-                              class="mt-1 text-sm text-black dark:text-gray-400"
-                            >
-                              Giá nhân viên
-                            </p>
-                          </div>
-                        </div>
-                      </div>
-                      <div className="mb-4">
-                        <label htmlFor="product_title" className="form-label">
-                          Giá Tshirt 2D X2
-                        </label>
-                        <div className="flex flex-row  gap-3">
-                          <div className="w-[50%]">
-                            <input
-                              class="form-control"
-                              type="number"
-                              value={giaKhachTshirtX2}
-
-                              onChange={(e) =>
-                                setGiaKhachTshirtX2(e.target.value)
-                              }
-                            />
-                            <p
-                              id="helper-text-explanation"
-                              class="mt-1 text-sm text-black dark:text-gray-400"
-                            >
-                              Giá khách
-                            </p>
-                          </div>
-
-                          <div className="w-[50%]">
-                            <input
-                              class="form-control "
-                              type="number"
-                              value={giaNhanVienTshirtX2}
-
-                              onChange={(e) =>
-                                setGiaNhanVienTshirtX2(e.target.value)
-                              }
-                            />
-                            <p
-                              id="helper-text-explanation"
-                              class="mt-1 text-sm text-black dark:text-gray-400"
-                            >
-                              Giá nhân viên
-                            </p>
-                          </div>
-                        </div>
-                      </div>
-                      <div className="mb-4">
-                        <label htmlFor="product_title" className="form-label">
-                          Giá Tshirt 2D X3
-                        </label>
-                        <div className="flex flex-row  gap-3">
-                          <div className="w-[50%]">
-                            <input
-                              class="form-control"
-                              type="number"
-                              value={giaKhachTshirtX3}
-
-                              onChange={(e) =>
-                                setGiaKhachTshirtX3(e.target.value)
-                              }
-                            />
-                            <p
-                              id="helper-text-explanation"
-                              class="mt-1 text-sm text-black dark:text-gray-400"
-                            >
-                              Giá khách
-                            </p>
-                          </div>
-
-                          <div className="w-[50%]">
-                            <input
-                              class="form-control "
-                              type="number"
-                              value={giaNhanVienTshirtX3}
-
-                              onChange={(e) =>
-                                setGiaNhanVienTshirtX3(e.target.value)
+                                setGiaNhanVienMug(e.target.value)
                               }
                             />
                             <p
@@ -453,8 +374,9 @@ const EditOrderMain = () => {
                             <input
                               class="form-control"
                               type="number"
+                              // id="exampleFormControlinput1"
+                              // rows="3"
                               value={giaKhachPosterKho}
-
                               onChange={(e) =>
                                 setGiaKhachPosterKho(e.target.value)
                               }
@@ -471,6 +393,8 @@ const EditOrderMain = () => {
                             <input
                               class="form-control "
                               type="number"
+                              // id="exampleFormControlinput1"
+                              // rows="3"
                               value={giaNhanVienPosterKho}
 
                               onChange={(e) =>
@@ -495,6 +419,8 @@ const EditOrderMain = () => {
                             <input
                               class="form-control"
                               type="number"
+                              // id="exampleFormControlinput1"
+                              // rows="3"
                               value={giaKhachPosterDe}
 
                               onChange={(e) =>
@@ -513,6 +439,8 @@ const EditOrderMain = () => {
                             <input
                               class="form-control "
                               type="number"
+                              // id="exampleFormControlinput1"
+                              // rows="3"
                               value={giaNhanVienPosterDe}
 
                               onChange={(e) =>
@@ -530,16 +458,18 @@ const EditOrderMain = () => {
                       </div>
                       <div className="mb-4">
                         <label htmlFor="product_title" className="form-label">
-                          Giá 3D
+                          Giá Tumler
                         </label>
                         <div className="flex flex-row  gap-3">
                           <div className="w-[50%]">
                             <input
                               class="form-control"
                               type="number"
-                              value={giaKhach3D}
+                              // id="exampleFormControlinput1"
+                              // rows="3"
+                              value={giaKhachTumler}
 
-                              onChange={(e) => setGiaKhach3D(e.target.value)}
+                              onChange={(e) => setGiaKhachTumler(e.target.value)}
                             />
                             <p
                               id="helper-text-explanation"
@@ -553,9 +483,11 @@ const EditOrderMain = () => {
                             <input
                               class="form-control "
                               type="number"
-                              value={giaNhanVien3D}
+                              // id="exampleFormControlinput1"
+                              // rows="3"
+                              value={giaNhanVienTumler}
 
-                              onChange={(e) => setGiaNhanVien3D(e.target.value)}
+                              onChange={(e) => setGiaNhanVienTumler(e.target.value)}
                             />
                             <p
                               id="helper-text-explanation"
@@ -568,17 +500,19 @@ const EditOrderMain = () => {
                       </div>
                       <div className="mb-4">
                         <label htmlFor="product_title" className="form-label">
-                          Giá 3D + Quần
+                          Giá Tshirt 3D + Quần
                         </label>
                         <div className="flex flex-row  gap-3">
                           <div className="w-[50%]">
                             <input
                               class="form-control"
                               type="number"
-                              value={giaKhach3DQuan}
+                              // id="exampleFormControlinput1"
+                              // rows="3"   
+                              value={giaKhachTshirt3DQuan}
 
                               onChange={(e) =>
-                                setGiaKhach3DQuan(e.target.value)
+                                setGiaKhachTshirt3DQuan(e.target.value)
                               }
                             />
                             <p
@@ -593,10 +527,58 @@ const EditOrderMain = () => {
                             <input
                               class="form-control "
                               type="number"
-                              value={giaNhanVien3DQuan}
+                              // id="exampleFormControlinput1"
+                              // rows="3"
+                              value={giaNhanVienTshirt3DQuan}
 
                               onChange={(e) =>
-                                setGiaNhanVien3DQuan(e.target.value)
+                                setGiaNhanVienTshirt3DQuan(e.target.value)
+                              }
+                            />
+                            <p
+                              id="helper-text-explanation"
+                              class="mt-1 text-sm text-black dark:text-gray-400"
+                            >
+                              Giá nhân viên
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+                      <div className="mb-4">
+                        <label htmlFor="product_title" className="form-label">
+                          Giá Tshirt 3D
+                        </label>
+                        <div className="flex flex-row  gap-3">
+                          <div className="w-[50%]">
+                            <input
+                              class="form-control"
+                              type="number"
+                              // id="exampleFormControlinput1"
+                              // rows="3"
+                              value={giaKhachTshirt3D}
+
+                              onChange={(e) =>
+                                setGiaKhachTshirt3D(e.target.value)
+                              }
+                            />
+                            <p
+                              id="helper-text-explanation"
+                              class="mt-1 text-sm text-black dark:text-gray-400"
+                            >
+                              Giá khách
+                            </p>
+                          </div>
+
+                          <div className="w-[50%]">
+                            <input
+                              class="form-control "
+                              type="number"
+                              // id="exampleFormControlinput1"
+                              // rows="3"
+                              value={giaNhanVienTshirt3D}
+
+                              onChange={(e) =>
+                                setGiaNhanVienTshirt3D(e.target.value)
                               }
                             />
                             <p

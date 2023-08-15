@@ -22,25 +22,26 @@ const CreateUser = () => {
   const [soDu, setSoDu] = useState(0);
   const [username, setUsername] = useState("");
   const [name, setName] = useState("");
-  const [giaKhachTshirt, setGiaKhachTshirt] = useState(0);
-  const [giaNhanVienTshirt, setGiaNhanVienTshirt] = useState(0);
-  const [giaKhachTshirtKho, setGiaKhachTshirtKho] = useState(0);
-  const [giaNhanVienTshirtKho, setGiaNhanVienTshirtKho] = useState(0);
-  const [giaKhachTshirtX15, setGiaKhachTshirtX15] = useState(0);
-  const [giaNhanVienTshirtX15, setGiaNhanVienTshirtX15] = useState(0);
-  const [giaKhachTshirtX2, setGiaKhachTshirtX2] = useState(0);
-  const [giaNhanVienTshirtX2, setGiaNhanVienTshirtX2] = useState(0);
-  const [giaKhachTshirtX3, setGiaKhachTshirtX3] = useState(0);
-  const [giaNhanVienTshirtX3, setGiaNhanVienTshirtX3] = useState(0);
+  const [giaKhachTshirt2DClone, setGiaKhachTshirt2DClone] = useState(0);
+  const [giaNhanVienTshirtt2DClone, setGiaNhanVienTshirtt2DClone] = useState(0);
+  const [giaKhachTshirt2DRedesign, setGiaKhachTshirt2DRedesign] = useState(0);
+  const [giaNhanVienTshirt2DRedesign, setGiaNhanVienTshirt2DRedesign] = useState(0);
 
+  const [giaKhachMug, setGiaKhachMug] = useState(0);
+  const [giaNhanVienMug, setGiaNhanVienMug] = useState(0);
+
+  const [giaKhachTumler, setGiaKhachTumler] = useState(0);
+  const [giaNhanVienTumler, setGiaNhanVienTumler] = useState(0);
+  const [giaKhachTshirt3D, setGiaKhachTshirt3D] = useState(0);
+  const [giaNhanVienTshirt3D, setGiaNhanVienTshirt3D] = useState(0);
+  const [giaKhachTshirt3DQuan, setGiaKhachTshirt3DQuan] = useState(0);
+  const [giaNhanVienTshirt3DQuan, setGiaNhanVienTshirt3DQuan] = useState(0);
   const [giaKhachPosterKho, setGiaKhachPosterKho] = useState(0);
   const [giaNhanVienPosterKho, setGiaNhanVienPosterKho] = useState(0);
   const [giaKhachPosterDe, setGiaKhachPosterDe] = useState(0);
   const [giaNhanVienPosterDe, setGiaNhanVienPosterDe] = useState(0);
-  const [giaKhach3D, setGiaKhach3D] = useState(0);
-  const [giaNhanVien3D, setGiaNhanVien3D] = useState(0);
-  const [giaKhach3DQuan, setGiaKhach3DQuan] = useState(0);
-  const [giaNhanVien3DQuan, setGiaNhanVien3DQuan] = useState(0);
+
+  
   const dispatch = useDispatch();
   const toastId = React.useRef(null);
   const Toastobjects = {
@@ -77,25 +78,25 @@ const CreateUser = () => {
         money: Number(soDu),
         name,
         typeGia: {
-          Tshirt2D: {
-            customer: giaKhachTshirt,
-            user: giaNhanVienTshirt,
+          Tshirt2DClone: {
+            customer: giaKhachTshirt2DClone,
+            user: giaNhanVienTshirtt2DClone,
           },
-          Tshirt2DX15: {
-            customer: giaKhachTshirtX15,
-            user: giaNhanVienTshirtX15,
+          Tshirt2DRedesign: {
+            customer: giaKhachTshirt2DRedesign,
+            user: giaNhanVienTshirt2DRedesign,
           },
-          Tshirt2DX2: {
-            customer: giaKhachTshirtX2,
-            user: giaNhanVienTshirtX2,
+          Mug: {
+            customer: giaKhachMug,
+            user: giaNhanVienMug,
           },
-          Tshirt2DX3: {
-            customer: giaKhachTshirtX3,
-            user: giaNhanVienTshirtX3,
+          Tumler: {
+            customer: giaKhachTumler,
+            user: giaNhanVienTumler,
           },
-          Tshirt2DKho: {
-            customer: giaKhachTshirtKho,
-            user: giaNhanVienTshirtKho,
+          Tshirt3D: {
+            customer: giaKhachTshirt3D,
+            user: giaNhanVienTshirt3D,
           },
           PosterKho: {
             customer: giaKhachPosterKho,
@@ -105,14 +106,11 @@ const CreateUser = () => {
             customer: giaKhachPosterDe,
             user: giaNhanVienPosterDe,
           },
-          T3D: {
-            customer: giaKhach3D,
-            user: giaNhanVien3D,
+          Tshirt3DQuan: {
+            customer: giaKhachTshirt3DQuan,
+            user: giaNhanVienTshirt3DQuan,
           },
-          Quan3D: {
-            customer: giaKhach3DQuan,
-            user: giaNhanVien3DQuan,
-          },
+
         },
         username,
         password,
@@ -253,7 +251,7 @@ const CreateUser = () => {
                       </div>
                       <div className="mb-4">
                         <label htmlFor="product_title" className="form-label">
-                          Giá Tshirt 2D
+                          Giá Tshirt 2D Clone
                         </label>
                         <div className="flex flex-row  gap-3">
                           <div className="w-[50%]">
@@ -263,7 +261,7 @@ const CreateUser = () => {
                               // id="exampleFormControlinput1"
                               // rows="3"
                               onChange={(e) =>
-                                setGiaKhachTshirt(e.target.value)
+                                setGiaKhachTshirt2DClone(e.target.value)
                               }
                             />
                             <p
@@ -281,7 +279,7 @@ const CreateUser = () => {
                               // id="exampleFormControlinput1"
                               // rows="3"
                               onChange={(e) =>
-                                setGiaNhanVienTshirt(e.target.value)
+                                setGiaNhanVienTshirtt2DClone(e.target.value)
                               }
                             />
                             <p
@@ -295,7 +293,7 @@ const CreateUser = () => {
                       </div>
                       <div className="mb-4">
                         <label htmlFor="product_title" className="form-label">
-                          Giá Tshirt 2D Khó
+                          Giá Tshirt 2D Redesign
                         </label>
                         <div className="flex flex-row  gap-3">
                           <div className="w-[50%]">
@@ -305,7 +303,7 @@ const CreateUser = () => {
                               // id="exampleFormControlinput1"
                               // rows="3"
                               onChange={(e) =>
-                                setGiaKhachTshirtKho(e.target.value)
+                                setGiaKhachTshirt2DRedesign(e.target.value)
                               }
                             />
                             <p
@@ -323,7 +321,7 @@ const CreateUser = () => {
                               // id="exampleFormControlinput1"
                               // rows="3"
                               onChange={(e) =>
-                                setGiaNhanVienTshirtKho(e.target.value)
+                                setGiaNhanVienTshirt2DRedesign(e.target.value)
                               }
                             />
                             <p
@@ -337,7 +335,7 @@ const CreateUser = () => {
                       </div>
                       <div className="mb-4">
                         <label htmlFor="product_title" className="form-label">
-                          Giá Tshirt 2D X1.5
+                          Giá Mug
                         </label>
                         <div className="flex flex-row  gap-3">
                           <div className="w-[50%]">
@@ -347,7 +345,7 @@ const CreateUser = () => {
                               // id="exampleFormControlinput1"
                               // rows="3"
                               onChange={(e) =>
-                                setGiaKhachTshirtX15(e.target.value)
+                                setGiaKhachMug(e.target.value)
                               }
                             />
                             <p
@@ -365,7 +363,7 @@ const CreateUser = () => {
                               // id="exampleFormControlinput1"
                               // rows="3"
                               onChange={(e) =>
-                                setGiaNhanVienTshirtX15(e.target.value)
+                                setGiaNhanVienMug(e.target.value)
                               }
                             />
                             <p
@@ -376,91 +374,7 @@ const CreateUser = () => {
                             </p>
                           </div>
                         </div>
-                      </div>
-                      <div className="mb-4">
-                        <label htmlFor="product_title" className="form-label">
-                          Giá Tshirt 2D X2
-                        </label>
-                        <div className="flex flex-row  gap-3">
-                          <div className="w-[50%]">
-                            <input
-                              class="form-control"
-                              type="number"
-                              // id="exampleFormControlinput1"
-                              // rows="3"
-                              onChange={(e) =>
-                                setGiaKhachTshirtX2(e.target.value)
-                              }
-                            />
-                            <p
-                              id="helper-text-explanation"
-                              class="mt-1 text-sm text-black dark:text-gray-400"
-                            >
-                              Giá khách
-                            </p>
-                          </div>
-
-                          <div className="w-[50%]">
-                            <input
-                              class="form-control "
-                              type="number"
-                              // id="exampleFormControlinput1"
-                              // rows="3"
-                              onChange={(e) =>
-                                setGiaNhanVienTshirtX2(e.target.value)
-                              }
-                            />
-                            <p
-                              id="helper-text-explanation"
-                              class="mt-1 text-sm text-black dark:text-gray-400"
-                            >
-                              Giá nhân viên
-                            </p>
-                          </div>
-                        </div>
-                      </div>
-                      <div className="mb-4">
-                        <label htmlFor="product_title" className="form-label">
-                          Giá Tshirt 2D X3
-                        </label>
-                        <div className="flex flex-row  gap-3">
-                          <div className="w-[50%]">
-                            <input
-                              class="form-control"
-                              type="number"
-                              // id="exampleFormControlinput1"
-                              // rows="3"
-                              onChange={(e) =>
-                                setGiaKhachTshirtX3(e.target.value)
-                              }
-                            />
-                            <p
-                              id="helper-text-explanation"
-                              class="mt-1 text-sm text-black dark:text-gray-400"
-                            >
-                              Giá khách
-                            </p>
-                          </div>
-
-                          <div className="w-[50%]">
-                            <input
-                              class="form-control "
-                              type="number"
-                              // id="exampleFormControlinput1"
-                              // rows="3"
-                              onChange={(e) =>
-                                setGiaNhanVienTshirtX3(e.target.value)
-                              }
-                            />
-                            <p
-                              id="helper-text-explanation"
-                              class="mt-1 text-sm text-black dark:text-gray-400"
-                            >
-                              Giá nhân viên
-                            </p>
-                          </div>
-                        </div>
-                      </div>
+                      </div>             
                       <div className="mb-4">
                         <label htmlFor="product_title" className="form-label">
                           Giá Poster Khó
@@ -547,7 +461,7 @@ const CreateUser = () => {
                       </div>
                       <div className="mb-4">
                         <label htmlFor="product_title" className="form-label">
-                          Giá 3D
+                        Giá Tumler
                         </label>
                         <div className="flex flex-row  gap-3">
                           <div className="w-[50%]">
@@ -556,7 +470,7 @@ const CreateUser = () => {
                               type="number"
                               // id="exampleFormControlinput1"
                               // rows="3"
-                              onChange={(e) => setGiaKhach3D(e.target.value)}
+                              onChange={(e) => setGiaKhachTumler(e.target.value)}
                             />
                             <p
                               id="helper-text-explanation"
@@ -572,7 +486,7 @@ const CreateUser = () => {
                               type="number"
                               // id="exampleFormControlinput1"
                               // rows="3"
-                              onChange={(e) => setGiaNhanVien3D(e.target.value)}
+                              onChange={(e) => setGiaNhanVienTumler(e.target.value)}
                             />
                             <p
                               id="helper-text-explanation"
@@ -585,7 +499,7 @@ const CreateUser = () => {
                       </div>
                       <div className="mb-4">
                         <label htmlFor="product_title" className="form-label">
-                          Giá 3D + Quần
+                          Giá Tshirt 3D + Quần
                         </label>
                         <div className="flex flex-row  gap-3">
                           <div className="w-[50%]">
@@ -595,7 +509,7 @@ const CreateUser = () => {
                               // id="exampleFormControlinput1"
                               // rows="3"
                               onChange={(e) =>
-                                setGiaKhach3DQuan(e.target.value)
+                                setGiaKhachTshirt3DQuan(e.target.value)
                               }
                             />
                             <p
@@ -613,7 +527,49 @@ const CreateUser = () => {
                               // id="exampleFormControlinput1"
                               // rows="3"
                               onChange={(e) =>
-                                setGiaNhanVien3DQuan(e.target.value)
+                                setGiaNhanVienTshirt3DQuan(e.target.value)
+                              }
+                            />
+                            <p
+                              id="helper-text-explanation"
+                              class="mt-1 text-sm text-black dark:text-gray-400"
+                            >
+                              Giá nhân viên
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+                      <div className="mb-4">
+                        <label htmlFor="product_title" className="form-label">
+                          Giá Tshirt 3D
+                        </label>
+                        <div className="flex flex-row  gap-3">
+                          <div className="w-[50%]">
+                            <input
+                              class="form-control"
+                              type="number"
+                              // id="exampleFormControlinput1"
+                              // rows="3"
+                              onChange={(e) =>
+                                setGiaKhachTshirt3D(e.target.value)
+                              }
+                            />
+                            <p
+                              id="helper-text-explanation"
+                              class="mt-1 text-sm text-black dark:text-gray-400"
+                            >
+                              Giá khách
+                            </p>
+                          </div>
+
+                          <div className="w-[50%]">
+                            <input
+                              class="form-control "
+                              type="number"
+                              // id="exampleFormControlinput1"
+                              // rows="3"
+                              onChange={(e) =>
+                                setGiaNhanVienTshirt3D(e.target.value)
                               }
                             />
                             <p

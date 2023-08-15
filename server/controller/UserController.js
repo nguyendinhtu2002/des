@@ -23,23 +23,15 @@ const register = async (req, res, next) => {
     }),
     role: Joi.string().valid("admin", "customer", "guest"),
     typeGia: Joi.object({
-      Tshirt2D: Joi.object({
+      Tshirt2DClone: Joi.object({
         customer: Joi.number(),
         user: Joi.number(),
       }),
-      Tshirt2DX15: Joi.object({
+      Tshirt2DRedesign: Joi.object({
         customer: Joi.number(),
         user: Joi.number(),
       }),
-      Tshirt2DX2: Joi.object({
-        customer: Joi.number(),
-        user: Joi.number(),
-      }),
-      Tshirt2DX3: Joi.object({
-        customer: Joi.number(),
-        user: Joi.number(),
-      }),
-      Tshirt2DKho: Joi.object({
+      Mug: Joi.object({
         customer: Joi.number(),
         user: Joi.number(),
       }),
@@ -51,14 +43,18 @@ const register = async (req, res, next) => {
         customer: Joi.number(),
         user: Joi.number(),
       }),
-      T3D: Joi.object({
+      Tumler: Joi.object({
         customer: Joi.number(),
         user: Joi.number(),
       }),
-      Quan3D: Joi.object({
+      Tshirt3D: Joi.object({
         customer: Joi.number(),
         user: Joi.number(),
       }),
+      Tshirt3DQuan: Joi.object({
+        customer: Joi.number(),
+        user: Joi.number(),
+      })
     }),
   });
   const { error } = schema.validate(req.body);
@@ -89,6 +85,7 @@ const loginUser = async (req, res, next) => {
   try {
     const { username, password } = req.body;
     const user = await User.findOne({ username });
+    console.log(user)
     if (user && (await user.matchPassword(password)) && !user.isDeleted) {
       if (user.role != "customer") {
         return res.status(401).json({ error: "Account not User" });
@@ -249,23 +246,15 @@ const updateAccount = async (req, res, next) => {
     money: Joi.number(),
     email: Joi.string(),
     typeGia: Joi.object({
-      Tshirt2D: Joi.object({
+      Tshirt2DClone: Joi.object({
         customer: Joi.number(),
         user: Joi.number(),
       }),
-      Tshirt2DX15: Joi.object({
+      Tshirt2DRedesign: Joi.object({
         customer: Joi.number(),
         user: Joi.number(),
       }),
-      Tshirt2DX2: Joi.object({
-        customer: Joi.number(),
-        user: Joi.number(),
-      }),
-      Tshirt2DX3: Joi.object({
-        customer: Joi.number(),
-        user: Joi.number(),
-      }),
-      Tshirt2DKho: Joi.object({
+      Mug: Joi.object({
         customer: Joi.number(),
         user: Joi.number(),
       }),
@@ -277,14 +266,18 @@ const updateAccount = async (req, res, next) => {
         customer: Joi.number(),
         user: Joi.number(),
       }),
-      T3D: Joi.object({
+      Tumler: Joi.object({
         customer: Joi.number(),
         user: Joi.number(),
       }),
-      Quan3D: Joi.object({
+      Tshirt3D: Joi.object({
         customer: Joi.number(),
         user: Joi.number(),
       }),
+      Tshirt3DQuan: Joi.object({
+        customer: Joi.number(),
+        user: Joi.number(),
+      })
     }),
   });
   const { error, value } = userSchema.validate(updateData);

@@ -1,18 +1,18 @@
 import React from "react";
 import Header from "../../Component/Header";
 import Sidebar from "../../Component/sidebar";
-import EditProductMain from "../../Component/Order/EditProduct";
+import AddProductMain from "../../Component/Order/AddProduct";
 
-const EditProduct = () => {
+const AddNew = () => {
   return (
     <>
       <Sidebar />
       <main className="main-wrap">
         <Header />
-        <EditProductMain />
+        < AddProductMain/>
       </main>
     </>
   );
 };
 
-export default EditProduct;
+export default AddNew;
