@@ -248,7 +248,7 @@ const getAll = async (req, res) => {
 const updateAccount = async (req, res, next) => {
   const { id } = req.params;
   const updateData = req.body;
-
+console.log(updateData)
   const userSchema = Joi.object({
     name: Joi.string(),
     password: Joi.string().allow(""),
@@ -306,7 +306,8 @@ const updateAccount = async (req, res, next) => {
       updateData.password = hashedPassword;
     }
     if (updateData.money) {
-      updateData.moneyTieu += moneyTieu.money;
+      updateData.moneyTotal=0;
+      updateData.moneyTotal+=updateData.money
     }
     const updatedUser = await User.findByIdAndUpdate(id, updateData, {
       new: true,
