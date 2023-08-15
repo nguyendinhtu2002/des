@@ -54,7 +54,7 @@ const register = async (req, res, next) => {
       Tshirt3DQuan: Joi.object({
         customer: Joi.number(),
         user: Joi.number(),
-      })
+      }),
     }),
   });
   const { error } = schema.validate(req.body);
@@ -64,11 +64,21 @@ const register = async (req, res, next) => {
     });
   }
   try {
+    const { role, email, name, username, money, password, typeGia } = req.body;
     const usernameExists = await User.findOne({ username: req.body.username });
     if (usernameExists) {
       return res.status(400).json({ message: "User name already exists" });
     }
-    const user = await User.create(req.body);
+    const user = await User.create({
+      role,
+      email,
+      name,
+      username,
+      money,
+      password,
+      typeGia,
+      moneyTotal: money,
+    });
 
     if (user) {
       return res.status(201).json({
@@ -85,7 +95,7 @@ const loginUser = async (req, res, next) => {
   try {
     const { username, password } = req.body;
     const user = await User.findOne({ username });
-    console.log(user)
+    console.log(user);
     if (user && (await user.matchPassword(password)) && !user.isDeleted) {
       if (user.role != "customer") {
         return res.status(401).json({ error: "Account not User" });
@@ -277,7 +287,7 @@ const updateAccount = async (req, res, next) => {
       Tshirt3DQuan: Joi.object({
         customer: Joi.number(),
         user: Joi.number(),
-      })
+      }),
     }),
   });
   const { error, value } = userSchema.validate(updateData);
@@ -295,7 +305,9 @@ const updateAccount = async (req, res, next) => {
       const hashedPassword = await bcrypt.hash(updateData.password, salt);
       updateData.password = hashedPassword;
     }
-
+    if (updateData.money) {
+      updateData.moneyTieu += moneyTieu.money;
+    }
     const updatedUser = await User.findByIdAndUpdate(id, updateData, {
       new: true,
     });
@@ -337,9 +349,9 @@ const userisCustomer = async (req, res, next) => {
     return res.status(400).json({ message: "Error" });
   }
 };
-const toltalMoneyUser = async(req,res,next)=>{
+const toltalMoneyUser = async (req, res, next) => {
   try {
-    const users = await User.find({ isDeleted: false,role:"customer" });
+    const users = await User.find({ isDeleted: false, role: "customer" });
 
     let totalMoney = 0;
 
@@ -352,10 +364,10 @@ const toltalMoneyUser = async(req,res,next)=>{
     console.error(error);
     res.status(500).json({ error: "Something went wrong" });
   }
-}
-const toltalMoneyGuest = async(req,res,next)=>{
+};
+const toltalMoneyGuest = async (req, res, next) => {
   try {
-    const users = await User.find({ isDeleted: false,role:"guest" });
+    const users = await User.find({ isDeleted: false, role: "guest" });
 
     let totalMoney = 0;
 
@@ -368,23 +380,23 @@ const toltalMoneyGuest = async(req,res,next)=>{
     console.error(error);
     res.status(500).json({ error: "Something went wrong" });
   }
-}
-const getUserIsNhanVien = async(req,res,next)=>{
+};
+const getUserIsNhanVien = async (req, res, next) => {
   try {
-    const data = await User.find({isDeleted: false,role:"customer"})
+    const data = await User.find({ isDeleted: false, role: "customer" });
     return res.json(data);
   } catch (error) {
     next(error);
   }
-}
-const getUserIsGuest = async(req,res,next)=>{
+};
+const getUserIsGuest = async (req, res, next) => {
   try {
-    const data = await User.find({isDeleted: false,role:"guest"})
+    const data = await User.find({ isDeleted: false, role: "guest" });
     return res.json(data);
   } catch (error) {
     next(error);
   }
-}
+};
 module.exports = {
   register,
   loginUser,
@@ -399,5 +411,5 @@ module.exports = {
   toltalMoneyUser,
   getUserIsNhanVien,
   getUserIsGuest,
-  toltalMoneyGuest
+  toltalMoneyGuest,
 };

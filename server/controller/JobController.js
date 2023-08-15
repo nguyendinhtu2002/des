@@ -41,17 +41,12 @@ const getPriceAndAttributesBySku = (guest, sku) => {
 };
 const createJob = async (req, res) => {
   try {
-    const {
-      designer_id,
-      nameProduct,
-      quantity,
-      guest_id,
-    } = req.body;
+    const { designer_id, nameProduct, quantity, guest_id } = req.body;
     const schema = Joi.object({
       designer_id: Joi.string().required(),
       nameProduct: Joi.string().required(),
       quantity: Joi.number().required().min(1),
-      guest_id: Joi.string().required()
+      guest_id: Joi.string().required(),
     });
 
     // Kiểm tra dữ liệu đầu vào với schema
@@ -79,7 +74,6 @@ const createJob = async (req, res) => {
     } else if (sku == "Tshirt2DRedesign") {
       price = guest.typeGia.Tshirt2DRedesign.customer; // Giá tiền cho loại Tshirt2D và người dùng
       priceNv = guest.typeGia.Tshirt2DRedesign.user;
-
     } else if (sku == "Mug") {
       price = guest.typeGia.Mug.customer;
       priceNv = guest.typeGia.Mug.user;
@@ -99,21 +93,20 @@ const createJob = async (req, res) => {
     } else if (sku == "Tshirt3D") {
       price = guest.typeGia.Tshirt3D.customer;
       priceNv = guest.typeGia.Tshirt3D.user;
-      // Giá tiền cho loại Poster và người 
+      // Giá tiền cho loại Poster và người
     } else if (sku == "Tshirt3DQuan") {
       price = guest.typeGia.Tshirt3DQuan.customer;
       priceNv = guest.typeGia.Tshirt3DQuan.user;
       // Giá tiền cho loại Tshirt3DQuan và người dùng
     }
-    console.log(price)
 
     if (guest.money < price * quantity || guest.money === 0) {
       return res.status(400).json({ message: "Insufficient funds" });
     }
 
-
     // Trừ tiền từ trường money của guest_create
     guest.money -= price * quantity;
+    guest.moneyTieu += price * quantity;
     customer.money += priceNv * quantity;
     // Lưu thông tin guest_create đã được cập nhật
     await guest.save();
@@ -180,8 +173,6 @@ const getAllJobs = async (req, res) => {
         },
       ]);
 
-
-
     return res.status(200).json(jobs);
   } catch (error) {
     console.error(error);
@@ -189,22 +180,7 @@ const getAllJobs = async (req, res) => {
   }
 };
 
-// Hàm gộp các công việc dựa trên nameProduct giống nhau
-const mergeJobsByName = (jobs) => {
-  const mergedJobsMap = new Map();
 
-  for (const job of jobs) {
-    const { nameProduct } = job;
-    if (mergedJobsMap.has(nameProduct)) {
-      mergedJobsMap.get(nameProduct).quantity += job.quantity;
-    } else {
-      mergedJobsMap.set(nameProduct, { ...job });
-    }
-  }
-
-  const mergedJobs = Array.from(mergedJobsMap.values());
-  return mergedJobs;
-};
 const updateStatus = async (req, res) => {
   try {
     const { id } = req.params;
@@ -292,50 +268,81 @@ const deleteJob = async (req, res) => {
 const updateJob = async (req, res) => {
   try {
     const { id } = req.params;
-    const { nameProduct, quantity } = req.body;
+    const { nameProduct, quantity, designer_id, guest_id } = req.body;
     const job = await Job.findOne({ id: id });
     if (!job) {
       return res.status(404).json({ message: "Job not found" });
-    }
-    else {
+    } else {
       const guest = await User.findOne({ _id: job.guest_id });
       const customer = await User.findOne({ _id: job.designer_id });
       if (quantity > job.quantity) {
         const quantityReal = quantity - job.quantity;
-    
+
         if (guest) {
-          const tempt = quantityReal * guest.typeGia[nameProduct].customer
+          const tempt = quantityReal * guest.typeGia[nameProduct].customer;
           if (tempt > guest.money) {
             return res.status(400).json({ message: "Insufficient funds" });
-          }
-          else{
-            guest.money -=tempt;
-            customer.money +=(quantityReal * guest.typeGia[nameProduct].user);
-            guest.save()
-            customer.save()
+          } else {
+            guest.money -= tempt;
+            customer.money += quantityReal * guest.typeGia[nameProduct].user;
+            guest.save();
+            customer.save();
           }
         }
-      }
-      else{
-        const quantityReal = job.quantity -quantity;
+      } else {
+        const quantityReal = job.quantity - quantity;
         if (guest) {
-          const tempt = quantityReal * guest.typeGia[nameProduct].customer
+          const tempt = quantityReal * guest.typeGia[nameProduct].customer;
           if (tempt > guest.money) {
             return res.status(400).json({ message: "Insufficient funds" });
-          }
-          else{
-            guest.money +=tempt;
-            customer.money -=(quantityReal * guest.typeGia[nameProduct].user);
-            guest.save()
-            customer.save()
+          } else {
+            guest.money += tempt;
+            customer.money -= quantityReal * guest.typeGia[nameProduct].user;
+            guest.save();
+            customer.save();
           }
         }
       }
     }
+    if (job.designer_id !== designer_id) {
+      const guest = await User.findOne({ _id: job.guest_id });
+      const customerOld = await User.findOne({ _id: job.designer_id });
+      const customerNew = await User.findOne({ _id: designer_id });
+      // customer la khach
+      const tempt = quantity * guest.typeGia[job.nameProduct].user;
+      console.log(job.nameProduct);
+      customerOld.money -= tempt;
+      customerNew.money += tempt;
+
+      customerOld.save();
+      customerNew.save();
+    }
+    if (job.guest_id !== guest_id) {
+      const guestOld = await User.findOne({ _id: job.guest_id });
+      const guestNew = await User.findOne({ _id: guest_id });
+      // guest la khach
+      const tempt = quantity * guestOld.typeGia[job.nameProduct].customer;
+
+      guestOld.money += tempt;
+      guestNew.money -= tempt;
+
+      if (guestNew.money < tempt) {
+        return res.status(400).json({ message: "Insufficient funds" });
+      }
+
+      guestOld.save();
+      guestNew.save();
+    }
+
     // Cập nhật trường designer_id và status cho công việc
     const updatedJob = await Job.findOneAndUpdate(
       { id: id },
-      { nameProduct: nameProduct, quantity: quantity },
+      {
+        nameProduct: nameProduct,
+        quantity: quantity,
+        designer_id: designer_id,
+        guest_id: guest_id,
+      },
       { new: true }
     );
 
@@ -354,10 +361,9 @@ const getJobByUser = async (req, res) => {
     const { designerId } = req.params;
 
     const jobs = await Job.find({
-      "designer_id": designerId,
+      designer_id: designerId,
       isDeleted: false,
-    })
-    .populate([
+    }).populate([
       {
         path: "designer_id",
         select: "name email _id",
@@ -379,15 +385,22 @@ const getJobByUser = async (req, res) => {
       };
       const product = { nameProduct: job.nameProduct, quantity: job.quantity };
 
-      const guestTypeGia = job.guest_id ? job.guest_id.typeGia[job.nameProduct] : null;
+      const guestTypeGia = job.guest_id
+        ? job.guest_id.typeGia[job.nameProduct]
+        : null;
       const money = guestTypeGia ? guestTypeGia.user * product.quantity : 0;
-      
+
       totalMoney += money;
 
-      const existingDesignerEntry = transformedData.find(entry => entry.designer_id._id.toString() === designer_id._id.toString());
-      
+      const existingDesignerEntry = transformedData.find(
+        (entry) =>
+          entry.designer_id._id.toString() === designer_id._id.toString()
+      );
+
       if (existingDesignerEntry) {
-        const existingProduct = existingDesignerEntry.product.find(p => p.nameProduct === product.nameProduct);
+        const existingProduct = existingDesignerEntry.product.find(
+          (p) => p.nameProduct === product.nameProduct
+        );
         if (existingProduct) {
           existingProduct.quantity += product.quantity;
           existingProduct.money += money;
@@ -397,7 +410,7 @@ const getJobByUser = async (req, res) => {
       } else {
         transformedData.push({
           designer_id: designer_id,
-          product: [{ ...product, money }]
+          product: [{ ...product, money }],
         });
       }
     }
@@ -405,10 +418,11 @@ const getJobByUser = async (req, res) => {
     res.status(200).json({ transformedData, totalMoney });
   } catch (error) {
     console.error(error);
-    res.status(500).json({ error: "An error occurred while fetching job data." });
+    res
+      .status(500)
+      .json({ error: "An error occurred while fetching job data." });
   }
 };
-
 
 const cancelJob = async (req, res) => {
   try {
@@ -623,7 +637,6 @@ const getTotalPrice = async (req, res) => {
     let totalPrice = 0;
 
     for (const job of jobs) {
-
       const user = await User.findOne({ _id: job.designer_id });
 
       if (user) {

@@ -20,7 +20,6 @@ const { getByGuest } = require("../controller/JobController");
 const router = express.Router();
 
 router.get("/toltalMoneyGuest",toltalMoneyGuest)
-
 router.post("/register", register);
 router.post("/loginUser", loginUser);
 router.post("/loginAdmin", loginAdmin);

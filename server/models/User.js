@@ -18,6 +18,14 @@ const userSchema = mongoose.Schema(
       type: Number,
       default: 0,
     },
+    moneyTotal:{
+      type: Number,
+      default: 0,
+    },
+    moneyTieu:{
+      type: Number,
+      default: 0,
+    },
     count: {
       type: Number,
       default: 0,
