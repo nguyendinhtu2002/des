@@ -17,6 +17,7 @@ import { updateUser } from "./features/userSlide/userSlide";
 import EditUserPage from "./page/User/EditPage";
 import NewUser from "./page/User/NewUser";
 import AddNew from "./page/Product/AddNew";
+import GuestPage from "./page/Guest/UserPage";
 function App() {
   const dispatch = useDispatch();
 
@@ -68,6 +69,8 @@ function App() {
         <Route path="/products" element={<ProductScreen />} />
         <Route path="/detail/:id" element={<EditProduct />} />
         <Route path="/users" element={<UserPage />} />
+        <Route path="/guest" element={<GuestPage />} />
+
         <Route path="/user/detail/:id" element={<EditUserPage />} />
         <Route path="/addUser" element={<NewUser />} />
         <Route path="/addProduct" element={<AddNew/>} />

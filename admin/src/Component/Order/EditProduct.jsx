@@ -135,6 +135,7 @@ const EditProductMain = (props) => {
 
                       ></input>
                     </div>
+                    
                     <div className="mb-4">
                       <label htmlFor="product_price" className="form-label">
                         Product

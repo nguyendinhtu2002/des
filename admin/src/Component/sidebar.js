@@ -51,7 +51,17 @@ const Sidebar = () => {
                 to="/users"
               >
                 <i className="icon fas fa-user"></i>
-                <span className="text">Users</span>
+                <span className="text">Nhân viên</span>
+              </NavLink>
+            </li>
+            <li className="menu-item">
+              <NavLink
+                activeClassName="active"
+                className="menu-link"
+                to="/guest"
+              >
+                <i className="icon fas fa-user"></i>
+                <span className="text">Khách hàng</span>
               </NavLink>
             </li>
           </ul>

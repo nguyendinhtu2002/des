@@ -26,6 +26,12 @@ const TopTotal = (props) => {
 
     return res;
   };
+  const fetchTotalGuest = async () => {
+    const access_token = JSON.parse(localStorage.getItem("access_token"));
+    const res = await UserService.getAllGuest();
+
+    return res;
+  };
   const { isLoading, data } = useQuery(["products"], fetchJob);
   const { isLoading1: isLoading1, data: data1 } = useQuery(
     ["customer"],
@@ -34,6 +40,10 @@ const TopTotal = (props) => {
   const { isLoading1: isLoading2, data: data2 } = useQuery(
     ["totalcustomer"],
     fetchTotalUser
+  );
+  const { isLoading1: isLoading3, data: data3 } = useQuery(
+    ["guest"],
+    fetchTotalGuest
   );
   // console.log(data2)
   // const hangldeGetAll = async () => {
@@ -66,9 +76,9 @@ const TopTotal = (props) => {
               <i className="text-primary fas fa-usd-circle"></i>
             </span>
             <div className="text">
-              <h6 className="mb-1">Tổng doanh thu</h6>
+              <h6 className="mb-1">Tổng tiền của khách hàng</h6>
               {!isLoading ? (
-                <span>$ {formattedAmount(data?.totalPrice)||0}</span>
+                <span>$ {formattedAmount(data?.totalMoney)||0}</span>
               ) : (
                 <Loading />
               )}{" "}
@@ -107,7 +117,7 @@ const TopTotal = (props) => {
             </span>
             <div className="text">
               <h6 className="mb-1">Số lượng khách hàng</h6>
-              {/* {products ? <span>{products.length}</span> : <span>0</span>} */}
+              {data3 ? <span>{data3.length}</span> : <span>0</span>}
             </div>
           </article>
         </div>

@@ -67,3 +67,13 @@ export const getToatalMoneyCustomer = async()=>{
   const res = await axios.get(`${URL}api/v1/users/totalMoney/dashboard/admin`)
   return res.data
 }
+
+export const getAllNV = async()=>{
+  const res = await axios.get(`${URL}api/v1/users/getNhanVien/getAll`)
+  return res.data
+}
+
+export const getAllGuest= async()=>{
+  const res = await axios.get(`${URL}api/v1/users/getGuest/getAll`)
+  return res.data
+}

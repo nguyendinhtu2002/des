@@ -6,7 +6,7 @@ import * as UserService from "../../service/UserService";
 import { error } from "jquery";
 import Users from "./User";
 import { Link } from "react-router-dom";
-const UserMain = () => {
+const GuestMain = () => {
   //   const orderList = useSelector((state) => state.orderList);
   //   const { loading, error, orders } = orderList;
   const [loading, setLoading] = useState("");
@@ -16,7 +16,7 @@ const UserMain = () => {
 
   const hangldeGetAll = async (access_token) => {
     setLoading(true);
-    await UserService.getAllNV(access_token)
+    await UserService.getAllGuest(access_token)
       .then((res) => {
         setLoading(false);
         setTempData(res);
@@ -67,4 +67,4 @@ const UserMain = () => {
   );
 };
 
-export default UserMain;
+export default GuestMain;

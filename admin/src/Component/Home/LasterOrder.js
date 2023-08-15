@@ -6,7 +6,6 @@ import Loading from "../LoadingError/LoadingError";
 
 const LatestOrder = (props) => {
   const { loading, error, orders } = props;
-  console.log(orders[0].products[0].totalPrice)
   return (
     <div className="card-body">
       <h4 className="card-title">New orders</h4>

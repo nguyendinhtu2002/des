@@ -85,7 +85,7 @@ export const updateByGuest = async (id, data, access_token) => {
 };
 
 export const getTotalPrice = async () => {
-  const res = await axios.get(`${URL}api/v1/job/getAllPrice/byAdmin`);
+  const res = await axios.get(`${URL}api/v1/users/toltalMoneyGuest`);
   return res.data;
 };
 
