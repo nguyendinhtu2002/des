@@ -371,7 +371,7 @@ const toltalMoneyGuest = async(req,res,next)=>{
 }
 const getUserIsNhanVien = async(req,res,next)=>{
   try {
-    const data = await User.find({role:"customer"})
+    const data = await User.find({isDeleted: false,role:"customer"})
     return res.json(data);
   } catch (error) {
     next(error);
@@ -379,7 +379,7 @@ const getUserIsNhanVien = async(req,res,next)=>{
 }
 const getUserIsGuest = async(req,res,next)=>{
   try {
-    const data = await User.find({role:"guest"})
+    const data = await User.find({isDeleted: false,role:"guest"})
     return res.json(data);
   } catch (error) {
     next(error);
