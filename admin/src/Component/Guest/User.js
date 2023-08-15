@@ -100,27 +100,31 @@ const Guest = (props) => {
         filterVariant: "range",
         filterFn: "between",
         Cell: ({ cell }) => <span>{formattedAmount(cell.getValue())}</span>,
-        // filterVariant: "range-slider",
-        // filterFn: "betweenInclusive",
-        // muiTableHeadCellFilterSliderProps: {
-        //   //no need to specify min/max/step if using faceted values
-        //   marks: true,
-        //   step: 5_000,
-        //   // valueLabelFormat: (value) =>
-        //   //   value.toLocaleString("en-US", {
-        //   //     style: "currency",
-        //   //     currency: "USD",
-        //   //   }),
-        // },
         size: 80,
       },
-
+      {
+        accessorKey: "moneyTotal",
+        header: "Tổng tiền đã nạp",
+        filterVariant: "range",
+        filterFn: "between",
+        Cell: ({ cell }) => <span>{formattedAmount(cell.getValue())}</span>,
+        size: 80,
+      },
+      {
+        accessorKey: "moneyTieu",
+        header: "Tổng tiền đã tiêu",
+        filterVariant: "range",
+        filterFn: "between",
+        Cell: ({ cell }) => <span>{formattedAmount(cell.getValue())}</span>,
+        size: 80,
+      },
       {
         accessorKey: "role",
         header: "Role",
         maxSize: 50,
         minSize: 30,
       },
+      
       {
         accessorKey: "createdAt",
         header: "Ngày tạo",

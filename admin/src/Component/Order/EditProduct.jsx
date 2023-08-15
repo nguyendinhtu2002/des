@@ -24,6 +24,8 @@ const EditProductMain = (props) => {
   
   const [product,setProduct] = useState('')
   const [quantity, setquantity] = useState(0);
+  const [idnv,setIdNv] = useState('')
+  const [idkhach,setIdKhach] =  useState('')
   const [status, setStatus] = useState("");
   const toggleChecked = () => setShow((value) => !value);
   const clickMobi = () => setOpen((value) => !value);
@@ -59,8 +61,12 @@ const EditProductMain = (props) => {
 
   useEffect(() => {
     if (data) {
+      console.log(data)
       setquantity(data.quantity)
       setProduct(data.nameProduct)
+      setIdNv(data.designer_id._id)
+      setIdKhach(data.guest_id._id)
+
     }
   }, [data]);
 
@@ -70,18 +76,20 @@ const EditProductMain = (props) => {
     mutationAddProduct.mutate({
       id,
       quantity:Number(quantity),
+      guest_id:idkhach,
+      designer_id:idnv,
       nameProduct:product,
       access_token,
     });
   };
+  
   const fetchUser = async () => {
     const access_token = JSON.parse(localStorage.getItem("access_token"));
 
-    const res = await UserService.getUserByCustomer(access_token);
+    const res = await UserService.getAll();
     return res;
   };
-  const { isLoading: isLoading1, data: data1 } = useQuery(["users"], fetchUser);
-
+  const { data:data1 } = useQuery(["user"], fetchUser);
   useEffect(() => {
     // hangldeGetAll();
     if (!error && isSuccess) {
@@ -135,7 +143,45 @@ const EditProductMain = (props) => {
 
                       ></input>
                     </div>
-                    
+                    <div className="mb-4">
+                    <label htmlFor="product_price" className="form-label">
+                      Nhân viên
+                    </label>
+                    <select
+                      class="form-select"
+                      aria-label="Default select example"
+                      onChange={(e) => setIdNv(e.target.value)}
+                    >
+                      <option selected>Choose Nhân viên</option>
+
+                      {data1?.map((item) =>
+                        item.role === "customer" ? (
+                          <option value={item._id} selected={item._id===idnv}>{item.name}</option>
+                        ) : (
+                          ""
+                        )
+                      )}
+                    </select>
+                  </div>
+                  <div className="mb-4">
+                    <label htmlFor="product_price" className="form-label">
+                      Khách
+                    </label>
+                    <select
+                      class="form-select"
+                      aria-label="Default select example"
+                      onChange={(e) => setIdKhach(e.target.value)}
+                    >
+                      <option selected>Choose Khách</option>
+                      {data1?.map((item) =>
+                        item.role === "guest" ? (
+                          <option value={item._id} selected={item._id===idkhach}>{item.name}</option>
+                        ) : (
+                          ""
+                        )
+                      )}
+                    </select>
+                  </div>
                     <div className="mb-4">
                       <label htmlFor="product_price" className="form-label">
                         Product

@@ -23,8 +23,8 @@ const ToastObjects = {
 const AddProductMain = () => {
   const [productname, setName] = useState("");
   const [idNv, setIdNv] = useState("");
-  const [idGuest, setIdGuest] = useState("")
-  const [quantity, setQuantity] = useState("")
+  const [idGuest, setIdGuest] = useState("");
+  const [quantity, setQuantity] = useState("");
   const [filteredData, setFilteredData] = useState([]);
   const [isFilterActive, setIsFilterActive] = useState(false);
   const dispatch = useDispatch();
@@ -55,12 +55,7 @@ const AddProductMain = () => {
 
   const submitHandler = async (event) => {
     event.preventDefault();
-    if (
-      productname === "" ||
-      idNv === "" ||
-      idGuest === "" ||
-      quantity === 0
-    ) {
+    if (productname === "" || idNv === "" || idGuest === "" || quantity === 0) {
       if (!toast.isActive(toastId.current)) {
         toastId.current = toast.error("Không được để trống!", Toastobjects);
       }
@@ -73,7 +68,7 @@ const AddProductMain = () => {
           guest_id: idGuest,
           quantity,
           nameProduct: productname,
-          access_token
+          access_token,
         });
 
         console.log(result);
@@ -81,10 +76,9 @@ const AddProductMain = () => {
         toast.error("Không đủ tiền!", ToastObjects);
       }
     }
-  }
+  };
   const { error, isLoading, isSuccess, isError } = mutationAddProduct;
   useEffect(() => {
-  
     if (!error && isSuccess) {
       if (!toast.isActive(toastId.current)) {
         toastId.current = toast.success("Thành công!", Toastobjects);
@@ -131,14 +125,15 @@ const AddProductMain = () => {
                     >
                       <option selected>Choose Product</option>
                       <option value="Tshirt2DClone">Tshirt 2D Clone</option>
-                      <option value="Tshirt2DRedesign">Tshirt 2D Redesign</option>
+                      <option value="Tshirt2DRedesign">
+                        Tshirt 2D Redesign
+                      </option>
                       <option value="Mug">Mug</option>
                       <option value="PosterDe">Poster Dễ</option>
                       <option value="PosterKho">Poster Khó</option>
                       <option value="Tumler">Tumler</option>
                       <option value="Tshirt3D">Tshirt 3D</option>
                       <option value="Tshirt 3D Quan">Tshirt 3D Quan</option>
-
                     </select>
                   </div>
 
@@ -153,13 +148,13 @@ const AddProductMain = () => {
                     >
                       <option selected>Choose Nhân viên</option>
 
-                      {
-                        data?.map((item) => item.role === "customer" ?
-                          <option value={item._id}>{item.name}</option> : ""
-
+                      {data?.map((item) =>
+                        item.role === "customer" ? (
+                          <option value={item._id}>{item.name}</option>
+                        ) : (
+                          ""
                         )
-                      }
-
+                      )}
                     </select>
                   </div>
                   <div className="mb-4">
@@ -172,13 +167,15 @@ const AddProductMain = () => {
                       onChange={(e) => setIdGuest(e.target.value)}
                     >
                       <option selected>Choose Khách</option>
-                      <option value="64dafb47045898f291c565d0">nguyentu123</option>
-                      <option value="Poster">Poster</option>
-                      <option value="T3D">3D</option>
-                      <option value="Quan3D">3D + Quần</option>
+                      {data?.map((item) =>
+                        item.role === "guest" ? (
+                          <option value={item._id}>{item.name}</option>
+                        ) : (
+                          ""
+                        )
+                      )}
                     </select>
                   </div>
-
 
                   <div className="mb-4">
                     <label htmlFor="product_price" className="form-label">
@@ -189,10 +186,7 @@ const AddProductMain = () => {
                       class="form-control"
                       onChange={(e) => setQuantity(e.target.value)}
                     />
-
                   </div>
-
-
                 </div>
               </div>
             </div>
