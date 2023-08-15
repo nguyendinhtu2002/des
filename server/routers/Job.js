@@ -34,7 +34,7 @@ router.delete("/detele/img/:id", deleteImg);
 router.put("/update/other/:id", protect, updateOrder);
 router.get("/getall/byGuest/:guestId", protect, guest, getByGuest);
 router.put("/update/guest/:id", protect, guest, updateGuest);
-router.post("/update/admin/:id",protect,admin,updateJob)
+router.post("/update/admin/:id",updateJob)
 router.get("/getAllPrice/byAdmin",getTotalPrice)
 router.get("/getStatusCountByDesign/admin",getStatusCountByDesigner)
 module.exports = router;
