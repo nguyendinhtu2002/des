@@ -59,13 +59,6 @@ function Main() {
     draggable: true,
     progress: undefined,
   };
-  const handleDeleteJob = (id) => {
-    if (window.confirm("Bạn có đồng ý xóa không?")) {
-      mutationDelete.mutate({
-        id,
-      });
-    }
-  };
   const { error, isSuccess } = mutationDelete;
   const { isLoading, data } = useQuery(["products"], fetchJob);
   const applyFilters = () => {
@@ -82,7 +75,7 @@ function Main() {
           (!product || item.product.name === product) &&
           (!dateFrom ||
             moment(item.createdAt).utc().format("MM/DD/YYYY") ===
-            moment(dateFrom).format("L"))
+              moment(dateFrom).format("L"))
         );
       } else if (typeDate === "updatedAt") {
         return (
@@ -93,7 +86,7 @@ function Main() {
           (!product || item.product.name === product) &&
           (!dateFrom ||
             moment(item.updatedAt).utc().format("MM/DD/YYYY") ===
-            moment(dateTo).format("L"))
+              moment(dateTo).format("L"))
         );
       }
       return false;
@@ -102,44 +95,12 @@ function Main() {
     setFilteredData(filtered);
     setIsFilterActive(true);
   };
-  const handleDeleteImg = async (id, designId) => {
-    console.log(designId);
-    if (window.confirm("Bạn có đồng ý xóa không?")) {
-      axios
-        .delete(`http://localhost:5000/api/v1/job/detele/img/${id}`, {
-          data: { designId: designId },
-        })
-        .then((res) => {
-          toastId.current = toast.success("Thành công!", Toastobjects);
-          // setTimeout(() => {
-          //   window.location.reload();
-          // }, 1000);
-        })
-        .catch((error) => {
-          if (error.response.status === 500) {
-            toastId.current = toast.error(
-              "Có lỗi về server báo cho admin!",
-              Toastobjects
-            );
-          } else {
-            toastId.current = toast.error(
-              error.response.data.message,
-              Toastobjects
-            );
-          }
-        });
-    }
-  };
+
   const fetchUser = async () => {
     const access_token = JSON.parse(localStorage.getItem("access_token"));
 
     const res = await UserService.getAll(access_token);
     return res;
-  };
-  const showModal = (src) => {
-    setClick(true);
-    document.getElementById("modal").classList.remove("hidden");
-    document.getElementById("modal-img").src = src;
   };
 
   const closeModal = () => {
@@ -148,14 +109,6 @@ function Main() {
     document.getElementById("modal").classList.add("hidden");
   };
 
-  // const handleClick = () => {
-  //   const url = this.props.url;
-  //   if (url && url.startsWith("http")) {
-  //     window.open(url, "_blank");
-  //   }
-  // };
-  const { isLoading: isLoading1, data: data1 } = useQuery(["users"], fetchUser);
-  
   const columns = useMemo(
     () => [
       {
@@ -163,7 +116,6 @@ function Main() {
         accessorKey: "id",
         filterVariant: "text",
         size: 50,
-
       },
       {
         header: "Tên nhân viên",
@@ -187,11 +139,21 @@ function Main() {
         filterVariant: "text",
         enableColumnFilter: false, // Disable column filter for this column
         size: 200,
-      }
+      },
+      {
+        header: "Ngày tạo",
+        accessorKey: "createdAt",
+        filterVariant: "text",
+        Cell: ({ cell }) => (
+          <span>{moment(cell.getValue()).utc().format("MM/DD/YYYY")}</span>
+        ),
+        enableColumnFilter: false, // Disable column filter for this column
+        size: 200,
+      },
     ],
     []
   );
-  
+
   const handleClearFrom = (e) => {
     setDateFrom("");
     setDateTo("");
@@ -272,7 +234,6 @@ function Main() {
                   >
                     Thêm mới
                   </Button>
-
                 </Link>
               </div>
             </div>
@@ -285,7 +246,7 @@ function Main() {
               enableRowActions
               enableColumnResizing
               renderRowActions={({ row, table }) => [
-                <div >
+                <div>
                   <IconButton
                     color="secondary"
                     onClick={() => {

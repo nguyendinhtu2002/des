@@ -25,8 +25,7 @@ const AddProductMain = () => {
   const [idNv, setIdNv] = useState("");
   const [idGuest, setIdGuest] = useState("");
   const [quantity, setQuantity] = useState("");
-  const [filteredData, setFilteredData] = useState([]);
-  const [isFilterActive, setIsFilterActive] = useState(false);
+  const [date, setDate] = useState([]);
   const dispatch = useDispatch();
   const userLogin = useSelector((state) => state.user);
   const toastId = React.useRef(null);
@@ -68,6 +67,7 @@ const AddProductMain = () => {
           guest_id: idGuest,
           quantity,
           nameProduct: productname,
+          createdAt:date,
           access_token,
         });
 
@@ -185,6 +185,16 @@ const AddProductMain = () => {
                       type="number"
                       class="form-control"
                       onChange={(e) => setQuantity(e.target.value)}
+                    />
+                  </div>
+                  <div className="mb-4">
+                    <label htmlFor="product_price" className="form-label">
+                      Thời gian
+                    </label>
+                    <input
+                      type="date"
+                      class="form-control"
+                      onChange={(e) => setDate(e.target.value)}
                     />
                   </div>
                 </div>

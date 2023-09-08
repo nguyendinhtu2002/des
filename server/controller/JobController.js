@@ -41,12 +41,13 @@ const getPriceAndAttributesBySku = (guest, sku) => {
 };
 const createJob = async (req, res) => {
   try {
-    const { designer_id, nameProduct, quantity, guest_id } = req.body;
+    const { designer_id, nameProduct, quantity, guest_id,createdAt } = req.body;
     const schema = Joi.object({
       designer_id: Joi.string().required(),
       nameProduct: Joi.string().required(),
       quantity: Joi.number().required().min(1),
       guest_id: Joi.string().required(),
+      createdAt:Joi.string(),
     });
 
     // Kiểm tra dữ liệu đầu vào với schema
@@ -118,6 +119,7 @@ const createJob = async (req, res) => {
       nameProduct,
       quantity,
       guest_id,
+      createdAt
     });
 
     const savedJob = await job.save();
@@ -172,7 +174,7 @@ const getAllJobs = async (req, res) => {
           select: "name",
         },
       ]);
-
+    
     return res.status(200).json(jobs);
   } catch (error) {
     console.error(error);

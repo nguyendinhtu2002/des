@@ -34,7 +34,7 @@ const jobSchema = mongoose.Schema({
   //   type: Boolean,
   //   default: false,
   // },
-  createdAt: { type: Date, default: Date.now },
+  createdAt: { type: Date},
 });
 
 jobSchema.pre("save", async function (next) {
